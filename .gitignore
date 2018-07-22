@@ -20,7 +20,10 @@ lib64/
 parts/
 sdist/
 var/
+<<<<<<< Updated upstream
 wheels/
+=======
+>>>>>>> Stashed changes
 *.egg-info/
 .installed.cfg
 *.egg
@@ -43,7 +46,11 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
+<<<<<<< Updated upstream
 *.cover
+=======
+*,cover
+>>>>>>> Stashed changes
 .hypothesis/
 
 # Translations
@@ -67,7 +74,11 @@ docs/_build/
 # PyBuilder
 target/
 
+<<<<<<< Updated upstream
 # Jupyter Notebook
+=======
+# IPython Notebook
+>>>>>>> Stashed changes
 .ipynb_checkpoints
 
 # pyenv
@@ -76,19 +87,26 @@ target/
 # celery beat schedule file
 celerybeat-schedule
 
+<<<<<<< Updated upstream
 # SageMath parsed files
 *.sage.py
 
+=======
+>>>>>>> Stashed changes
 # dotenv
 .env
 
 # virtualenv
+<<<<<<< Updated upstream
 .venv
+=======
+>>>>>>> Stashed changes
 venv/
 ENV/
 
 # Spyder project settings
 .spyderproject
+<<<<<<< Updated upstream
 .spyproject
 
 # Rope project settings
@@ -114,3 +132,18 @@ data
 # pytest
 .pytest_cache
 
+=======
+
+# pycharm 
+.idea
+
+# Project specific
+data
+
+# vim
+.ropeproject
+.*.sw[po]
+
+# pytest
+.pytest_cache
+>>>>>>> Stashed changes
