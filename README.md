@@ -19,9 +19,6 @@ Setting up development Environment on Linux
 
 #### Configuration
 
-Create a file named `~/.config/panda.yml`
-
-
 ```yaml
 
 db:
