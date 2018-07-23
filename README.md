@@ -6,25 +6,7 @@ A single sign-on application
 Setting up development Environment on Linux
 ----------------------------------
 
-### Setup Python environment
-
-    $ sudo apt-get install python3-pip python3-dev
-    $ sudo pip3.6 install virtualenvwrapper
-    $ echo "export VIRTUALENVWRAPPER_PYTHON=`which python3.6`" >> ~/.bashrc
-    $ echo "alias v.activate=\"source $(which virtualenvwrapper.sh)\"" >> ~/.bashrc
-    $ source ~/.bashrc
-    $ v.activate
-    $ mkvirtualenv --python=$(which python3.6) --no-site-packages panda
-
-#### Activating virtual environment
-    
-    $ workon panda
-
-#### Upgrade pip, setuptools and wheel to the latest version
-
-    $ pip install -U pip setuptools wheel
-  
-### Installing Project (edit mode)
+### Install Project (edit mode)
 
 #### Working copy
     
@@ -32,12 +14,10 @@ Setting up development Environment on Linux
     $ git clone git@github.com:Carrene/panda.git
     $ cd panda
     $ pip install -e .
-    
+ 
 ### Setup Database
 
 #### Configuration
-
-Create a file named `~/.config/panda.yml`
 
 ```yaml
 
@@ -60,21 +40,21 @@ smtp:
 
 #### Remove old abd create a new database **TAKE CARE ABOUT USING THAT**
 
-    $ panda admin create-db --drop --mockup
-    
+    $ panda db create --drop --mockup
+
 And or
 
-    $ panda admin create-db --drop --basedata 
+    $ panda db create --drop --basedata 
 
 #### Drop old database: **TAKE CARE ABOUT USING THAT**
 
-    $ panda [-c path/to/config.yml] admin drop-db
+    $ panda [-c path/to/config.yml] db --drop
 
 #### Create database
 
-    $ panda [-c path/to/config.yml] admin create-db
+    $ panda [-c path/to/config.yml] db --create
 
 Or, you can add `--drop` to drop the previously created database: **TAKE CARE ABOUT USING THAT**
 
-    $ panda [-c path/to/config.yml] admin create-db --drop
+    $ panda [-c path/to/config.yml] db create --drop
 
