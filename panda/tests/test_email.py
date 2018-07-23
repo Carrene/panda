@@ -1,4 +1,4 @@
-from bddrest.authoring import response, Update, when
+from bddrest.authoring import response, Update, Remove, when
 from restfulpy.messaging import create_messenger
 from restfulpy.testing import ApplicableTestCase
 
@@ -8,14 +8,13 @@ from panda.models import Member, RegisterEmail
 
 class TestEmailApplication(ApplicableTestCase):
     __controller_factory__ = Root
-
     __configuration__ = '''
-    activation:
-      secret: activation-secret
-      url: http://cas.carrene.com/register
+      activation:
+        secret: activation-secret
+        url: http://cas.carrene.com/register
 
-    messaging:
-      default_messenger: restfulpy.mockup.MockupMessenger
+      messaging:
+        default_messenger: restfulpy.mockup.MockupMessenger
     '''
 
     @classmethod
@@ -28,18 +27,22 @@ class TestEmailApplication(ApplicableTestCase):
         session.add(member)
         session.commit()
 
-    def test_version(self):
+    def test_claim_email(self):
         messanger = create_messenger()
 
-        call = dict(
-            title='Request whitout email parameters',
-            url='/apiv1/emails',
-            verb='CLAIM',
-            form=dict()
-        )
+        with self.given(
+            'Claim a email',
+            '/apiv1/emails',
+            'CLAIM',
+            form=dict(email='user@example.com')
+        ):
+            assert response.status == 200
+            assert 'email' in response.json
 
-        with self.given(**call):
-            assert response.status == 701
+            task = RegisterEmail.pop()
+            task.do_(None)
+            assert 'register_token' in messanger.last_message['body']
+            assert 'register_url' in messanger.last_message['body']
 
             when('Email not contain @', form=Update(email='userexample.com'))
             assert response.status == 701
@@ -60,16 +63,8 @@ class TestEmailApplication(ApplicableTestCase):
             assert response.status == 601
 
             when(
-                'Claim an email',
-                form=Update(email='user@example.com')
+                'Request without email parametes',
+                form=Remove('email')
             )
-            assert response.status == 200
-
-            task = RegisterEmail.pop()
-            task.do_(None)
-
-            assert 'email' in response.json
-
-            assert 'register_token' in messanger.last_message['body']
-            assert 'register_url' in messanger.last_message['body']
+            assert response.status == 701
 
