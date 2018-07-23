@@ -21,13 +21,13 @@ class TestEmailApplication(ApplicableTestCase):
     def mockup(cls):
         member = Member(
             email='already.added@example.com',
-            title = 'user',
+            title='user',
         )
         session = cls.create_session()
         session.add(member)
         session.commit()
 
-    def test_claim_email(self):
+    def test_claim_email_ownership(self):
         messanger = create_messenger()
 
         with self.given(
@@ -50,10 +50,10 @@ class TestEmailApplication(ApplicableTestCase):
             when('Email not contain dot', form=Update(email='user@examplecom'))
             assert status == '701 Invalid email format'
 
-            when('Invalid format email', form=Update(email='@example.com'))
+            when('Invalid email format', form=Update(email='@example.com'))
             assert status == '701 Invalid email format'
 
-            when('Email not contain domain', form=Update(email='user@.com'))
+            when('Email not contains any domain', form=Update(email='user@.com'))
             assert status == '701 Invalid email format'
 
             when(
@@ -67,3 +67,4 @@ class TestEmailApplication(ApplicableTestCase):
                 form=Remove('email')
             )
             assert status == '701 Invalid email format'
+
