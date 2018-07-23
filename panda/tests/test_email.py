@@ -1,4 +1,4 @@
-from bddrest.authoring import response, Update, Remove, when
+from bddrest.authoring import response, Update, Remove, when, status
 from restfulpy.messaging import create_messenger
 from restfulpy.testing import ApplicableTestCase
 
@@ -45,26 +45,25 @@ class TestEmailApplication(ApplicableTestCase):
             assert 'register_url' in messanger.last_message['body']
 
             when('Email not contain @', form=Update(email='userexample.com'))
-            assert response.status == '701 Invalid format email'
+            assert status == '701 Invalid email format'
 
             when('Email not contain dot', form=Update(email='user@examplecom'))
-            assert response.status == '701 Invalid format email'
+            assert status == '701 Invalid email format'
 
             when('Invalid format email', form=Update(email='@example.com'))
-            assert response.status == '701 Invalid format email'
+            assert status == '701 Invalid email format'
 
             when('Email not contain domain', form=Update(email='user@.com'))
-            assert response.status == '701 Invalid format email'
+            assert status == '701 Invalid email format'
 
             when(
                 'Email address is already registered',
                 form=Update(email='already.added@example.com')
             )
-            assert response.status == '601 Email address is already registered'
+            assert status == '601 Email address is already registered'
 
             when(
                 'Request without email parametes',
                 form=Remove('email')
             )
-            assert response.status == '701 Invalid format email'
-
+            assert status == '701 Invalid email format'
