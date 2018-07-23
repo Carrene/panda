@@ -1,6 +1,5 @@
 from bddrest.authoring import response, Update, when
 from restfulpy.messaging import create_messenger
-from restfulpy.orm import DBSession
 from restfulpy.testing import ApplicableTestCase
 
 from panda.controllers.root import Root
@@ -25,9 +24,9 @@ class TestEmailApplication(ApplicableTestCase):
             email='already.added@example.com',
             title = 'user',
         )
-        member.is_active = True
-        DBSession.add(member)
-        DBSession.commit()
+        session = cls.create_session()
+        session.add(member)
+        session.commit()
 
     def test_version(self):
         messanger = create_messenger()
