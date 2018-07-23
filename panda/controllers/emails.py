@@ -24,7 +24,7 @@ class EmailsController(ModelRestController):
 
         if DBSession.query(Member.email).filter(Member.email == email).count():
             raise HTTPStatus(
-                '601 The requested email address is already registered.'
+                '601 Email address is already registered'
             )
 
         serializer = \
