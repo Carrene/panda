@@ -14,7 +14,7 @@ class EmailsController(ModelRestController):
         email=dict(
             required=(True, '701 Invalid format email'),
             pattern=(
-                r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)',
+                '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)',
                 '701 Invalid format email'
             )
         )
