@@ -1,4 +1,4 @@
 <%
-    url = '%s?t_=%s' % (register_url, register_token)
+    url = '%s?t_=%s' % (registeration_callback_url, registeration_token)
 %>
 
