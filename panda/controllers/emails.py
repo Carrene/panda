@@ -23,12 +23,10 @@ class EmailsController(ModelRestController):
         email = context.form.get('email')
 
         if DBSession.query(Member.email).filter(Member.email == email).count():
-            raise HTTPStatus(
-                '601 Email address is already registered'
-            )
+            raise HTTPStatus('601 Email address is already registered')
 
         serializer = \
-            itsdangerous.URLSafeTimedSerializer(settings.activation.secret)
+            itsdangerous.URLSafeTimedSerializer(settings.registeration.secret)
 
         token = serializer.dumps(email)
 
@@ -37,8 +35,9 @@ class EmailsController(ModelRestController):
                 to=email,
                 subject='Register your CAS account',
                 body={
-                    'register_token': token,
-                    'register_url': settings.activation.url
+                    'registeration_token': token,
+                    'registeration_callback_url':
+                    settings.registeration.callback_url
                 }
             )
         )
