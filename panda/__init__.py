@@ -10,19 +10,28 @@ __version__ = '0.1.0-dev'
 
 class Panda(Application):
 
-    builtin_configuration = """
+    __configuration__ = '''
+    db:
+      url: postgresql://postgres:postgres@localhost/panda_dev
+      test_url: postgresql://postgres:postgres@localhost/panda_test
+      administrative_url: postgresql://postgres:postgres@localhost/postgres
+
     reset_password:
       secret: reset-password-secret
       max_age: 3600  # seconds
       url: http://nc.carrene.com/reset_password
       # url: http://localhost:8080/reset_password
 
-    activation:
-      secret: activation-secret
-      max_age: 86400  # seconds
-      url: http://nc.carrene.com/activate
-      # url: http://localhost:8080/activate
-      """
+    registeration:
+      secret: registeration-secret
+      callback_url: http://cas.carrene.com/register
+
+    messaging:
+      default_sender: CAS
+      template_dirs:
+        - %(root_path)s/panda/email_templates
+
+    '''
 
     def __init__(self):
         super().__init__(
