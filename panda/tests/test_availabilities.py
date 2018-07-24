@@ -2,7 +2,7 @@ from bddrest.authoring import response, status, Update, when, Remove
 from restfulpy.testing import ApplicableTestCase
 
 from panda.controllers.root import Root
-from panda.models import Member, RegisterEmail
+from panda.models import Member
 
 
 class TestAvailabilitiesApplication(ApplicableTestCase):
@@ -10,7 +10,7 @@ class TestAvailabilitiesApplication(ApplicableTestCase):
 
     @classmethod
     def mockup(cls):
-        member = Member(email='already.added@example.com', title='user')
+        member = Member(email='already.added@example.com', title='nickname')
         session = cls.create_session()
         session.add(member)
         session.commit()
@@ -46,4 +46,24 @@ class TestAvailabilitiesApplication(ApplicableTestCase):
 
             when('Request without email parametes', form=Remove('email'))
             assert status == '701 Invalid email format'
+
+    def test_title_availabilities(self):
+        title = 'nickname_example'
+
+        with self.given(
+            'The availability of a tile',
+            '/apiv1/availabilities/nicknames',
+            'CHECK',
+            form=dict(title=title)
+        ):
+            assert response.status == 200
+
+            when('Title contain @', form=Update(title='nick@name'))
+            assert status == '705 Invalid title format'
+
+            when('Title is already registered', form=Update(title='nickname'))
+            assert status == '604 Title is already registered'
+
+            when('Request without title parametes', form=Remove('title'))
+            assert status == '705 Invalid title format'
 
