@@ -45,17 +45,11 @@ class TestEmailApplication(ApplicableTestCase):
             task = RegisterEmail.pop()
             task.do_(None)
 
-            assert 'registeration_token' in messanger.last_message['body']
+            assert messanger.last_message['to'] == email
 
-            assert 'registeration_callback_url' in \
-                messanger.last_message['body']
             assert settings.registeration.callback_url == \
                 messanger.last_message['body']['registeration_callback_url']
 
-            assert 'to' in messanger.last_message
-            assert messanger.last_message['to'] == email
-
-            assert 'subject' in messanger.last_message
             assert messanger.last_message['subject'] ==\
                 'Register your CAS account'
 
