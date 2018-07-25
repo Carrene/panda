@@ -1,4 +1,4 @@
-from panda.validators import user_title_pattern as pattern
+from panda.validators import USER_TITLE_PATTERN as pattern
 
 
 def test_user_title_pattern():

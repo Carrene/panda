@@ -1,4 +1,4 @@
-from panda.validators import user_email_pattern as pattern
+from panda.validators import USER_EMAIL_PATTERN as pattern
 
 
 def test_user_email_pattern():
