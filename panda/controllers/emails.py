@@ -1,24 +1,17 @@
 import itsdangerous
-from nanohttp import json, context, validate, settings, HTTPStatus
+from nanohttp import json, context, settings, HTTPStatus
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
 from panda.models import Member, RegisterEmail
+from panda.validators import email_validator
 
 
 class EmailsController(ModelRestController):
 
     @commit
     @json
-    @validate(
-        email=dict(
-            required=(True, '701 Invalid email format'),
-            pattern=(
-                '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)',
-                '701 Invalid email format'
-            )
-        )
-    )
+    @email_validator
     def claim(self):
         email = context.form.get('email')
 
