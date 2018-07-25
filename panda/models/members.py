@@ -7,13 +7,7 @@ class Member(DeclarativeBase):
 
     id = Field(Integer, primary_key=True)
 
-    email = Field(
-        Unicode(100),
-        unique=True,
-        index=True,
-        json='email',
-        pattern='(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
-    )
+    email = Field(Unicode(100), unique=True, index=True)
 
     title = Field(Unicode(100))
 
