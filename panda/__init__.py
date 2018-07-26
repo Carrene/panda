@@ -24,6 +24,7 @@ class Panda(Application):
 
     registeration:
       secret: registeration-secret
+      max_age: 86400  # seconds
       callback_url: http://cas.carrene.com/register
 
     messaging:
