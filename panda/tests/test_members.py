@@ -9,18 +9,13 @@ from panda.models import Member, RegisterEmail
 class TestMemberApplication(ApplicableTestCase):
     __controller_factory__ = Root
     __configuration__ = '''
-     db:
-      url: postgresql://postgres:postgres@localhost/panda_dev
-      test_url: postgresql://postgres:postgres@localhost/panda_test
-      administrative_url: postgresql://postgres:postgres@localhost/postgres
+    registeration:
+      secret: registeration-secret
+      max_age: 86400  # seconds
+      callback_url: http://cas.carrene.com/register
 
-     registeration:
-        secret: registeration-secret
-        max_age: 3600  # seconds
-        callback_url: http://cas.carrene.com/register
-
-      messaging:
-        default_messenger: restfulpy.mockup.MockupMessenger
+    messaging:
+      default_messenger: restfulpy.mockup.MockupMessenger
     '''
 
     @classmethod
@@ -83,8 +78,20 @@ class TestMemberApplication(ApplicableTestCase):
             assert status == '702 Invalid password length'
 
             when(
-                'Invalid title',
+                'Invalid title format',
                 form=Update(password='123AAAaaa', title='1username')
             )
             assert status == '705 Invalid title format'
+
+            when ('Duplicate title', form=Update(title='username'))
+            assert status == '604 Title is already registered'
+
+            when ('Duplicate Email', form=Update(title='user_name'))
+            assert status == '601 Email address is already registered'
+
+            when (
+                'The toekn has been damaged',
+                form=Update(ownership_token='token')
+            )
+            assert status == '704 Invalid ownership token'
 
