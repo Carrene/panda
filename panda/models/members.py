@@ -2,7 +2,7 @@ import os
 from hashlib import sha256
 
 from restfulpy.orm import DeclarativeBase, Field
-from restfulpy.principal import JwtPrincipal
+from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer
 from sqlalchemy.orm import synonym
 
@@ -48,4 +48,13 @@ class Member(DeclarativeBase):
             email=self.email,
             name=self.title
         ))
+
+    def create_refresh_principal(self):
+        return JwtRefreshToken(dict(id=self.id))
+
+    def validate_password(self, password):
+        hashed_pass = sha256()
+        hashed_pass.update((password + self.password[:64]).encode('utf-8'))
+
+        return self.password[64:] == hashed_pass.hexdigest()
 
