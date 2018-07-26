@@ -49,7 +49,7 @@ class TestTokenApplication(ApplicableTestCase):
             assert status == '603 Incorrect email or password'
 
             when(
-                'Invalid email',
+                'Not exist email',
                 form=Update(password='123abcABC', email='user@example.com')
             )
             assert status == '603 Incorrect email or password'
