@@ -18,6 +18,9 @@ class MembersController(ModelRestController):
         password = context.form.get('password')
         ownership_token = context.form.get('ownership_token')
 
+        if DBSession.query(Member.title).filter(Member.title == title).count():
+            raise HTTPStatus('604 Title is already registered')
+
         serializer = \
             itsdangerous.URLSafeTimedSerializer(settings.registeration.secret)
 
@@ -29,6 +32,9 @@ class MembersController(ModelRestController):
 
         except itsdangerous.BadSignature:
             raise HTTPStatus(status='704 Invalid ownership token')
+
+        if DBSession.query(Member.email).filter(Member.email == email).count():
+            raise HTTPStatus('601 Email address is already registered')
 
         member = Member(email=email, title=title, password=password)
 
