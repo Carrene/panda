@@ -35,10 +35,10 @@ class Panda(Application):
 
     '''
 
-    def __init__(self):
+    def __init__(self, application_name='panda', root=Root()):
         super().__init__(
-            'panda',
-            root=Root(),
+            application_name,
+            root=root,
             root_path=join(dirname(__file__), '..'),
             version=__version__,
         )
