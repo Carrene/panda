@@ -41,7 +41,7 @@ class TestMemberApplication(ApplicableTestCase):
             'CLAIM',
             form=dict(email=email)
         ):
-            assert response.status == 200
+            assert status == 200
             assert 'email' in response.json
             assert response.json['email'] == email
 
