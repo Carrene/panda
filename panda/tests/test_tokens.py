@@ -1,25 +1,12 @@
 from bddrest.authoring import response, status, when, Update
 from restfulpy.application import Application
-from restfulpy.testing import ApplicableTestCase
 
-from panda.authentication import Authenticator
-from panda.controllers.root import Root
 from panda.models import Member
+from panda.controllers.root import Root
+from panda.tests.helpers import LoadApplicationTestCase
 
 
-class TestTokenApplication(ApplicableTestCase):
-    __application__ = Application(
-        'MockupApplication',
-        root=Root(),
-        authenticator=Authenticator()
-    )
-    __configuration__ = '''
-    db:
-      url: postgresql://postgres:postgres@localhost/panda_dev
-      test_url: postgresql://postgres:postgres@localhost/panda_test
-      administrative_url: postgresql://postgres:postgres@localhost/postgres
-
-    '''
+class TestTokenApplication(LoadApplicationTestCase):
 
     @classmethod
     def mockup(cls):
@@ -45,13 +32,10 @@ class TestTokenApplication(ApplicableTestCase):
             assert status == 200
             assert 'token' in response.json
 
-            when('Invalid password',form=Update(password='123aA'))
+            when('Invalid password', form=Update(password='123aA'))
             assert status == '603 Incorrect email or password'
 
-            when(
-                'Not exist email',
-                form=Update(password='123abcABC', email='user@example.com')
-            )
+            when('Not exist email', form=Update(email='user@example.com'))
             assert status == '603 Incorrect email or password'
 
             when('Invalid email format', form=Update(email='user.com'))

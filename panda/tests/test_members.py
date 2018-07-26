@@ -91,7 +91,7 @@ class TestMemberApplication(ApplicableTestCase):
 
             when (
                 'The toekn has been damaged',
-                form=Update(ownership_token='token')
+                form=Update(title='user_name', ownership_token='token')
             )
             assert status == '704 Invalid ownership token'
 
