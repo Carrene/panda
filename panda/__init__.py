@@ -2,6 +2,7 @@ from os.path import join, dirname
 
 from restfulpy.application import Application
 
+from .authentication import Authenticator
 from .controllers.root import Root
 
 
@@ -9,7 +10,7 @@ __version__ = '0.1.0-dev'
 
 
 class Panda(Application):
-
+    __authenticator__ = Authenticator()
     __configuration__ = '''
     db:
       url: postgresql://postgres:postgres@localhost/panda_dev
@@ -34,10 +35,10 @@ class Panda(Application):
 
     '''
 
-    def __init__(self):
+    def __init__(self, application_name='panda', root=Root()):
         super().__init__(
-            'panda',
-            root=Root(),
+            application_name,
+            root=root,
             root_path=join(dirname(__file__), '..'),
             version=__version__,
         )
