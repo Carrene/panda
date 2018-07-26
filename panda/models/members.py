@@ -12,7 +12,7 @@ class Member(DeclarativeBase):
 
     id = Field(Integer, primary_key=True)
     email = Field(Unicode(100), unique=True, index=True)
-    title = Field(Unicode(100))
+    title = Field(Unicode(100), unique=True)
     _password = Field('password', Unicode(128), index=True, protected=True)
 
     def _hash_password(cls, password):
