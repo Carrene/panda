@@ -10,7 +10,11 @@ class TestAvailabilitiesApplication(ApplicableTestCase):
 
     @classmethod
     def mockup(cls):
-        member = Member(email='already.added@example.com', title='nickname')
+        member = Member(
+            email='already.added@example.com',
+            title='nickname',
+            password='123ABCabc'
+        )
         session = cls.create_session()
         session.add(member)
         session.commit()

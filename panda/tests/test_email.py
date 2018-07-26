@@ -23,6 +23,7 @@ class TestEmailApplication(ApplicableTestCase):
         member = Member(
             email='already.added@example.com',
             title='user',
+            password='123ABCabc'
         )
         session = cls.create_session()
         session.add(member)
