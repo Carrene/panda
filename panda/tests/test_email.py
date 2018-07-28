@@ -1,33 +1,16 @@
 from bddrest.authoring import response, Update, Remove, when, status
 from nanohttp import settings
 from restfulpy.messaging import create_messenger
-from restfulpy.testing import ApplicableTestCase
 
-from panda.controllers.root import Root
-from panda.models import Member, RegisterEmail
+from panda.models import RegisterEmail
+from panda.tests.helpers import LoadApplicationTestCase
 
 
-class TestEmailApplication(ApplicableTestCase):
-    __controller_factory__ = Root
+class TestEmailApplication(LoadApplicationTestCase):
     __configuration__ = '''
-      registeration:
-        secret: registeration-secret
-        callback_url: http://cas.carrene.com/register
-
       messaging:
         default_messenger: restfulpy.mockup.MockupMessenger
     '''
-
-    @classmethod
-    def mockup(cls):
-        member = Member(
-            email='already.added@example.com',
-            title='user',
-            password='123ABCabc'
-        )
-        session = cls.create_session()
-        session.add(member)
-        session.commit()
 
     def test_claim_email_ownership(self):
         messanger = create_messenger()

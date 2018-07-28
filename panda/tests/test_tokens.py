@@ -1,26 +1,12 @@
 from bddrest.authoring import response, status, when, Update
-from restfulpy.application import Application
 
-from panda.models import Member
-from panda.controllers.root import Root
 from panda.tests.helpers import LoadApplicationTestCase
 
 
 class TestTokenApplication(LoadApplicationTestCase):
 
-    @classmethod
-    def mockup(cls):
-        member = Member(
-            email='username@example.com',
-            title='username',
-            password='123abcABC'
-        )
-        session = cls.create_session()
-        session.add(member)
-        session.commit()
-
     def test_create_token(self):
-        email = 'username@example.com'
+        email = 'already.added@example.com'
         password = '123abcABC'
 
         with self.given(
