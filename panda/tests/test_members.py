@@ -1,33 +1,17 @@
 from bddrest.authoring import response, Update, when, status
 from restfulpy.messaging import create_messenger
-from restfulpy.testing import ApplicableTestCase
 
 from panda.controllers.root import Root
-from panda.models import Member, RegisterEmail
+from panda.models import RegisterEmail
+from panda.tests.helpers import LoadApplicationTestCase
 
 
-class TestMemberApplication(ApplicableTestCase):
+class TestMemberApplication(LoadApplicationTestCase):
     __controller_factory__ = Root
     __configuration__ = '''
-    registeration:
-      secret: registeration-secret
-      max_age: 86400  # seconds
-      callback_url: http://cas.carrene.com/register
-
     messaging:
       default_messenger: restfulpy.mockup.MockupMessenger
     '''
-
-    @classmethod
-    def mockup(cls):
-        member = Member(
-            email='already.added@example.com',
-            title='username',
-            password='123abcABC'
-        )
-        session = cls.create_session()
-        session.add(member)
-        session.commit()
 
     def test_register_member(self):
         messanger = create_messenger()

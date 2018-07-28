@@ -1,23 +1,9 @@
 from bddrest.authoring import response, status, Update, when, Remove
-from restfulpy.testing import ApplicableTestCase
 
-from panda.controllers.root import Root
-from panda.models import Member
+from panda.tests.helpers import LoadApplicationTestCase
 
 
-class TestAvailabilitiesApplication(ApplicableTestCase):
-    __controller_factory__ = Root
-
-    @classmethod
-    def mockup(cls):
-        member = Member(
-            email='already.added@example.com',
-            title='nickname',
-            password='123ABCabc'
-        )
-        session = cls.create_session()
-        session.add(member)
-        session.commit()
+class TestAvailabilitiesApplication(LoadApplicationTestCase):
 
     def test_email_availabilities(self):
         email = 'user@example.com'
@@ -65,7 +51,7 @@ class TestAvailabilitiesApplication(ApplicableTestCase):
             when('Title contain @', form=Update(title='nick@name'))
             assert status == '705 Invalid title format'
 
-            when('Title is already registered', form=Update(title='nickname'))
+            when('Title is already registered', form=Update(title='username'))
             assert status == '604 Title is already registered'
 
             when('Request without title parametes', form=Remove('title'))
