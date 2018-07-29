@@ -1,9 +1,21 @@
 from bddrest.authoring import response, status, when, Update
 
-from panda.tests.helpers import LoadApplicationTestCase
+from panda.models import Member
+from panda.tests.helpers import LocadApplicationTestCase
 
 
-class TestTokenApplication(LoadApplicationTestCase):
+class TestLogin(LocadApplicationTestCase):
+
+    @classmethod
+    def mockup(cls):
+        member = Member(
+            email='already.added@example.com',
+            title='username',
+            password='123abcABC'
+        )
+        session = cls.create_session()
+        session.add(member)
+        session.commit()
 
     def test_create_token(self):
         email = 'already.added@example.com'
