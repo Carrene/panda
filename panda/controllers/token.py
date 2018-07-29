@@ -3,7 +3,7 @@ from nanohttp import RestController, json, context, HTTPStatus
 from panda.validators import email_validator
 
 
-class TokensController(RestController):
+class TokenController(RestController):
 
     @json
     @email_validator
