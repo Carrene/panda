@@ -110,25 +110,24 @@ class TestResetPassword(LocadApplicationTestCase):
 
             hash_new_password = session.query(Member).one().password
             assert hash_new_password != hash_old_password
-            #session.commit()
 
             when(
-                'Invalid new password min length',
+                'Trying to a short password',
                 form=Update(password='1Aa')
             )
             assert status == '702 Invalid password length'
 
             when(
-                'Invalid new password max length',
+                'Trying to a long password',
                 form=Update(password='1Aa123456789abcdeABCDE')
             )
             assert status == '702 Invalid password length'
 
-            when('Request without new password', form=Remove('password'))
+            when('Request without password parameter', form=Remove('password'))
             assert status == '702 Invalid password length'
 
             when(
-                'The toekn has been damaged',
+                'The token has been damaged',
                 form=Update(reset_password_token='token')
             )
             assert status == '704 Invalid token'
