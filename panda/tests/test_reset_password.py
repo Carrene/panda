@@ -112,13 +112,13 @@ class TestResetPassword(LocadApplicationTestCase):
             assert hash_new_password != hash_old_password
 
             when(
-                'Trying to a short password',
+                'Trying to pass a short password',
                 form=Update(password='1Aa')
             )
             assert status == '702 Invalid password length'
 
             when(
-                'Trying to a long password',
+                'Trying to a pass long password',
                 form=Update(password='1Aa123456789abcdeABCDE')
             )
             assert status == '702 Invalid password length'
