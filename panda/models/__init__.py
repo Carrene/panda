@@ -1,3 +1,3 @@
-from .members import Member
+from .member import Member
 from .messaging import RegisterEmail, ResetPasswordEmail
 

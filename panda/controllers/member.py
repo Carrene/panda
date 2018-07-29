@@ -7,7 +7,7 @@ from panda.models import Member
 from panda.validators import title_validator, password_validator
 
 
-class MembersController(ModelRestController):
+class MemberController(ModelRestController):
 
     @json
     @commit
@@ -31,7 +31,7 @@ class MembersController(ModelRestController):
             )
 
         except itsdangerous.BadSignature:
-            raise HTTPStatus(status='704 Invalid ownership token')
+            raise HTTPStatus(status='704 Invalid token')
 
         if DBSession.query(Member.email).filter(Member.email == email).count():
             raise HTTPStatus('601 Email address is already registered')

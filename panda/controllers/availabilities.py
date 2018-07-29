@@ -6,7 +6,7 @@ from panda.models import Member
 from panda.validators import email_validator, title_validator
 
 
-class AvailabilitiesController(RestController):
+class AvailabilityController(RestController):
 
     @json
     def check(self, subject):

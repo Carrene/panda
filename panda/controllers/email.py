@@ -7,7 +7,7 @@ from panda.models import Member, RegisterEmail
 from panda.validators import email_validator
 
 
-class EmailsController(ModelRestController):
+class EmailController(ModelRestController):
 
     @commit
     @json

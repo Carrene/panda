@@ -2,16 +2,26 @@ from bddrest.authoring import response, Update, when, status
 from restfulpy.messaging import create_messenger
 
 from panda.controllers.root import Root
-from panda.models import RegisterEmail
-from panda.tests.helpers import LoadApplicationTestCase
+from panda.models import RegisterEmail, Member
+from panda.tests.helpers import LocadApplicationTestCase
 
 
-class TestMemberApplication(LoadApplicationTestCase):
+class TestRegisteration(LocadApplicationTestCase):
     __controller_factory__ = Root
     __configuration__ = '''
     messaging:
       default_messenger: restfulpy.mockup.MockupMessenger
     '''
+    @classmethod
+    def mockup(cls):
+        member = Member(
+            email='already.added@example.com',
+            title='username',
+            password='123abcABC'
+        )
+        session = cls.create_session()
+        session.add(member)
+        session.commit()
 
     def test_register_member(self):
         messanger = create_messenger()
@@ -77,5 +87,5 @@ class TestMemberApplication(LoadApplicationTestCase):
                 'The toekn has been damaged',
                 form=Update(title='user_name', ownership_token='token')
             )
-            assert status == '704 Invalid ownership token'
+            assert status == '704 Invalid token'
 

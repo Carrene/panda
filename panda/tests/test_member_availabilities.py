@@ -1,9 +1,21 @@
 from bddrest.authoring import response, status, Update, when, Remove
 
-from panda.tests.helpers import LoadApplicationTestCase
+from panda.models import Member
+from panda.tests.helpers import LocadApplicationTestCase
 
 
-class TestAvailabilitiesApplication(LoadApplicationTestCase):
+class TestAvailabilities(LocadApplicationTestCase):
+
+    @classmethod
+    def mockup(cls):
+        member = Member(
+            email='already.added@example.com',
+            title='username',
+            password='123abcABC'
+        )
+        session = cls.create_session()
+        session.add(member)
+        session.commit()
 
     def test_email_availabilities(self):
         email = 'user@example.com'
