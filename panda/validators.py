@@ -3,7 +3,7 @@ import re
 from nanohttp import validate
 
 
-USER_EMAIL_PATTERN =\
+USER_EMAIL_PATTERN = \
     re.compile('(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
 USER_TITLE_PATTERN = re.compile('^[a-zA-Z][\w]{5,16}$')
 
