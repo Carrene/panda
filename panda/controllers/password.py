@@ -9,10 +9,10 @@ from panda.validators import password_validator, new_password_validator
 
 
 class PasswordController(RestController):
-
+    
+    @password_validator
     @json
     @commit
-    @password_validator
     def reset(self):
         password = context.form.get('password')
         reset_password_token = context.form.get('reset_password_token')
