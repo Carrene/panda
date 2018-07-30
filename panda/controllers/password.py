@@ -43,7 +43,9 @@ class PasswordController(RestController):
         new_password = context.form.get('new_password')
 
         member = Member.current()
-        if not member.validate_password(current_password):
+
+        if current_password is None or \
+                not member.validate_password(current_password):
             raise HTTPStatus('602 Invalid current password')
 
         member.password = new_password
