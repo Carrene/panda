@@ -3,9 +3,11 @@ import re
 from nanohttp import validate
 
 
-USER_EMAIL_PATTERN =\
+USER_EMAIL_PATTERN = \
     re.compile('(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
 USER_TITLE_PATTERN = re.compile('^[a-zA-Z][\w]{5,16}$')
+
+# Password be to have numbers, uppercase, and lowercase
 USER_PASSWORD_PATTERN = re.compile('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
 
 
@@ -27,6 +29,16 @@ title_validator = validate(
 
 password_validator = validate(
     password=dict(
+        required=(True, '702 Invalid password length'),
+        min_length=(6,'702 Invalid password length'),
+        max_length=(20,'702 Invalid password length'),
+        pattern=(USER_PASSWORD_PATTERN, '703 Password not complex enough')
+    )
+)
+
+
+new_password_validator = validate(
+    new_password=dict(
         required=(True, '702 Invalid password length'),
         min_length=(6,'702 Invalid password length'),
         max_length=(20,'702 Invalid password length'),
