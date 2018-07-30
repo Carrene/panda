@@ -34,10 +34,10 @@ class PasswordController(RestController):
 
         return dict()
 
-    @json
-    @commit
     @authorize
     @new_password_validator
+    @json
+    @commit
     def change(self):
         current_password = context.form.get('current_password')
         new_password = context.form.get('new_password')
