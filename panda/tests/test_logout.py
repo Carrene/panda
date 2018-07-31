@@ -28,7 +28,7 @@ class TestLogout(LocadApplicationTestCase):
         with self.given(
             'The member has been successfully logout',
             '/apiv1/tokens',
-            'invalidate',
+            'INVALIDATE',
         ):
             assert status == 200
 
