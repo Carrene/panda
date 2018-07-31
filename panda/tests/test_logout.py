@@ -1,4 +1,4 @@
-from bddrest.authoring import Update, Remove, when, status
+from bddrest.authoring import when, status
 
 from panda.models import Member
 from panda.tests.helpers import LocadApplicationTestCase
@@ -34,5 +34,3 @@ class TestLogout(LocadApplicationTestCase):
 
             when('Trying to pass unathorized member')
             assert status == 401
-
-
