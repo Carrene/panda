@@ -34,3 +34,4 @@ class TestLogout(LocadApplicationTestCase):
 
             when('Trying to pass unathorized member')
             assert status == 401
+
