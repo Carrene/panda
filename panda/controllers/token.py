@@ -1,4 +1,5 @@
 from nanohttp import RestController, json, context, HTTPStatus
+from restfulpy.authorization import authorize
 
 from panda.validators import email_validator
 
@@ -22,3 +23,9 @@ class TokenController(RestController):
 
         return dict(token=principal.dump())
 
+    @authorize
+    @json
+    def invalidate(self):
+        context.application.__authenticator__.logout()
+
+        return {}
