@@ -2,7 +2,7 @@ import os
 from hashlib import sha256
 
 from nanohttp import context
-from restfulpy.orm import DeclarativeBase, Field, DBSession
+from restfulpy.orm import DeclarativeBase, Field, DBSession, relationship
 from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer
 from sqlalchemy.orm import synonym
@@ -15,6 +15,7 @@ class Member(DeclarativeBase):
     email = Field(Unicode(100), unique=True, index=True)
     title = Field(Unicode(100), unique=True)
     _password = Field('password', Unicode(128), index=True, protected=True)
+    clients = relationship('Client', back_populates='member', protected=True)
 
     def _hash_password(cls, password):
         salt = sha256()
