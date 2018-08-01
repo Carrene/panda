@@ -18,6 +18,9 @@ class TestClient(LocadApplicationTestCase):
         session.commit()
 
     def test_define_client(self):
+        title = 'example_client'
+        redirect_uri = 'http://example.com/oauth2'
+
         self.login(
             email='already.added@example.com',
             password='123abcABC',
@@ -25,22 +28,19 @@ class TestClient(LocadApplicationTestCase):
             verb='CREATE'
         )
 
-        title = 'example_client'
-        redirect_uri = 'http://example.com/oauth2'
-
         with self.given(
             'The client has successfully defined',
             '/apiv1/clients',
-            'define',
-            form=dict(
-                title=title,
-                redirect_uri=redirect_uri
-            )
+            'DEFINE',
+            form=dict(title=title, redirect_uri=redirect_uri)
         ):
             assert status == 200
             assert response.json['title'] == title
             assert response.json['redirect_uri'] == redirect_uri
             assert 'secret' in response.json
+
+            when('Trying to pass duplicate title')
+            assert status == 200
 
             when('Trying to pass with balnk title', form=Update(title=' '))
             assert status == '705 Invalid title format'
@@ -63,8 +63,13 @@ class TestClient(LocadApplicationTestCase):
             )
             assert status == '706 Redirect uri is blank'
 
-            self.logout()
-            import pudb; pudb.set_trace()  # XXX BREAKPOINT
-            when('Trying to pass unathorized member')
+        self.logout()
+
+        with self.given(
+            'An unauthorized member trying to define client',
+            '/apiv1/clients',
+            'DEFINE',
+            form=dict(title=title, redirect_uri=redirect_uri)
+        ):
             assert status == 401
 
