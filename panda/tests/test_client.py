@@ -1,7 +1,10 @@
+import base64
+import hashlib
+
 from bddrest.authoring import Update, Remove, when, status, response
 
 from panda.models import Member
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocadApplicationTestCase, RandomPatch
 
 
 class TestClient(LocadApplicationTestCase):
@@ -28,7 +31,10 @@ class TestClient(LocadApplicationTestCase):
             verb='CREATE'
         )
 
-        with self.given(
+        with RandomPatch(
+            b'2X\x95z\x14\x7f\x80\xe2\xd1\xdeD\xf6\xd3\x9ea\x90uZ \
+            \x00\xb3mG@\xd0\x1a"\xc7-V\r8\x11'
+        ), self.given(
             'The client has successfully defined',
             '/apiv1/clients',
             'DEFINE',
@@ -37,7 +43,15 @@ class TestClient(LocadApplicationTestCase):
             assert status == 200
             assert response.json['title'] == title
             assert response.json['redirect_uri'] == redirect_uri
-            assert 'secret' in response.json
+
+            secret = base64.encodebytes(hashlib.pbkdf2_hmac(
+                'sha256',
+                str(response.json['member_id']).encode(),
+                RandomPatch.random(32),
+                100000,
+                dklen=32
+            )).decode()
+            assert response.json['secret'] == secret
 
             when('Trying to pass duplicate title')
             assert status == 200
