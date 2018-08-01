@@ -1,11 +1,11 @@
 import hashlib
-import os
 
 from nanohttp import json, context, HTTPStatus
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
+from panda import cryptohelpers
 from panda.models import Client
 
 
@@ -32,7 +32,7 @@ class ClientController(ModelRestController):
         client.secret = hashlib.pbkdf2_hmac(
             'sha256',
             str(context.identity.id).encode(),
-            os.urandom(32),
+            cryptohelpers.random(32),
             100000,
             dklen=32
         )
