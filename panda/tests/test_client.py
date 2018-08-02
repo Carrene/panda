@@ -4,7 +4,7 @@ import hashlib
 from bddrest.authoring import Update, Remove, when, status, response
 
 from panda.models import Member
-from panda.tests.helpers import LocadApplicationTestCase, RandomPatch
+from panda.tests.helpers import LocadApplicationTestCase, RandomMonkeyPatch
 
 
 class TestClient(LocadApplicationTestCase):
@@ -31,7 +31,7 @@ class TestClient(LocadApplicationTestCase):
             verb='CREATE'
         )
 
-        with RandomPatch(
+        with RandomMonkeyPatch(
             b'2X\x95z\x14\x7f\x80\xe2\xd1\xdeD\xf6\xd3\x9ea\x90uZ \
             \x00\xb3mG@\xd0\x1a"\xc7-V\r8\x11'
         ), self.given(
@@ -47,7 +47,7 @@ class TestClient(LocadApplicationTestCase):
             secret = base64.encodebytes(hashlib.pbkdf2_hmac(
                 'sha256',
                 str(response.json['member_id']).encode(),
-                RandomPatch.random(32),
+                RandomMonkeyPatch.random(32),
                 100000,
                 dklen=32
             )).decode()
