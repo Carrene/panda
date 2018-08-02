@@ -8,10 +8,12 @@ class Client(DeclarativeBase):
     __tablename__ = 'client'
 
     id = Field(Integer, primary_key=True)
+    
+    member_id = Field(Integer, ForeignKey('member.id'))
+    
     title = Field(Unicode(100))
     redirect_uri = Field(Unicode(100))
     secret = Field(Binary(32))
-    member_id = Field(Integer, ForeignKey('member.id'))
 
     member = relationship('Member', back_populates='clients', protected=True)
 
