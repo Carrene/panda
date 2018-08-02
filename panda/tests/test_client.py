@@ -32,8 +32,8 @@ class TestClient(LocadApplicationTestCase):
         )
 
         with RandomMonkeyPatch(
-            b'2X\x95z\x14\x7f\x80\xe2\xd1\xdeD\xf6\xd3\x9ea\x90uZ \
-            \x00\xb3mG@\xd0\x1a"\xc7-V\r8\x11'
+            b'2X\x95z\x14\x7f\x80\xe2\xd1\xdeD\xf6\xd3\x9ea\x90uZ'
+            b'\x00\xb3mG@\xd0\x1a"\xc7-V\r8\x11'
         ), self.given(
             'The client has successfully defined',
             '/apiv1/clients',
