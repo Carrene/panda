@@ -33,6 +33,9 @@ class Panda(Application):
       template_dirs:
         - %(root_path)s/panda/email_templates
 
+    authorization_code:
+      secret: authorization-code-secret
+
     '''
 
     def __init__(self, application_name='panda', root=Root()):
