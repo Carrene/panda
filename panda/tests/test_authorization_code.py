@@ -75,7 +75,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
 
             # Related to the redirect uri tests
             when(
-                'Trying pass to without redirect uri parameter',
+                'Trying to pass without redirect uri parameter',
                 query=Remove('redirect_uri')
             )
             authorization_code = \
@@ -89,7 +89,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
 
             # Related to the state tests
             when(
-                'Trying pass to without state parameter',
+                'Trying to pass without state parameter',
                 query=Remove('state')
             )
             authorization_code = \
@@ -102,13 +102,13 @@ class TestAuthorizationCode(LocadApplicationTestCase):
 
             # Related to the client id tests
             when(
-                'Tring to pass not exist client',
+                'Trying to pass not exist client',
                 query=Update(client_id='1000')
             )
             assert status == '605 We don\'t recognize this client'
 
             when(
-                'Trying pass to without clint_id parameter',
+                'Trying to pass without clint_id parameter',
                 query=Remove('client_id')
             )
             assert status == '605 We don\'t recognize this client'
