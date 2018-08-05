@@ -46,7 +46,7 @@ class AuthorizationCodeController(RestController):
 
         serializer = itsdangerous.URLSafeTimedSerializer \
             (settings.authorization_code.secret)
-        token = serializer.dumps(dict(
+        authorization_code = serializer.dumps(dict(
             scope=scope,
             member_id=context.identity.id,
             member_title=context.identity.payload['name'],
@@ -56,5 +56,5 @@ class AuthorizationCodeController(RestController):
             location=location
         ))
 
-        return dict(token=token)
+        return dict(authorizationCode=authorization_code)
 

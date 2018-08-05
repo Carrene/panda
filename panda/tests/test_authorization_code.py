@@ -57,14 +57,15 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             assert status == 200
             serializer = itsdangerous.URLSafeTimedSerializer \
                 (settings.authorization_code.secret)
-            token = serializer.loads(response.json['token'])
-            assert token['scope'] == scope
-            assert token['client_title'] == self.client.title
-            assert token['client_id'] == self.client.id
-            assert token['member_id'] == self.member.id
-            assert token['email'] == self.member.email
+            authorization_code = \
+                serializer.loads(response.json['authorizationCode'])
+            assert authorization_code['scope'] == scope
+            assert authorization_code['client_title'] == self.client.title
+            assert authorization_code['client_id'] == self.client.id
+            assert authorization_code['member_id'] == self.member.id
+            assert authorization_code['email'] == self.member.email
 
-            location_parse = urlparse(token['location'])
+            location_parse = urlparse(authorization_code['location'])
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
             }
@@ -77,8 +78,9 @@ class TestAuthorizationCode(LocadApplicationTestCase):
                 'Trying pass to without redirect uri parameter',
                 query=Remove('redirect_uri')
             )
-            token = serializer.loads(response.json['token'])
-            location_parse = urlparse(token['location'])
+            authorization_code = \
+                serializer.loads(response.json['authorizationCode'])
+            location_parse = urlparse(authorization_code['location'])
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
             }
@@ -90,8 +92,9 @@ class TestAuthorizationCode(LocadApplicationTestCase):
                 'Trying pass to without state parameter',
                 query=Remove('state')
             )
-            token = serializer.loads(response.json['token'])
-            location_parse = urlparse(token['location'])
+            authorization_code = \
+                serializer.loads(response.json['authorizationCode'])
+            location_parse = urlparse(authorization_code['location'])
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
             }
@@ -116,8 +119,9 @@ class TestAuthorizationCode(LocadApplicationTestCase):
                 query=Update(scope='profile+email')
             )
             assert status == 200
-            token = serializer.loads(response.json['token'])
-            assert token['scope'] == 'profile+email'
+            authorization_code = \
+                serializer.loads(response.json['authorizationCode'])
+            assert authorization_code['scope'] == 'profile+email'
 
             when(
                 'Trying to pass invalid scope name',
