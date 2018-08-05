@@ -1,7 +1,9 @@
 import os
 from urllib.parse import urlparse, parse_qs
 
+import itsdangerous
 from bddrest.authoring import Update, Remove, when, status, response
+from nanohttp import settings
 
 from panda.models import Member, Client
 from panda.tests.helpers import LocadApplicationTestCase
@@ -23,7 +25,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
 
         cls.client = Client(
             title='oauth',
-            redirect_uri='http://example.com/oauth2',
+            redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
             member_id=cls.member.id
         )
@@ -31,13 +33,15 @@ class TestAuthorizationCode(LocadApplicationTestCase):
         session.commit()
 
     def test_create_authorization_code(self):
-
         self.login(
             email=self.member.email,
             password='123abcABC',
             url='/apiv1/tokens',
             verb='CREATE'
         )
+        scope='profile'
+        state='123456'
+        redirect_uri='http://example2.com/oauth2'
 
         with self.given(
             'Create authorization code',
@@ -45,30 +49,55 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             'CREATE',
             query=dict(
                 client_id=self.client.id,
-                scope='profile',
-                state='123456',
-                redirect_uri='http://example.com/oauth2'
+                scope=scope,
+                state=state,
+                redirect_uri=redirect_uri
             )
         ):
-            assert status == 302
+            assert status == 200
+            serializer = itsdangerous.URLSafeTimedSerializer \
+                (settings.authorization_code.secret)
+            token = serializer.loads(response.json['token'])
+            assert token['scope'] == scope
+            assert token['client_title'] == self.client.title
+            assert token['client_id'] == self.client.id
+            assert token['member_id'] == self.member.id
+            assert token['email'] == self.member.email
 
-            url_parse = urlparse(response.headers['location'])
-            url_query_string = {
-                k: v[0] for k, v in parse_qs(url_parse.query).items()
+            location_parse = urlparse(token['location'])
+            location_query_string = {
+                k: v[0] for k, v in parse_qs(location_parse.query).items()
             }
+            location_redirect_uri = location_parse.geturl().split('?')[0]
+            assert location_redirect_uri == redirect_uri
+            assert location_query_string['state'] == state
 
-            assert url_query_string['state'] == '123456'
-            assert url_query_string['scope'] == 'profile'
-
-            # Related to the state test case
+            # Related to the redirect uri tests
             when(
-                'Trying pass to without clint_id parameter',
+                'Trying pass to without redirect uri parameter',
+                query=Remove('redirect_uri')
+            )
+            token = serializer.loads(response.json['token'])
+            location_parse = urlparse(token['location'])
+            location_query_string = {
+                k: v[0] for k, v in parse_qs(location_parse.query).items()
+            }
+            location_redirect_uri = location_parse.geturl().split('?')[0]
+            assert location_redirect_uri == self.client.redirect_uri
+
+            # Related to the state tests
+            when(
+                'Trying pass to without state parameter',
                 query=Remove('state')
             )
-            assert status == 302
-            assert 'state'not in url_query_string['state']
+            token = serializer.loads(response.json['token'])
+            location_parse = urlparse(token['location'])
+            location_query_string = {
+                k: v[0] for k, v in parse_qs(location_parse.query).items()
+            }
+            assert 'state'not in location_query_string
 
-            # Related to the client id test case
+            # Related to the client id tests
             when(
                 'Tring to pass not exist client',
                 query=Update(client_id='1000')
@@ -81,7 +110,15 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             )
             assert status == '605 We don\'t recognize this client'
 
-            # Related to the scope test case
+            # Related to the scope tests
+            when(
+                'Trying to pass multi scope',
+                query=Update(scope='profile+email')
+            )
+            assert status == 200
+            token = serializer.loads(response.json['token'])
+            assert token['scope'] == 'profile+email'
+
             when(
                 'Trying to pass invalid scope name',
                 query=Update(scope='profiles')
@@ -94,12 +131,13 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             )
             assert status == '606 Invalid scope'
 
-            # related to the form parameters
+            # Related to the form parameters
             when('Trying to pass with form parameters', form=dict(a='a'))
             assert status == '707 Form not allowed'
 
+            # Related to the unauthorization member
             when(
-                'An authorization member trying to create authorization code',
+                'An unauthorization member trying to create authorization code',
                 authorization=None
             )
             assert status == 401
