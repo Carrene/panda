@@ -11,8 +11,8 @@ class AuthorizationCodeController(RestController):
 
     @authorize
     @validate(
-        client_id=dict(required=(True, '605 We don\'t recognize this client')),
-        scope=dict(required=(True, '606 Invalid scope'))
+        client_id=dict(required=('605 We don\'t recognize this client')),
+        scope=dict(required=('606 Invalid scope'))
     )
     @json
     def create(self):
