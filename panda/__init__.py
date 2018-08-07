@@ -34,7 +34,7 @@ class Panda(Application):
         - %(root_path)s/panda/email_templates
 
     authorization_code:
-      secret: authorization-code-secret
+      secret: !!binary T8xNMJCFl4xgBSW3NaDv6/D+48ssBWZTQbqqDlnl0gU=
 
     '''
 

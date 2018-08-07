@@ -56,7 +56,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
         ):
             assert status == 200
             serializer = itsdangerous.URLSafeTimedSerializer \
-                (settings.authorization_code.secret)
+                (bytearray(settings.authorization_code.secret))
             authorization_code = \
                 serializer.loads(response.json['authorizationCode'])
             assert authorization_code['scope'] == scope
