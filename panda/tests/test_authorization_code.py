@@ -16,8 +16,8 @@ class TestAuthorizationCode(LocadApplicationTestCase):
         session = cls.create_session()
 
         cls.member = Member(
-            email='already.added@example.com',
-            title='username',
+            email='member@example.com',
+            title='member_Title',
             password='123abcABC'
         )
         session.add(cls.member)
@@ -98,11 +98,11 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
             }
-            assert 'state'not in location_query_string
+            assert 'state' not in location_query_string
 
             # Related to the client id tests
             when(
-                'Trying to pass not exist client',
+                'Trying to pass not existing client',
                 query=Update(client_id='1000')
             )
             assert status == '605 We don\'t recognize this client'
@@ -130,7 +130,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             assert status == '606 Invalid scope'
 
             when(
-                'Trying pass to without scope parameter',
+                'Trying to pass without scope parameter',
                 query=Remove('scope')
             )
             assert status == '606 Invalid scope'
@@ -141,7 +141,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
 
             # Related to the unauthorization member
             when(
-                'An unauthorization member trying to create authorization code',
+                'An unauthorized member trying to create authorization code',
                 authorization=None
             )
             assert status == 401
