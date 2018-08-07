@@ -28,8 +28,8 @@ class AuthorizationCodeController(RestController):
         state = context.query.get('state')
 
         for s in scope.split('+'):
-           if s not in scopes:
-               raise HTTPStatus('606 Invalid scope')
+            if s not in scopes:
+                raise HTTPStatus('606 Invalid scope')
 
         client = DBSession.query(Client).\
             filter(Client.id == context.query.get('client_id')).one_or_none()
