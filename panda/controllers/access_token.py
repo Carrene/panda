@@ -1,10 +1,9 @@
-import itsdangerous
-from nanohttp import json, context, HTTPStatus, settings, validate
-from restfulpy.authorization import authorize
+from nanohttp import json, context, HTTPStatus, validate
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
 from panda.models import Client
+from panda.oauth import AccessToken, AuthorizationCode
 
 
 class AccessTokenController(RestController):
@@ -16,19 +15,7 @@ class AccessTokenController(RestController):
     )
     @json
     def create(self):
-        import pudb; pudb.set_trace()  # XXX BREAKPOINT
-        code = context.form.get('code')
-
-        serializer = itsdangerous. \
-            URLSafeTimedSerializer(settings.authorization_code.secret)
-        try:
-             authorization_code = serializer.loads(
-                code,
-                max_age=settings.authorization_code.max_age
-            )
-
-        except itsdangerous.BadSignature:
-            raise HTTPStatus(status='607 Malformed authorization code')
+        authorization_code = AuthorizationCode.load(context.form.get('code'))
 
         client = DBSession.query(Client).\
             filter(Client.id == context.form.get('client_id')).one_or_none()
@@ -38,6 +25,12 @@ class AccessTokenController(RestController):
         if not client.validate_secret(context.form.get('secret')):
             raise HTTPStatus('608 Malformed secret')
 
+        access_token_payload = dict(
+            client_id=client.id,
+            member_id=authorization_code['member_id'],
+            scope = authorization_code['scope'],
+        )
+        access_token = AccessToken(access_token_payload)
 
-        return dict()
+        return dict(access_token=access_token.dump())
 

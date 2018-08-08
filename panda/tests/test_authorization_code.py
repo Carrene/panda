@@ -1,11 +1,10 @@
 import os
 from urllib.parse import urlparse, parse_qs
 
-import itsdangerous
 from bddrest.authoring import Update, Remove, when, status, response
-from nanohttp import settings
 
 from panda.models import Member, Client
+from panda.oauth import AuthorizationCode
 from panda.tests.helpers import LocadApplicationTestCase
 
 
@@ -55,10 +54,9 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             )
         ):
             assert status == 200
-            serializer = itsdangerous.URLSafeTimedSerializer \
-                (bytearray(settings.authorization_code.secret))
+
             authorization_code = \
-                serializer.loads(response.json['authorizationCode'])
+                AuthorizationCode.load(response.json['authorizationCode'])
             assert authorization_code['scope'] == scope
             assert authorization_code['client_title'] == self.client.title
             assert authorization_code['client_id'] == self.client.id
@@ -79,7 +77,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
                 query=Remove('redirect_uri')
             )
             authorization_code = \
-                serializer.loads(response.json['authorizationCode'])
+                AuthorizationCode.load(response.json['authorizationCode'])
             location_parse = urlparse(authorization_code['location'])
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
@@ -93,7 +91,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
                 query=Remove('state')
             )
             authorization_code = \
-                serializer.loads(response.json['authorizationCode'])
+                AuthorizationCode.load(response.json['authorizationCode'])
             location_parse = urlparse(authorization_code['location'])
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
@@ -120,7 +118,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             )
             assert status == 200
             authorization_code = \
-                serializer.loads(response.json['authorizationCode'])
+                AuthorizationCode.load(response.json['authorizationCode'])
             assert authorization_code['scope'] == 'profile+email'
 
             when(

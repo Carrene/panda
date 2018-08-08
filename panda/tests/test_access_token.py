@@ -1,12 +1,10 @@
-import os
 import base64
-from urllib.parse import urlparse, parse_qs
+import os
 
-import itsdangerous
-from bddrest.authoring import Update, Remove, when, status, response
-from nanohttp import settings
+from bddrest.authoring import Update, when, status, response
 
 from panda.models import Member, Client
+from panda.oauth import AccessToken
 from panda.tests.helpers import LocadApplicationTestCase
 
 
@@ -18,7 +16,7 @@ class TestAccessToken(LocadApplicationTestCase):
 
         cls.member = Member(
             email='member@example.com',
-            title='member_Title',
+            title='member_title',
             password='123abcABC'
         )
         session.add(cls.member)
@@ -69,8 +67,18 @@ class TestAccessToken(LocadApplicationTestCase):
         ):
             assert status == 200
 
+            access_token = response.json['access_token']
+            access_token_payload = AccessToken.load(access_token)
+            assert access_token_payload['client_id'] == self.client.id
+            assert access_token_payload['scope'] == scope
+            assert access_token_payload['member_id'] == self.member.id
 
+            when(
+                'Trying to get access token using wrong client',
+                form=Update(client_id=2)
+            )
+            assert status == '605 We don\'t recognize this client'
 
-
-
+            when('', form=Update(secret='secret'))
+            assert status == '608 Malformed secret'
 

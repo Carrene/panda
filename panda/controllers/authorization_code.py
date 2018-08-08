@@ -1,10 +1,10 @@
-import itsdangerous
-from nanohttp import json, context, HTTPStatus, settings, validate
+from nanohttp import json, context, HTTPStatus, validate
 from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
 from panda.models import Client
+from panda.oauth import AuthorizationCode
 
 
 class AuthorizationCodeController(RestController):
@@ -44,9 +44,7 @@ class AuthorizationCodeController(RestController):
         if state:
             location = f'{location}&state={state}'
 
-        serializer = itsdangerous.URLSafeTimedSerializer \
-            (settings.authorization_code.secret)
-        authorization_code = serializer.dumps(dict(
+        authorization_code_payload = dict(
             scope=scope,
             member_id=context.identity.id,
             member_title=context.identity.payload['name'],
@@ -54,7 +52,8 @@ class AuthorizationCodeController(RestController):
             client_id=client.id,
             client_title=client.title,
             location=location
-        ))
+        )
+        authorization_code = AuthorizationCode(authorization_code_payload)
 
-        return dict(authorizationCode=authorization_code)
+        return dict(authorizationCode=authorization_code.dump())
 
