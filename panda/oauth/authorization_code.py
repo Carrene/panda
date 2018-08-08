@@ -18,6 +18,5 @@ class AuthorizationCode(BaseJwtPrincipal):
 
     @classmethod
     def get_config(cls):
-
         return settings.authorization_code
 

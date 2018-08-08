@@ -11,7 +11,7 @@ class TestAccessToken(LocadApplicationTestCase):
 
     def test_access_token(self):
 
-        # Create token using dump and load it successfuly
+        # Create access token using dump and load methods
         payload = dict(a=1, b=2)
         access_token = AccessToken(payload)
         dump = access_token.dump()
@@ -25,11 +25,10 @@ class TestAccessToken(LocadApplicationTestCase):
         ):
             load = AccessToken.load('token')
 
-        # trying to load token when token is expired
+        # Trying to load token when token is expired
         with pytest.raises(HTTPStatus(status='609 Token expired').__class__):
 
             settings.access_token.max_age = 0.3
-
             access_token = AccessToken(payload)
             dump = access_token.dump()
             time.sleep(1)
