@@ -27,7 +27,7 @@ class AccessTokenController(RestController):
 
         access_token_payload = dict(
             client_id=client.id,
-            member_id=authorization_code['member_id'],
+            member_id=authorization_code['memberId'],
             scope=authorization_code['scope'],
         )
         access_token = AccessToken(access_token_payload)

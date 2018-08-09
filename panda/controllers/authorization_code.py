@@ -46,11 +46,11 @@ class AuthorizationCodeController(RestController):
 
         authorization_code_payload = dict(
             scope=scope,
-            member_id=context.identity.id,
-            member_title=context.identity.payload['name'],
+            memberId=context.identity.id,
+            memberTitle=context.identity.payload['name'],
             email=context.identity.email,
-            client_id=client.id,
-            client_title=client.title,
+            clientId=client.id,
+            clientTitle=client.title,
             location=location
         )
         authorization_code = AuthorizationCode(authorization_code_payload)

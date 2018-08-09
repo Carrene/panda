@@ -58,9 +58,9 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
             assert authorization_code['scope'] == scope
-            assert authorization_code['client_title'] == self.client.title
-            assert authorization_code['client_id'] == self.client.id
-            assert authorization_code['member_id'] == self.member.id
+            assert authorization_code['clientTitle'] == self.client.title
+            assert authorization_code['clientId'] == self.client.id
+            assert authorization_code['memberId'] == self.member.id
             assert authorization_code['email'] == self.member.email
 
             location_parse = urlparse(authorization_code['location'])
