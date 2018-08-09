@@ -42,7 +42,6 @@ class Panda(Application):
       secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
       max_age: 86400  # seconds
       algorithm: HS256
-
     '''
 
     def __init__(self, application_name='panda', root=Root()):
