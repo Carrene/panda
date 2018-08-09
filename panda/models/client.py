@@ -8,9 +8,9 @@ class Client(DeclarativeBase):
     __tablename__ = 'client'
 
     id = Field(Integer, primary_key=True)
-    
+
     member_id = Field(Integer, ForeignKey('member.id'))
-    
+
     title = Field(Unicode(100))
     redirect_uri = Field(Unicode(100))
     secret = Field(Binary(32))
@@ -25,4 +25,7 @@ class Client(DeclarativeBase):
             secret=base64.encodebytes(self.secret),
             member_id=self.member_id
         )
+
+    def validate_secret(self, secret):
+        return base64.encodebytes(self.secret).decode() == secret
 

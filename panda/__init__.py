@@ -35,7 +35,13 @@ class Panda(Application):
 
     authorization_code:
       secret: !!binary T8xNMJCFl4xgBSW3NaDv6/D+48ssBWZTQbqqDlnl0gU=
+      max_age: 86400  # seconds
+      algorithm: HS256
 
+    access_token:
+      secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
+      max_age: 86400  # seconds
+      algorithm: HS256
     '''
 
     def __init__(self, application_name='panda', root=Root()):
