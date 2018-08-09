@@ -1,7 +1,7 @@
 import base64
 import os
 
-from bddrest.authoring import Update, when, status, response
+from bddrest.authoring import Remove, Update, when, status, response
 
 from panda.models import Member, Client
 from panda.oauth import AccessToken
@@ -38,9 +38,6 @@ class TestAccessToken(LocadApplicationTestCase):
             url='/apiv1/tokens',
             verb='CREATE'
         )
-        scope='profile'
-        state='123456'
-        redirect_uri='http://example2.com/oauth2'
 
         with self.given(
             'Create authorization code',
@@ -48,9 +45,9 @@ class TestAccessToken(LocadApplicationTestCase):
             'CREATE',
             query=dict(
                 client_id=self.client.id,
-                scope=scope,
-                state=state,
-                redirect_uri=redirect_uri
+                scope='profile',
+                state='123456',
+                redirect_uri='http://example2.com/oauth2'
             )
         ):
             authorization_code = response.json['authorizationCode']
@@ -70,7 +67,7 @@ class TestAccessToken(LocadApplicationTestCase):
             access_token = response.json['access_token']
             access_token_payload = AccessToken.load(access_token)
             assert access_token_payload['client_id'] == self.client.id
-            assert access_token_payload['scope'] == scope
+            assert access_token_payload['scope'] == 'profile'
             assert access_token_payload['member_id'] == self.member.id
 
             when(
@@ -79,6 +76,18 @@ class TestAccessToken(LocadApplicationTestCase):
             )
             assert status == '605 We don\'t recognize this client'
 
-            when('', form=Update(secret='secret'))
+            when(
+                'Trying to pass using damaged secret',
+                form=Update(secret='secret')
+            )
             assert status == '608 Malformed secret'
+
+            when('Trying to pass without client id', form=Remove('client_id'))
+            assert status == '708 Client id not in form'
+
+            when('Trying to pass without secret', form=Remove('secret'))
+            assert status == '710 Secret not in form'
+
+            when('Trying to pass without code', form=Remove('code'))
+            assert status == '708 Code not in form'
 
