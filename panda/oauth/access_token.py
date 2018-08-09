@@ -7,10 +7,8 @@ class AccessToken(BaseJwtPrincipal):
 
     @classmethod
     def load(cls, token):
-
         try:
             return super().load(token).payload
-
         except itsdangerous.SignatureExpired:
             raise HTTPStatus(status='609 Token expired')
         except itsdangerous.BadSignature:
