@@ -26,8 +26,9 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             load = AuthorizationCode.load('token')
 
         # Trying to load token when token is expired
-        with pytest.raises(HTTPStatus(status='609 Token expired').__class__):
-
+        with pytest.raises(
+            HTTPStatus(status='609 Token expired').__class__
+        ):
             settings.authorization_code.max_age = 0.3
             authorization_code = AuthorizationCode(payload)
             dump = authorization_code.dump()
