@@ -20,12 +20,14 @@ class Panda(Application):
     reset_password:
       secret: reset-password-secret
       max_age: 3600  # seconds
+      algorithm: HS256
       callback_url: http://nc.carrene.com/reset_password
       # url: http://localhost:8080/reset_password
 
     registeration:
       secret: registeration-secret
       max_age: 86400  # seconds
+      algorithm: HS256
       callback_url: http://cas.carrene.com/register
 
     messaging:
