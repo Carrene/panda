@@ -2,6 +2,7 @@ from os.path import join, dirname
 
 from restfulpy.application import Application
 
+from .tokens import RegisterationToken, ResetPasswordToken
 from .authentication import Authenticator
 from .controllers.root import Root
 

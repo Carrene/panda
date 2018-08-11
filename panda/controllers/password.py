@@ -3,8 +3,8 @@ from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
 
-from ..oauth import ResetPasswordToken
 from panda.models import Member
+from panda.tokens import ResetPasswordToken
 from panda.validators import password_validator, new_password_validator
 
 

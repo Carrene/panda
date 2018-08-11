@@ -2,7 +2,7 @@ from nanohttp import json, context, settings, HTTPStatus
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
-from ..oauth import RegisterationToken
+from panda.tokens import RegisterationToken
 from panda.models import Member, RegisterEmail
 from panda.validators import email_validator
 

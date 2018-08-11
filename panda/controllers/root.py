@@ -9,8 +9,7 @@ from .token import TokenController
 from .reset_password_token import ResetPasswordTokenController
 from .password import PasswordController
 from .client import ClientController
-from .authorization_code import AuthorizationCodeController
-from .access_token import AccessTokenController
+from ..oauth.controllers import AuthorizationCodeController, AccessTokenController
 
 
 class ApiV1(Controller):
