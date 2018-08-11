@@ -4,3 +4,4 @@ pytest-pudb
 pytest-cov
 git+git://github.com/Carrene/nanohttp.git@v1.1.0a2
 git+git://github.com/Carrene/restfulpy.git@develop
+git+git://github.com/pylover/pymlconf.git@v0.8.9
