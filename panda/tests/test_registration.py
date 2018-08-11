@@ -87,5 +87,5 @@ class TestRegisteration(LocadApplicationTestCase):
                 'The toekn has been damaged',
                 form=Update(title='user_name', ownership_token='token')
             )
-            assert status == '704 Invalid token'
+            assert status == '611 Malformed token'
 

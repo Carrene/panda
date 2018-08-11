@@ -130,5 +130,5 @@ class TestResetPassword(LocadApplicationTestCase):
                 'The token has been damaged',
                 form=Update(reset_password_token='token')
             )
-            assert status == '704 Invalid token'
+            assert status == '611 Malformed token'
 
