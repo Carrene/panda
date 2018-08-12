@@ -38,7 +38,7 @@ password_validator = validate(
 
 
 new_password_validator = validate(
-    new_password=dict(
+    newPassword=dict(
         required='702 Invalid password length',
         min_length=(6,'702 Invalid password length'),
         max_length=(20,'702 Invalid password length'),

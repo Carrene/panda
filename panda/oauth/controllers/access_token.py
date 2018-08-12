@@ -1,4 +1,4 @@
-from nanohttp import json, context, HTTPStatus, validate
+from nanohttp import json, context, HTTPStatus, validate, action
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
@@ -8,6 +8,7 @@ from .. import AccessToken, AuthorizationCode
 
 class AccessTokenController(RestController):
 
+    @action(prevent_empty_form=True)
     @validate(
         client_id=dict(required='708 Client id not in form'),
         secret=dict(required='710 Secret not in form'),

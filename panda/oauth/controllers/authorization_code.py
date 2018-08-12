@@ -1,4 +1,4 @@
-from nanohttp import json, context, HTTPStatus, validate
+from nanohttp import json, context, HTTPStatus, validate, action
 from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
@@ -9,6 +9,7 @@ from .. import AuthorizationCode
 
 class AuthorizationCodeController(RestController):
 
+    @action(prevent_form='707 Form not allowed')
     @authorize
     @validate(
         client_id=dict(required='605 We don\'t recognize this client'),
@@ -16,10 +17,6 @@ class AuthorizationCodeController(RestController):
     )
     @json
     def create(self):
-        # FIXME: This validation must be performed inside the validation
-        # decorator.
-        if context.form.keys():
-            raise HTTPStatus('707 Form not allowed')
 
        # FIXME Temporarily set here!!!
         scopes = ['profile', 'email']

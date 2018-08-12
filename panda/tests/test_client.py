@@ -77,6 +77,9 @@ class TestClient(LocadApplicationTestCase):
             )
             assert status == '706 Redirect uri is blank'
 
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
+
         self.logout()
 
         with self.given(

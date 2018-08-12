@@ -1,4 +1,4 @@
-from bddrest.authoring import response, Update, Remove, when, status
+from bddrest.authoring import response, Update, when, status, given_form
 from nanohttp import settings
 from restfulpy.messaging import create_messenger
 
@@ -70,7 +70,10 @@ class TestEmail(LocadApplicationTestCase):
 
             when(
                 'Request without email parametes',
-                form=Remove('email')
+                form=given_form - 'email' | dict(a='a')
             )
             assert status == '701 Invalid email format'
+
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
 

@@ -1,17 +1,18 @@
-from nanohttp import json, context, settings
-from restfulpy.controllers import ModelRestController
+from nanohttp import json, context, settings, action
+from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
 
-from panda.models import Member, ResetPasswordEmail
-from panda.tokens import ResetPasswordToken
-from panda.validators import email_validator
+from ..models import Member, ResetPasswordEmail
+from ..tokens import ResetPasswordToken
+from ..validators import email_validator
 
 
-class ResetPasswordTokenController(ModelRestController):
-
-    @commit
-    @json
+class ResetPasswordTokenController(RestController):
+    
+    @action(prevent_empty_form=True)
     @email_validator
+    @json
+    @commit
     def ask(self):
         email = context.form.get('email')
 
@@ -26,8 +27,8 @@ class ResetPasswordTokenController(ModelRestController):
                 to=email,
                 subject='Reset your CAS account password',
                 body={
-                    'reset_password_token': token.dump(),
-                    'reset_password_callback_url':
+                    'resetPasswordToken': token.dump(),
+                    'resetPasswordCallbackUrl':
                     settings.reset_password.callback_url
                 }
             )

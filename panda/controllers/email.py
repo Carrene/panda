@@ -1,17 +1,18 @@
-from nanohttp import json, context, settings, HTTPStatus
-from restfulpy.controllers import ModelRestController
+from nanohttp import json, context, settings, HTTPStatus, action
+from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
 
-from panda.tokens import RegisterationToken
-from panda.models import Member, RegisterEmail
-from panda.validators import email_validator
+from ..models import Member, RegisterEmail
+from ..tokens import RegisterationToken
+from ..validators import email_validator
 
 
-class EmailController(ModelRestController):
-
-    @commit
-    @json
+class EmailController(RestController):
+    
+    @action(prevent_empty_form=True)
     @email_validator
+    @json
+    @commit
     def claim(self):
         email = context.form.get('email')
 

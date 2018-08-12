@@ -87,3 +87,6 @@ class TestRegisteration(LocadApplicationTestCase):
             )
             assert status == '611 Malformed token'
 
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
+

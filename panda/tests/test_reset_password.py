@@ -1,4 +1,5 @@
-from bddrest.authoring import response, Update, Remove, when, status
+from bddrest.authoring import response, Update, Remove, when, status, \
+    given_form
 from nanohttp import settings
 from restfulpy.messaging import create_messenger
 
@@ -42,7 +43,7 @@ class TestResetPassword(LocadApplicationTestCase):
             assert messanger.last_message['to'] == email
 
             assert settings.reset_password.callback_url == \
-                messanger.last_message['body']['reset_password_callback_url']
+                messanger.last_message['body']['resetPasswordCallbackUrl']
 
             assert messanger.last_message['subject'] ==\
                 'Reset your CAS account password'
@@ -71,9 +72,12 @@ class TestResetPassword(LocadApplicationTestCase):
 
             when(
                 'Request without email parametes',
-                form=Remove('email')
+                form=given_form - 'email' | dict(a='a')
             )
             assert status == '701 Invalid email format'
+
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
 
     def test_reset_password(self):
         session = self.create_session()
@@ -95,7 +99,7 @@ class TestResetPassword(LocadApplicationTestCase):
             task.do_(None)
 
             reset_password_token =\
-                messanger.last_message['body']['reset_password_token']
+                messanger.last_message['body']['resetPasswordToken']
 
         with self.given(
             'Reset your CAS account password',
@@ -131,4 +135,7 @@ class TestResetPassword(LocadApplicationTestCase):
                 form=Update(resetPasswordToken='token')
             )
             assert status == '611 Malformed token'
+
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
 
