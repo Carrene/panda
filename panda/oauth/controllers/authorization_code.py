@@ -31,8 +31,8 @@ class AuthorizationCodeController(RestController):
             if s not in scopes:
                 raise HTTPStatus('606 Invalid scope')
 
-        client = DBSession.query(Client).\
-            filter(Client.id == context.query.get('client_id')) \
+        client = DBSession.query(Client) \
+            .filter(Client.id == context.query.get('client_id')) \
             .one_or_none()
         if not client:
             raise HTTPStatus('605 We don\'t recognize this client')
