@@ -70,7 +70,7 @@ class TestEmail(LocadApplicationTestCase):
 
             when(
                 'Request without email parametes',
-                form=given_form - 'email' | dict(a='a')
+                form=given_form - 'email' + dict(a='a')
             )
             assert status == '701 Invalid email format'
 
