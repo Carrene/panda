@@ -43,7 +43,7 @@ class TestRegisteration(LocadApplicationTestCase):
             task.do_(None)
 
             registeration_token =\
-                messanger.last_message['body']['registeration_token']
+                messanger.last_message['body']['registerationToken']
 
         with self.given(
             'Register a member',
@@ -53,7 +53,7 @@ class TestRegisteration(LocadApplicationTestCase):
                 email=email,
                 title=title,
                 password=password,
-                ownership_token=registeration_token
+                ownershipToken=registeration_token
             )
         ):
             assert status == 200
@@ -85,7 +85,7 @@ class TestRegisteration(LocadApplicationTestCase):
 
             when (
                 'The toekn has been damaged',
-                form=Update(title='user_name', ownership_token='token')
+                form=Update(title='user_name', ownershipToken='token')
             )
             assert status == '611 Malformed token'
 

@@ -24,8 +24,8 @@ class EmailController(ModelRestController):
                 to=email,
                 subject='Register your CAS account',
                 body={
-                    'registeration_token': token.dump(),
-                    'registeration_callback_url':
+                    'registerationToken': token.dump(),
+                    'registerationCallbackUrl':
                     settings.registeration.callback_url
                 }
             )

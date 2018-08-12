@@ -10,9 +10,9 @@ class AuthorizationCode(BaseJwtPrincipal):
         try:
             return super().load(token).payload
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus(status='609 Token expired')
+            raise HTTPStatus('609 Token expired')
         except itsdangerous.BadSignature:
-            raise HTTPStatus(status='607 Malformed authorization code')
+            raise HTTPStatus('607 Malformed authorization code')
 
     @classmethod
     def get_config(cls):
@@ -26,9 +26,9 @@ class AccessToken(BaseJwtPrincipal):
         try:
             return super().load(token).payload
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus(status='609 Token expired')
+            raise HTTPStatus('609 Token expired')
         except itsdangerous.BadSignature:
-            raise HTTPStatus(status='610 Malformed access token')
+            raise HTTPStatus('610 Malformed access token')
 
     @classmethod
     def get_config(cls):
