@@ -1,17 +1,17 @@
 from nanohttp import json, context, settings
-from restfulpy.controllers import ModelRestController
+from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
 
-from panda.models import Member, ResetPasswordEmail
-from panda.tokens import ResetPasswordToken
-from panda.validators import email_validator
+from ..models import Member, ResetPasswordEmail
+from ..tokens import ResetPasswordToken
+from ..validators import email_validator
 
 
-class ResetPasswordTokenController(ModelRestController):
+class ResetPasswordTokenController(RestController):
 
-    @commit
-    @json
+    @json(prevent_empty_form=True)
     @email_validator
+    @commit
     def ask(self):
         email = context.form.get('email')
 

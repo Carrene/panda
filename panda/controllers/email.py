@@ -1,17 +1,17 @@
 from nanohttp import json, context, settings, HTTPStatus
-from restfulpy.controllers import ModelRestController
+from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
 
-from panda.tokens import RegisterationToken
-from panda.models import Member, RegisterEmail
-from panda.validators import email_validator
+from ..models import Member, RegisterEmail
+from ..tokens import RegisterationToken
+from ..validators import email_validator
 
 
-class EmailController(ModelRestController):
+class EmailController(RestController):
 
-    @commit
-    @json
+    @json(prevent_empty_form=True)
     @email_validator
+    @commit
     def claim(self):
         email = context.form.get('email')
 
@@ -24,8 +24,8 @@ class EmailController(ModelRestController):
                 to=email,
                 subject='Register your CAS account',
                 body={
-                    'registerationToken': token.dump(),
-                    'registerationCallbackUrl':
+                    'registeration_token': token.dump(),
+                    'registeration_callback_url':
                     settings.registeration.callback_url
                 }
             )

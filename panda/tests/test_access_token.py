@@ -91,3 +91,6 @@ class TestAccessToken(LocadApplicationTestCase):
             when('Trying to pass without code', form=Remove('code'))
             assert status == '708 Code not in form'
 
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
+

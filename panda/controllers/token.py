@@ -1,12 +1,12 @@
 from nanohttp import RestController, json, context, HTTPStatus
 from restfulpy.authorization import authorize
 
-from panda.validators import email_validator
+from ..validators import email_validator
 
 
 class TokenController(RestController):
 
-    @json
+    @json(prevent_empty_form=True)
     @email_validator
     def create(self):
         email = context.form.get('email')
@@ -20,7 +20,6 @@ class TokenController(RestController):
 
         if principal is None:
             raise HTTPStatus('603 Incorrect email or password')
-
         return dict(token=principal.dump())
 
     @authorize
@@ -29,3 +28,4 @@ class TokenController(RestController):
         context.application.__authenticator__.logout()
 
         return {}
+

@@ -5,14 +5,16 @@ from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
-from panda import cryptohelpers
-from panda.models import Client
+from .. import cryptohelpers
+from ..models import Client
 
 
 class ClientController(ModelRestController):
+    __model__ = Client
 
+    @json(prevent_empty_form=True)
     @authorize
-    @json
+    @Client.expose
     @commit
     def define(self):
         title = context.form.get('title')
@@ -36,8 +38,6 @@ class ClientController(ModelRestController):
             100000,
             dklen=32
         )
-
         DBSession.add(client)
-
         return client
 

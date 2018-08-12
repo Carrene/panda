@@ -33,8 +33,8 @@ class TestChangePassword(LocadApplicationTestCase):
             '/apiv1/passwords',
             'change',
             form=dict(
-                current_password='123abcABC',
-                new_password='NewPassword123'
+                currentPassword='123abcABC',
+                newPassword='NewPassword123'
             )
         ):
             assert status == 200
@@ -45,39 +45,42 @@ class TestChangePassword(LocadApplicationTestCase):
             when(
                 'Trying to pass using the wrong password',
                 form=Update(
-                    current_password='123abc',
-                    new_password='NewPassword123'
+                    currentPassword='123abc',
+                    newPassword='NewPassword123'
                 )
             )
             assert status == '602 Invalid current password'
 
             when(
                 'Trying to pass without current password parameter',
-                form=Remove('current_password')
+                form=Remove('currentPassword')
             )
             assert status == '602 Invalid current password'
 
             when(
                 'Trying to pass a simple password',
-                form=Update(new_password='123')
+                form=Update(newPassword='123')
             )
             assert status == '703 Password not complex enough'
 
             when(
                 'Trying to pass a short password',
-                form=Update(new_password='1aA')
+                form=Update(newPassword='1aA')
             )
             assert status == '702 Invalid password length'
 
             when(
                 'Trying to pass a long password',
-                form=Update(new_password='1aA123456789123456789')
+                form=Update(newPassword='1aA123456789123456789')
             )
             assert status == '702 Invalid password length'
 
             when(
                 'Trying to pass without new password parameter',
-                form=Remove('new_password')
+                form=Remove('newPassword')
             )
             assert status == '702 Invalid password length'
+
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
 

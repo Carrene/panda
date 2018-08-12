@@ -2,18 +2,18 @@ from nanohttp import json, context, HTTPStatus, validate
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
-from ...models import Client
 from .. import AccessToken, AuthorizationCode
+from ...models import Client
 
 
 class AccessTokenController(RestController):
 
+    @json(prevent_empty_form=True)
     @validate(
         client_id=dict(required='708 Client id not in form'),
         secret=dict(required='710 Secret not in form'),
         code=dict(required='708 Code not in form')
     )
-    @json
     def create(self):
         authorization_code = AuthorizationCode.load(context.form.get('code'))
 

@@ -39,3 +39,6 @@ class TestLogin(LocadApplicationTestCase):
             when('Invalid email format', form=Update(email='user.com'))
             assert status == '701 Invalid email format'
 
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
+

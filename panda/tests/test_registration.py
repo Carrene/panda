@@ -41,7 +41,7 @@ class TestRegisteration(LocadApplicationTestCase):
             task = RegisterEmail.pop()
             task.do_(None)
             registeration_token = \
-                messanger.last_message['body']['registerationToken']
+                messanger.last_message['body']['registeration_token']
 
         with self.given(
             'Register a member',
@@ -86,4 +86,7 @@ class TestRegisteration(LocadApplicationTestCase):
                 form=Update(title='user_name', ownershipToken='token')
             )
             assert status == '611 Malformed token'
+
+            when('Trying to pass with empty form', form={})
+            assert status == '400 Empty Form'
 
