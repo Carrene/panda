@@ -3,8 +3,8 @@ from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
-from panda.models import Client
-from panda.oauth import AuthorizationCode
+from ...models import Client
+from .. import AuthorizationCode
 
 
 class AuthorizationCodeController(RestController):

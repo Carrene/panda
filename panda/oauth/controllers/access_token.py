@@ -2,8 +2,8 @@ from nanohttp import json, context, HTTPStatus, validate
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
-from panda.models import Client
-from panda.oauth import AccessToken, AuthorizationCode
+from ...models import Client
+from .. import AccessToken, AuthorizationCode
 
 
 class AccessTokenController(RestController):

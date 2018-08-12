@@ -44,7 +44,7 @@ class TestEmail(LocadApplicationTestCase):
             assert settings.registeration.callback_url == \
                 messanger.last_message['body']['registerationCallbackUrl']
 
-            assert messanger.last_message['subject'] ==\
+            assert messanger.last_message['subject'] == \
                 'Register your CAS account'
 
             when('Email not contain @', form=Update(email='userexample.com'))
