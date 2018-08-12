@@ -1,21 +1,20 @@
-from nanohttp import json, context, HTTPStatus, validate, action
+from nanohttp import json, context, HTTPStatus, validate
 from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
-from ...models import Client
 from .. import AuthorizationCode
+from ...models import Client
 
 
 class AuthorizationCodeController(RestController):
 
-    @action(prevent_form='707 Form not allowed')
+    @json(prevent_form='707 Form not allowed')
     @authorize
     @validate(
         client_id=dict(required='605 We don\'t recognize this client'),
         scope=dict(required='606 Invalid scope')
     )
-    @json
     def create(self):
 
        # FIXME Temporarily set here!!!
