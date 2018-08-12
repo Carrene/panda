@@ -1,17 +1,16 @@
 from bddrest.authoring import response, Update, when, status
 from restfulpy.messaging import create_messenger
 
-from panda.controllers.root import Root
 from panda.models import RegisterEmail, Member
 from panda.tests.helpers import LocadApplicationTestCase
 
 
 class TestRegisteration(LocadApplicationTestCase):
-    __controller_factory__ = Root
     __configuration__ = '''
     messaging:
       default_messenger: restfulpy.mockup.MockupMessenger
     '''
+
     @classmethod
     def mockup(cls):
         member = Member(
@@ -41,8 +40,7 @@ class TestRegisteration(LocadApplicationTestCase):
 
             task = RegisterEmail.pop()
             task.do_(None)
-
-            registeration_token =\
+            registeration_token = \
                 messanger.last_message['body']['registerationToken']
 
         with self.given(
