@@ -19,14 +19,14 @@ class Panda(Application):
       administrative_url: postgresql://postgres:postgres@localhost/postgres
 
     reset_password:
-      secret: reset-password-secret
+      secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
       max_age: 3600  # seconds
       algorithm: HS256
       callback_url: http://nc.carrene.com/reset_password
       # url: http://localhost:8080/reset_password
 
     registeration:
-      secret: registeration-secret
+      secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
       max_age: 86400  # seconds
       algorithm: HS256
       callback_url: http://cas.carrene.com/register
