@@ -2,8 +2,8 @@ from nanohttp import json, context, settings
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
-from panda.tokens import ResetPasswordToken
 from panda.models import Member, ResetPasswordEmail
+from panda.tokens import ResetPasswordToken
 from panda.validators import email_validator
 
 
@@ -15,8 +15,8 @@ class ResetPasswordTokenController(ModelRestController):
     def ask(self):
         email = context.form.get('email')
 
-        if not DBSession.query(Member.email). \
-                filter(Member.email == email)\
+        if not DBSession.query(Member.email) \
+                .filter(Member.email == email) \
                 .count():
             return dict(email=email)
 

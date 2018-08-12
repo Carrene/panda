@@ -17,8 +17,9 @@ class AccessTokenController(RestController):
     def create(self):
         authorization_code = AuthorizationCode.load(context.form.get('code'))
 
-        client = DBSession.query(Client).\
-            filter(Client.id == context.form.get('client_id')).one_or_none()
+        client = DBSession.query(Client) \
+            .filter(Client.id == context.form.get('client_id')) \
+            .one_or_none()
         if not client:
             raise HTTPStatus('605 We don\'t recognize this client')
 
@@ -31,6 +32,5 @@ class AccessTokenController(RestController):
             scope=authorization_code['scope'],
         )
         access_token = AccessToken(access_token_payload)
-
         return dict(access_token=access_token.dump())
 
