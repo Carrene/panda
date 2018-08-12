@@ -103,7 +103,7 @@ class TestResetPassword(LocadApplicationTestCase):
             'RESET',
             form=dict(
                 password=password,
-                reset_password_token=reset_password_token
+                resetPasswordToken=reset_password_token
             )
         ):
             assert status == 200
@@ -128,7 +128,7 @@ class TestResetPassword(LocadApplicationTestCase):
 
             when(
                 'The token has been damaged',
-                form=Update(reset_password_token='token')
+                form=Update(resetPasswordToken='token')
             )
-            assert status == '704 Invalid token'
+            assert status == '611 Malformed token'
 

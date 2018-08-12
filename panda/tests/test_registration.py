@@ -1,17 +1,16 @@
 from bddrest.authoring import response, Update, when, status
 from restfulpy.messaging import create_messenger
 
-from panda.controllers.root import Root
 from panda.models import RegisterEmail, Member
 from panda.tests.helpers import LocadApplicationTestCase
 
 
 class TestRegisteration(LocadApplicationTestCase):
-    __controller_factory__ = Root
     __configuration__ = '''
     messaging:
       default_messenger: restfulpy.mockup.MockupMessenger
     '''
+
     @classmethod
     def mockup(cls):
         member = Member(
@@ -41,9 +40,8 @@ class TestRegisteration(LocadApplicationTestCase):
 
             task = RegisterEmail.pop()
             task.do_(None)
-
-            registeration_token =\
-                messanger.last_message['body']['registeration_token']
+            registeration_token = \
+                messanger.last_message['body']['registerationToken']
 
         with self.given(
             'Register a member',
@@ -53,7 +51,7 @@ class TestRegisteration(LocadApplicationTestCase):
                 email=email,
                 title=title,
                 password=password,
-                ownership_token=registeration_token
+                ownershipToken=registeration_token
             )
         ):
             assert status == 200
@@ -85,7 +83,7 @@ class TestRegisteration(LocadApplicationTestCase):
 
             when (
                 'The toekn has been damaged',
-                form=Update(title='user_name', ownership_token='token')
+                form=Update(title='user_name', ownershipToken='token')
             )
-            assert status == '704 Invalid token'
+            assert status == '611 Malformed token'
 

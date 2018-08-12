@@ -2,15 +2,15 @@ from nanohttp import Controller, json
 from restfulpy.controllers import RootController
 
 import panda
+from ..oauth.controllers import AuthorizationCodeController, \
+    AccessTokenController
 from .availabilities import AvailabilityController
+from .client import ClientController
 from .email import EmailController
 from .member import MemberController
-from .token import TokenController
-from .reset_password_token import ResetPasswordTokenController
 from .password import PasswordController
-from .client import ClientController
-from .authorization_code import AuthorizationCodeController
-from .access_token import AccessTokenController
+from .reset_password_token import ResetPasswordTokenController
+from .token import TokenController
 
 
 class ApiV1(Controller):

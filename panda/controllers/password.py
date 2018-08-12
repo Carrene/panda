@@ -1,37 +1,28 @@
-import itsdangerous
-from nanohttp import json, context, settings, HTTPStatus
+from nanohttp import json, context, HTTPStatus
+from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
-from restfulpy.authorization import authorize
 
 from panda.models import Member
+from panda.tokens import ResetPasswordToken
 from panda.validators import password_validator, new_password_validator
 
 
 class PasswordController(RestController):
-    
+
     @password_validator
     @json
     @commit
     def reset(self):
         password = context.form.get('password')
-        reset_password_token = context.form.get('reset_password_token')
+        reset_password_token = context.form.get('resetPasswordToken')
 
-        serializer = \
-            itsdangerous.URLSafeTimedSerializer(settings.reset_password.secret)
-
-        try:
-             email = serializer.loads(
-                reset_password_token,
-                max_age=settings.reset_password.max_age
-            )
-
-        except itsdangerous.BadSignature:
-            raise HTTPStatus(status='704 Invalid token')
+        reset_password_token_payload = \
+            ResetPasswordToken.load(reset_password_token)
+        email = reset_password_token_payload['email']
 
         member = DBSession.query(Member).filter(Member.email == email).one()
         member.password = password
-
         return dict()
 
     @authorize
