@@ -10,9 +10,8 @@ from ..validators import password_validator, new_password_validator
 
 class PasswordController(RestController):
 
-    @action(prevent_empty_form=True)
+    @json(prevent_empty_form=True)
     @password_validator
-    @json
     @commit
     def reset(self):
         password = context.form.get('password')
@@ -24,10 +23,9 @@ class PasswordController(RestController):
         member.password = password
         return {}
 
-    @action(prevent_empty_form=True)
+    @json(prevent_empty_form=True)
     @authorize
     @new_password_validator
-    @json
     @commit
     def change(self):
         current_password = context.form.get('currentPassword')

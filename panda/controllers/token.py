@@ -1,4 +1,4 @@
-from nanohttp import RestController, json, context, HTTPStatus, action
+from nanohttp import RestController, json, context, HTTPStatus
 from restfulpy.authorization import authorize
 
 from ..validators import email_validator
@@ -6,9 +6,8 @@ from ..validators import email_validator
 
 class TokenController(RestController):
 
-    @action(prevent_empty_form=True)
+    @json(prevent_empty_form=True)
     @email_validator
-    @json
     def create(self):
         email = context.form.get('email')
         password = context.form.get('password')

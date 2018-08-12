@@ -1,4 +1,4 @@
-from nanohttp import json, context, settings, action
+from nanohttp import json, context, settings
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
 
@@ -8,10 +8,9 @@ from ..validators import email_validator
 
 
 class ResetPasswordTokenController(RestController):
-    
-    @action(prevent_empty_form=True)
+
+    @json(prevent_empty_form=True)
     @email_validator
-    @json
     @commit
     def ask(self):
         email = context.form.get('email')

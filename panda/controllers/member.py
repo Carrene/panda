@@ -1,19 +1,18 @@
-from nanohttp import json, context, HTTPStatus, action
+from nanohttp import json, context, HTTPStatus
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
-from ..tokens import RegisterationToken
 from ..models import Member
+from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator
 
 
 class MemberController(ModelRestController):
     __model__ = Member
 
-    @action(prevent_empty_form=True)
+    @json(prevent_empty_form=True)
     @title_validator
     @password_validator
-    @json
     @Member.expose
     @commit
     def register(self):

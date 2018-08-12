@@ -1,6 +1,6 @@
 import hashlib
 
-from nanohttp import json, context, HTTPStatus, action
+from nanohttp import json, context, HTTPStatus
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
@@ -11,10 +11,9 @@ from ..models import Client
 
 class ClientController(ModelRestController):
     __model__ = Client
-    
-    @action(prevent_empty_form=True)
+
+    @json(prevent_empty_form=True)
     @authorize
-    @json
     @Client.expose
     @commit
     def define(self):
