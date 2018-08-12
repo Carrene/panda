@@ -41,7 +41,7 @@ class TestRegisteration(LocadApplicationTestCase):
             task = RegisterEmail.pop()
             task.do_(None)
             registeration_token = \
-                messanger.last_message['body']['registerationToken']
+                messanger.last_message['body']['registeration_token']
 
         with self.given(
             'Register a member',

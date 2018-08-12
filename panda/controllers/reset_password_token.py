@@ -26,8 +26,8 @@ class ResetPasswordTokenController(RestController):
                 to=email,
                 subject='Reset your CAS account password',
                 body={
-                    'resetPasswordToken': token.dump(),
-                    'resetPasswordCallbackUrl':
+                    'reset_password_token': token.dump(),
+                    'reset_password_callback_url':
                     settings.reset_password.callback_url
                 }
             )

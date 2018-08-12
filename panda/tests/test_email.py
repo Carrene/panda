@@ -42,7 +42,7 @@ class TestEmail(LocadApplicationTestCase):
             assert messanger.last_message['to'] == email
 
             assert settings.registeration.callback_url == \
-                messanger.last_message['body']['registerationCallbackUrl']
+                messanger.last_message['body']['registeration_callback_url']
 
             assert messanger.last_message['subject'] == \
                 'Register your CAS account'

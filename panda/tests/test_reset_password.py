@@ -43,7 +43,7 @@ class TestResetPassword(LocadApplicationTestCase):
             assert messanger.last_message['to'] == email
 
             assert settings.reset_password.callback_url == \
-                messanger.last_message['body']['resetPasswordCallbackUrl']
+                messanger.last_message['body']['reset_password_callback_url']
 
             assert messanger.last_message['subject'] ==\
                 'Reset your CAS account password'
@@ -99,7 +99,7 @@ class TestResetPassword(LocadApplicationTestCase):
             task.do_(None)
 
             reset_password_token =\
-                messanger.last_message['body']['resetPasswordToken']
+                messanger.last_message['body']['reset_password_token']
 
         with self.given(
             'Reset your CAS account password',
