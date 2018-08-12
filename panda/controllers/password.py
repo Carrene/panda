@@ -15,7 +15,7 @@ class PasswordController(RestController):
     @commit
     def reset(self):
         password = context.form.get('password')
-        reset_password_token = context.form.get('reset_password_token')
+        reset_password_token = context.form.get('resetPasswordToken')
 
         reset_password_token_payload = \
             ResetPasswordToken.load(reset_password_token)
