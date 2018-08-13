@@ -24,7 +24,7 @@ class AccessToken(BaseJwtPrincipal):
     @classmethod
     def load(cls, token):
         try:
-            return super().load(token).payload
+            return super().load(token)
         except itsdangerous.SignatureExpired:
             raise HTTPStatus('609 Token expired')
         except itsdangerous.BadSignature:
@@ -33,4 +33,13 @@ class AccessToken(BaseJwtPrincipal):
     @classmethod
     def get_config(cls):
         return settings.access_token
+
+    @property
+    def id(self):
+        return self.payload.get('id')
+
+    @property
+    def session_id(self):
+        return self.payload.get('sessionId')
+
 

@@ -1,10 +1,11 @@
-from nanohttp import json, context, HTTPStatus
+from nanohttp import json, context, HTTPStatus, HTTPForbidden
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
 from ..models import Member
 from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator
+from ..oauth.tokens import AccessToken
 
 
 class MemberController(ModelRestController):
@@ -38,3 +39,14 @@ class MemberController(ModelRestController):
         )
         return member
 
+    @json(prevent_form='400 Form Not Allowed')
+    def get(self, id):
+        import pudb; pudb.set_trace()  # XXX BREAKPOINT
+
+        if not isinstance(context.identity, AccessToken):
+            raise HTTPForbidden()
+
+        if id != context.identity.payload['member_id']:
+            raise HTTPForbidden()
+
+        return {}
