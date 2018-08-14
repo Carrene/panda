@@ -40,7 +40,7 @@ class MemberController(ModelRestController):
         )
         return member
 
-    @json(prevent_form='400 Form Not Allowed')
+    @json()
     def get(self, id):
         try:
             id = int(id)

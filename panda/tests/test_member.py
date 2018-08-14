@@ -1,7 +1,7 @@
 import os
 import time
 
-from bddrest.authoring import status, response, when
+from bddrest.authoring import status, response, when, Update
 from nanohttp import settings
 
 from panda.models import Member, Client
@@ -42,7 +42,7 @@ class TestMemberProfile(LocadApplicationTestCase):
 
         with self.given(
             'Get member profile',
-            f'/apiv1/members/id:{self.member.id}',
+            f'/apiv1/members/id: {self.member.id}',
             'GET',
             headers={'authorization': f'oauth2-accesstoken {access_token}'},
         ):
@@ -63,13 +63,6 @@ class TestMemberProfile(LocadApplicationTestCase):
 
             when('Trying to pass without headers', headers={})
             assert status == '403 Forbidden'
-
-            when(
-                'Request with form parameters',
-                content_type='application/json',
-                form=dict(a='a')
-            )
-            assert status == '400 Form Not Allowed'
 
             when(
                 'Trying to pass with damege token',
