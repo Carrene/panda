@@ -42,7 +42,6 @@ class MemberController(ModelRestController):
 
     @json(prevent_form='400 Form Not Allowed')
     def get(self, id):
-
         try:
             id = int(id)
         except:
@@ -58,8 +57,8 @@ class MemberController(ModelRestController):
         if not member:
             raise HTTPForbidden()
 
-        member_properties = {}
+        member_scope = {}
         for scope in context.identity.payload['scope'].split('+'):
-            member_properties[scope] = SCOPES[scope](member)
-        return member_properties
+            member_scope[scope] = SCOPES[scope](member)
+        return member_scope
 
