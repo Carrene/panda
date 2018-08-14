@@ -2,7 +2,7 @@ from nanohttp import HTTPStatus, context
 from restfulpy.authentication import StatefulAuthenticator
 from restfulpy.orm import DBSession
 
-from panda.models import Member
+from .models import Member
 from .oauth.tokens import AccessToken
 
 
