@@ -15,7 +15,7 @@ class TestOauthTokens(LocadApplicationTestCase):
         payload = dict(a=1, b=2)
         access_token = AccessToken(payload)
         dump = access_token.dump()
-        load = AccessToken.load(dump.decode())
+        load = AccessToken.load(dump.decode()).payload
         assert load == payload
 
         # Trying to load token using bad signature token

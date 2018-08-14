@@ -38,7 +38,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             url='/apiv1/tokens',
             verb='CREATE'
         )
-        scope='profile'
+        scope='title'
         state='123456'
         redirect_uri='http://example2.com/oauth2'
 
@@ -114,12 +114,12 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             # Related to the scope tests
             when(
                 'Trying to pass multi scope',
-                query=Update(scope='profile+email')
+                query=Update(scope='title+email')
             )
             assert status == 200
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            assert authorization_code['scope'] == 'profile+email'
+            assert authorization_code['scope'] == 'title+email'
 
             when(
                 'Trying to pass invalid scope name',
