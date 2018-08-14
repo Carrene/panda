@@ -6,6 +6,7 @@ from ..models import Member
 from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator
 from ..oauth.tokens import AccessToken
+from ..oauth.scopes import SCOPES
 
 
 class MemberController(ModelRestController):
@@ -41,7 +42,11 @@ class MemberController(ModelRestController):
 
     @json(prevent_form='400 Form Not Allowed')
     def get(self, id):
-        import pudb; pudb.set_trace()  # XXX BREAKPOINT
+
+        try:
+            id = int(id)
+        except:
+            raise HTTPForbidden()
 
         if not isinstance(context.identity, AccessToken):
             raise HTTPForbidden()
@@ -49,4 +54,12 @@ class MemberController(ModelRestController):
         if id != context.identity.payload['member_id']:
             raise HTTPForbidden()
 
-        return {}
+        member = DBSession.query(Member).filter(Member.id == id).one_or_none()
+        if not member:
+            raise HTTPForbidden()
+
+        member_properties = {}
+        for scope in context.identity.payload['scope'].split('+'):
+            member_properties[scope] = SCOPES[scope](member)
+        return member_properties
+
