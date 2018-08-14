@@ -37,5 +37,6 @@ class Authenticator(StatefulAuthenticator):
     def verify_token(self, encoded_token):
         if not encoded_token.startswith('oauth2-accesstoken'):
             return super().verify_token(encoded_token)
+
         return AccessToken.load(encoded_token.split(' ')[1])
 
