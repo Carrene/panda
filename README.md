@@ -3,6 +3,14 @@ A single sign-on application
 
 ![Panda](http://tadalafilforsale.net/data/media/1/51830280.jpg)
 
+## Branches
+
+### master
+
+[![Build Status](https://travis-ci.com/Carrene/panda.svg?token=QJx4YS88Uw3DGG4mp4z6&branch=master)](https://travis-ci.com/Carrene/panda)
+[![Coverage Status](https://coveralls.io/repos/github/Carrene/panda/badge.svg?branch=master&t=ykm7UM)](https://coveralls.io/github/Carrene/panda?branch=master)
+
+
 Setting up development Environment on Linux
 ----------------------------------
 
