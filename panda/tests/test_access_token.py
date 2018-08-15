@@ -63,7 +63,7 @@ class TestAccessToken(LocadApplicationTestCase):
             )
         ):
             assert status == 200
-
+            assert response.json['member_id'] == self.member.id
             access_token = response.json['access_token']
             access_token_payload = AccessToken.load(access_token).payload
             assert access_token_payload['client_id'] == self.client.id
