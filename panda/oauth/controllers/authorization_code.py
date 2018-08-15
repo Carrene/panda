@@ -13,7 +13,7 @@ class AuthorizationCodeController(RestController):
     @json(prevent_form='707 Form not allowed')
     @authorize
     @validate(
-        client_id=dict(required='605 We don\'t recognize this client'),
+        clientId=dict(required='605 We don\'t recognize this client'),
         scope=dict(required='606 Invalid scope')
     )
     def create(self):
@@ -25,13 +25,13 @@ class AuthorizationCodeController(RestController):
                 raise HTTPStatus('606 Invalid scope')
 
         client = DBSession.query(Client) \
-            .filter(Client.id == context.query.get('client_id')) \
+            .filter(Client.id == context.query.get('clientId')) \
             .one_or_none()
         if not client:
             raise HTTPStatus('605 We don\'t recognize this client')
 
-        redirect_uri = context.query.get('redirect_uri')\
-            if context.query.get('redirect_uri') else client.redirect_uri
+        redirect_uri = context.query.get('redirectUri')\
+            if context.query.get('redirectUri') else client.redirect_uri
 
         location = f'{redirect_uri}?clint_id={client.id}'
 

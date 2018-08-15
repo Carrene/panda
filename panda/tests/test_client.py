@@ -38,15 +38,15 @@ class TestClient(LocadApplicationTestCase):
             'The client has successfully defined',
             '/apiv1/clients',
             'DEFINE',
-            form=dict(title=title, redirect_uri=redirect_uri)
+            form=dict(title=title, redirectUri=redirect_uri)
         ):
             assert status == 200
             assert response.json['title'] == title
-            assert response.json['redirect_uri'] == redirect_uri
+            assert response.json['redirectUri'] == redirect_uri
 
             secret = base64.encodebytes(hashlib.pbkdf2_hmac(
                 'sha256',
-                str(response.json['member_id']).encode(),
+                str(response.json['memberId']).encode(),
                 RandomMonkeyPatch.random(32),
                 100000,
                 dklen=32
@@ -67,13 +67,13 @@ class TestClient(LocadApplicationTestCase):
 
             when(
                 'Trying to pass with balnk title',
-                form=Update(redirect_uri=' ')
+                form=Update(redirectUri=' ')
             )
             assert status == '706 Redirect uri is blank'
 
             when(
                 'Trying to pass without title parameter',
-                form=Remove('redirect_uri')
+                form=Remove('redirectUri')
             )
             assert status == '706 Redirect uri is blank'
 
@@ -86,7 +86,7 @@ class TestClient(LocadApplicationTestCase):
             'An unauthorized member trying to define client',
             '/apiv1/clients',
             'DEFINE',
-            form=dict(title=title, redirect_uri=redirect_uri)
+            form=dict(title=title, redirectUri=redirect_uri)
         ):
             assert status == 401
 

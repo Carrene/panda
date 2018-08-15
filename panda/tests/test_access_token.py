@@ -44,10 +44,10 @@ class TestAccessToken(LocadApplicationTestCase):
             '/apiv1/authorizationcodes',
             'CREATE',
             query=dict(
-                client_id=self.client.id,
+                clientId=self.client.id,
                 scope='title',
                 state='123456',
-                redirect_uri='http://example2.com/oauth2'
+                redirectUri='http://example2.com/oauth2'
             )
         ):
             authorization_code = response.json['authorizationCode']
@@ -57,22 +57,22 @@ class TestAccessToken(LocadApplicationTestCase):
             '/apiv1/accesstokens',
             'CREATE',
             form=dict(
-                client_id=self.client.id,
+                clientId=self.client.id,
                 secret=base64.encodebytes(self.client.secret),
                 code=authorization_code,
             )
         ):
             assert status == 200
-            assert response.json['member_id'] == self.member.id
-            access_token = response.json['access_token']
+            assert response.json['memberId'] == self.member.id
+            access_token = response.json['accessToken']
             access_token_payload = AccessToken.load(access_token).payload
-            assert access_token_payload['client_id'] == self.client.id
+            assert access_token_payload['clientId'] == self.client.id
             assert access_token_payload['scope'] == 'title'
-            assert access_token_payload['member_id'] == self.member.id
+            assert access_token_payload['memberId'] == self.member.id
 
             when(
                 'Trying to get access token using wrong client',
-                form=Update(client_id=2)
+                form=Update(clientId=2)
             )
             assert status == '605 We don\'t recognize this client'
 
@@ -82,7 +82,7 @@ class TestAccessToken(LocadApplicationTestCase):
             )
             assert status == '608 Malformed secret'
 
-            when('Trying to pass without client id', form=Remove('client_id'))
+            when('Trying to pass without client id', form=Remove('clientId'))
             assert status == '708 Client id not in form'
 
             when('Trying to pass without secret', form=Remove('secret'))

@@ -21,9 +21,9 @@ class Client(DeclarativeBase):
         return dict(
             id=self.id,
             title=self.title,
-            redirect_uri=self.redirect_uri,
+            redirectUri=self.redirect_uri,
             secret=base64.encodebytes(self.secret),
-            member_id=self.member_id
+            memberId=self.member_id
         )
 
     def validate_secret(self, secret):
