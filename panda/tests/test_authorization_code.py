@@ -47,10 +47,10 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             '/apiv1/authorizationcodes',
             'CREATE',
             query=dict(
-                client_id=self.client.id,
+                clientId=self.client.id,
                 scope=scope,
                 state=state,
-                redirect_uri=redirect_uri
+                redirectUri=redirect_uri
             )
         ):
             assert status == 200
@@ -74,7 +74,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             # Related to the redirect uri tests
             when(
                 'Trying to pass without redirect uri parameter',
-                query=Remove('redirect_uri')
+                query=Remove('redirectUri')
             )
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
@@ -101,13 +101,13 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             # Related to the client id tests
             when(
                 'Trying to pass not existing client',
-                query=Update(client_id='1000')
+                query=Update(clientId='1000')
             )
             assert status == '605 We don\'t recognize this client'
 
             when(
                 'Trying to pass without clint_id parameter',
-                query=Remove('client_id')
+                query=Remove('clientId')
             )
             assert status == '605 We don\'t recognize this client'
 

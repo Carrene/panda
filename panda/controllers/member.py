@@ -50,7 +50,7 @@ class MemberController(ModelRestController):
         if not isinstance(context.identity, AccessToken):
             raise HTTPForbidden()
 
-        if id != context.identity.payload['member_id']:
+        if id != context.identity.payload['memberId']:
             raise HTTPForbidden()
 
         member = DBSession.query(Member).filter(Member.id == id).one_or_none()

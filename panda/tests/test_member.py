@@ -1,7 +1,7 @@
 import os
 import time
 
-from bddrest.authoring import status, response, when, Update
+from bddrest.authoring import status, response, when
 from nanohttp import settings
 
 from panda.models import Member, Client
@@ -34,8 +34,8 @@ class TestMember(LocadApplicationTestCase):
 
     def test_get_member(self):
         access_token_payload = dict(
-            client_id=self.client.id,
-            member_id=self.member.id,
+            clientId=self.client.id,
+            memberId=self.member.id,
             scope='title',
         )
         access_token = AccessToken(access_token_payload).dump().decode()
