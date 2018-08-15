@@ -9,7 +9,7 @@ from panda.oauth.tokens import AccessToken
 from panda.tests.helpers import LocadApplicationTestCase
 
 
-class TestMemberProfile(LocadApplicationTestCase):
+class TestMember(LocadApplicationTestCase):
 
     @classmethod
     def mockup(cls):
@@ -32,7 +32,7 @@ class TestMemberProfile(LocadApplicationTestCase):
         session.add(cls.client)
         session.commit()
 
-    def test_member_profile(self):
+    def test_get_member(self):
         access_token_payload = dict(
             client_id=self.client.id,
             member_id=self.member.id,
