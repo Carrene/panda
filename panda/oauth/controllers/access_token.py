@@ -12,7 +12,7 @@ class AccessTokenController(RestController):
     @validate(
         client_id=dict(required='708 Client id not in form'),
         secret=dict(required='710 Secret not in form'),
-        code=dict(required='708 Code not in form')
+        code=dict(required='709 Code not in form')
     )
     def create(self):
         authorization_code = AuthorizationCode.load(context.form.get('code'))
