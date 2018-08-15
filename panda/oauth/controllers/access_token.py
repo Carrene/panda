@@ -32,5 +32,8 @@ class AccessTokenController(RestController):
             scope=authorization_code['scope'],
         )
         access_token = AccessToken(access_token_payload)
-        return dict(access_token=access_token.dump())
+        return dict(
+            access_token=access_token.dump(),
+            member_id=authorization_code['memberId']
+        )
 

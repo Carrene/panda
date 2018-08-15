@@ -1,10 +1,12 @@
-from nanohttp import json, context, HTTPStatus
+from nanohttp import json, context, HTTPStatus, HTTPForbidden
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
 from ..models import Member
 from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator
+from ..oauth.tokens import AccessToken
+from ..oauth.scopes import SCOPES
 
 
 class MemberController(ModelRestController):
@@ -37,4 +39,27 @@ class MemberController(ModelRestController):
             principal.dump().decode('utf-8')
         )
         return member
+
+    @json()
+    def get(self, id):
+        try:
+            id = int(id)
+        except:
+            raise HTTPForbidden()
+
+        if not isinstance(context.identity, AccessToken):
+            raise HTTPForbidden()
+
+        if id != context.identity.payload['member_id']:
+            raise HTTPForbidden()
+
+        member = DBSession.query(Member).filter(Member.id == id).one_or_none()
+        if not member:
+            raise HTTPForbidden()
+
+        member_scope = dict.fromkeys(SCOPES.keys(), None)
+        member_scope['id'] = member.id
+        for scope in context.identity.payload['scope'].split('+'):
+            member_scope[scope] = SCOPES[scope](member)
+        return member_scope
 

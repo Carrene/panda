@@ -5,6 +5,7 @@ from restfulpy.orm import DBSession
 
 from .. import AuthorizationCode
 from ...models import Client
+from ..scopes import SCOPES
 
 
 class AuthorizationCodeController(RestController):
@@ -16,15 +17,11 @@ class AuthorizationCodeController(RestController):
         scope=dict(required='606 Invalid scope')
     )
     def create(self):
-
-       # FIXME Temporarily set here!!!
-        scopes = ['profile', 'email']
-
         scope = context.query.get('scope')
         state = context.query.get('state')
 
         for s in scope.split('+'):
-            if s not in scopes:
+            if s not in SCOPES:
                 raise HTTPStatus('606 Invalid scope')
 
         client = DBSession.query(Client) \

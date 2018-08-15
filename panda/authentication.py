@@ -1,8 +1,9 @@
-from nanohttp import HTTPStatus
+from nanohttp import HTTPStatus, context
 from restfulpy.authentication import StatefulAuthenticator
 from restfulpy.orm import DBSession
 
-from panda.models import Member
+from .models import Member
+from .oauth.tokens import AccessToken
 
 
 class Authenticator(StatefulAuthenticator):
@@ -32,4 +33,10 @@ class Authenticator(StatefulAuthenticator):
             return None
 
         return member
+
+    def verify_token(self, encoded_token):
+        if not encoded_token.startswith('oauth2-accesstoken'):
+            return super().verify_token(encoded_token)
+
+        return AccessToken.load(encoded_token.split(' ')[1])
 
