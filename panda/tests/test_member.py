@@ -48,6 +48,7 @@ class TestMemberProfile(LocadApplicationTestCase):
         ):
             assert status == 200
             assert response.json['title'] == self.member.title
+            assert response.json['id'] == self.member.id
 
             when(
                 'Trying to pass using another member id',
@@ -78,6 +79,7 @@ class TestMemberProfile(LocadApplicationTestCase):
             )
             assert response.json['title'] == self.member.title
             assert response.json['email'] == self.member.email
+            assert response.json['id'] == self.member.id
 
             settings.access_token.max_age = 0.1
             access_token = AccessToken(access_token_payload).dump().decode()

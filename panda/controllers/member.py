@@ -57,7 +57,8 @@ class MemberController(ModelRestController):
         if not member:
             raise HTTPForbidden()
 
-        member_scope = {}
+        member_scope = dict.fromkeys(SCOPES.keys(), None)
+        member_scope['id'] = member.id
         for scope in context.identity.payload['scope'].split('+'):
             member_scope[scope] = SCOPES[scope](member)
         return member_scope
