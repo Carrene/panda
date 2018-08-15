@@ -18,7 +18,7 @@ class ClientController(ModelRestController):
     @commit
     def define(self):
         title = context.form.get('title')
-        redirect_uri = context.form.get('redirect_uri')
+        redirect_uri = context.form.get('redirectUri')
 
         if not title or title.isspace():
             raise HTTPStatus('705 Invalid title format')
