@@ -44,10 +44,10 @@ class TestAccessToken(LocadApplicationTestCase):
             '/apiv1/authorizationcodes',
             'CREATE',
             query=dict(
-                client_id=self.client.id,
+                clientId=self.client.id,
                 scope='title',
                 state='123456',
-                redirect_uri='http://example2.com/oauth2'
+                redirectUri='http://example2.com/oauth2'
             )
         ):
             authorization_code = response.json['authorizationCode']
