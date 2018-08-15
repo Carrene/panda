@@ -41,7 +41,7 @@ class TestMember(LocadApplicationTestCase):
         access_token = AccessToken(access_token_payload).dump().decode()
 
         with self.given(
-            'Get member profile',
+            'Get member according to scopes',
             f'/apiv1/members/id: {self.member.id}',
             'GET',
             headers={'authorization': f'oauth2-accesstoken {access_token}'},
