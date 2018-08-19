@@ -32,7 +32,7 @@ class Panda(Application):
       callback_url: http://cas.carrene.com/register
 
     messaging:
-      default_sender: CAS
+      default_messenger: restfulpy.messaging.ConsoleMessenger
       template_dirs:
         - %(root_path)s/panda/email_templates
 
