@@ -27,5 +27,7 @@ class Client(DeclarativeBase):
         )
 
     def validate_secret(self, secret):
-        return base64.encodebytes(self.secret).decode() == secret
-
+        try:
+            return self.secret == base64.decodebytes(bytes(secret, 'utf-8'))
+        except:
+            return False

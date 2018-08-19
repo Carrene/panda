@@ -78,6 +78,12 @@ class TestAccessToken(LocadApplicationTestCase):
 
             when(
                 'Trying to pass using damaged secret',
+                form=Update(secret='damage_secret=')
+            )
+            assert status == '608 Malformed secret'
+
+            when(
+                'Trying to pass using damaged secret and incorrect padding',
                 form=Update(secret='secret')
             )
             assert status == '608 Malformed secret'

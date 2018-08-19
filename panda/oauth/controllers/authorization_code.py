@@ -20,7 +20,7 @@ class AuthorizationCodeController(RestController):
         scope = context.query.get('scope')
         state = context.query.get('state')
 
-        for s in scope.split('+'):
+        for s in scope.split(','):
             if s not in SCOPES:
                 raise HTTPStatus('606 Invalid scope')
 

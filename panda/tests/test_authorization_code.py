@@ -114,12 +114,12 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             # Related to the scope tests
             when(
                 'Trying to pass multi scope',
-                query=Update(scope='title+email')
+                query=Update(scope='title,email')
             )
             assert status == 200
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            assert authorization_code['scope'] == 'title+email'
+            assert authorization_code['scope'] == 'title,email'
 
             when(
                 'Trying to pass invalid scope name',
