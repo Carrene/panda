@@ -77,7 +77,13 @@ class TestAccessToken(LocadApplicationTestCase):
             assert status == '605 We don\'t recognize this client'
 
             when(
-                'Trying to pass using damaged secret',
+                'Trying to pass using damaged and secret',
+                form=Update(secret='damage_secret=')
+            )
+            assert status == '608 Malformed secret'
+
+            when(
+                'Trying to pass using damaged secret and incorrect padding',
                 form=Update(secret='secret')
             )
             assert status == '608 Malformed secret'
