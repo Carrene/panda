@@ -38,8 +38,8 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             url='/apiv1/tokens',
             verb='CREATE'
         )
-        scope='title'
-        state='123456'
+        scope = ['title']
+        state = '123456'
         redirect_uri='http://example2.com/oauth2'
 
         with self.given(
@@ -57,7 +57,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
 
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            assert authorization_code['scope'] == scope
+            assert authorization_code['scopes'] == scope
             assert authorization_code['clientTitle'] == self.client.title
             assert authorization_code['clientId'] == self.client.id
             assert authorization_code['memberId'] == self.member.id
@@ -114,16 +114,16 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             # Related to the scope tests
             when(
                 'Trying to pass multi scope',
-                query=Update(scope='title,email')
+                query=Update(scope=['title', 'email'])
             )
             assert status == 200
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            assert authorization_code['scope'] == 'title,email'
+            assert authorization_code['scopes'] == ['title', 'email']
 
             when(
                 'Trying to pass invalid scope name',
-                query=Update(scope='profiles')
+                query=Update(scope=['profiles'])
             )
             assert status == '606 Invalid scope'
 
@@ -131,6 +131,9 @@ class TestAuthorizationCode(LocadApplicationTestCase):
                 'Trying to pass without scope parameter',
                 query=Remove('scope')
             )
+            assert status == '606 Invalid scope'
+
+            when('The scope is not a list', query=Update(scope='title'))
             assert status == '606 Invalid scope'
 
             # Related to the form parameters
