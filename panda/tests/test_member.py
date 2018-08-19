@@ -71,7 +71,7 @@ class TestMember(LocadApplicationTestCase):
             )
             assert status == '610 Malformed access token'
 
-            access_token_payload['scope'] = 'title+email'
+            access_token_payload['scope'] = 'title,email'
             access_token = AccessToken(access_token_payload).dump().decode()
             when(
                 'Trying to pass with multi scope',
