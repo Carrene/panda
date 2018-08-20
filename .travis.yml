@@ -23,6 +23,10 @@ addons:
 services:
   - redis-server
 
-install: ./scripts/travis-install.sh
+install: 
+  - pip3 install -U pip setuptools wheel
+  - pip3 install -r requirements-dev.txt
+  - pip3 install -e .
+
 script: py.test --cov=panda panda/tests
 after_success: travis_retry coveralls
