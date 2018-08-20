@@ -48,31 +48,31 @@ class TestEmail(LocadApplicationTestCase):
                 'Register your CAS account'
 
             when('Email not contain @', form=Update(email='userexample.com'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Email not contain dot', form=Update(email='user@examplecom'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Invalid email format', form=Update(email='@example.com'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when(
                 'Email not contains any domain',
                 form=Update(email='user@.com')
             )
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when(
                 'Email address is already registered',
                 form=Update(email='already.added@example.com')
             )
-            assert status == '601 Email address is already registered'
+            assert status == '601 Email Address Is Already Registered'
 
             when(
                 'Request without email parametes',
                 form=given_form - 'email' + dict(a='a')
             )
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

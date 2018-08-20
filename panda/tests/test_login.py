@@ -31,13 +31,13 @@ class TestLogin(LocadApplicationTestCase):
             assert 'token' in response.json
 
             when('Invalid password', form=Update(password='123aA'))
-            assert status == '603 Incorrect email or password'
+            assert status == '603 Incorrect Email Or Password'
 
             when('Not exist email', form=Update(email='user@example.com'))
-            assert status == '603 Incorrect email or password'
+            assert status == '603 Incorrect Email Or Password'
 
             when('Invalid email format', form=Update(email='user.com'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

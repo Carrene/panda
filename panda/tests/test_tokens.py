@@ -20,13 +20,13 @@ class TestTokens(LocadApplicationTestCase):
 
         # Trying to load token using bad signature token
         with pytest.raises(
-            HTTPStatus('607 Malformed token').__class__
+            HTTPStatus('607 Malformed Token').__class__
         ):
             load = ResetPasswordToken.load('token')
 
         # Trying to load token when token is expired
         with pytest.raises(
-            HTTPStatus('609 Token expired').__class__
+            HTTPStatus('609 Token Expired').__class__
         ):
             settings.reset_password.max_age = 0.3
             reset_password_token = ResetPasswordToken(payload)
@@ -45,13 +45,13 @@ class TestTokens(LocadApplicationTestCase):
 
         # Trying to load token using bad signature token
         with pytest.raises(
-            HTTPStatus('607 Malformed token').__class__
+            HTTPStatus('607 Malformed Token').__class__
         ):
             load = RegisterationToken.load('token')
 
         # Trying to load token when token is expired
         with pytest.raises(
-            HTTPStatus('609 Token expired').__class__
+            HTTPStatus('609 Token Expired').__class__
         ):
             settings.registeration.max_age = 0.3
             registeration_token = RegisterationToken(payload)

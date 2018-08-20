@@ -13,13 +13,13 @@ class TokenController(RestController):
         password = context.form.get('password')
 
         if email and password is None:
-            raise HTTPStatus('603 Incorrect email or password')
+            raise HTTPStatus('603 Incorrect Email Or Password')
 
         principal = context.application.__authenticator__.\
             login((email, password))
 
         if principal is None:
-            raise HTTPStatus('603 Incorrect email or password')
+            raise HTTPStatus('603 Incorrect Email Or Password')
         return dict(token=principal.dump())
 
     @authorize

@@ -74,28 +74,28 @@ class TestAccessToken(LocadApplicationTestCase):
                 'Trying to get access token using wrong client',
                 form=Update(clientId=2)
             )
-            assert status == '605 We don\'t recognize this client'
+            assert status == '605 We Don\'t Recognize This Client'
 
             when(
                 'Trying to pass using damaged secret',
                 form=Update(secret='damage_secret=')
             )
-            assert status == '608 Malformed secret'
+            assert status == '608 Malformed Secret'
 
             when(
                 'Trying to pass using damaged secret and incorrect padding',
                 form=Update(secret='secret')
             )
-            assert status == '608 Malformed secret'
+            assert status == '608 Malformed Secret'
 
             when('Trying to pass without client id', form=Remove('clientId'))
-            assert status == '708 Client id not in form'
+            assert status == '708 Client Id Not In Form'
 
             when('Trying to pass without secret', form=Remove('secret'))
-            assert status == '710 Secret not in form'
+            assert status == '710 Secret Not In Form'
 
             when('Trying to pass without code', form=Remove('code'))
-            assert status == '709 Code not in form'
+            assert status == '709 Code Not In Form'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

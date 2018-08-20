@@ -57,25 +57,25 @@ class TestClient(LocadApplicationTestCase):
             assert status == 200
 
             when('Trying to pass with balnk title', form=Update(title=' '))
-            assert status == '705 Invalid title format'
+            assert status == '705 Invalid Title Format'
 
             when(
                 'Trying to pass without title parameter',
                 form=Remove('title')
             )
-            assert status == '705 Invalid title format'
+            assert status == '705 Invalid Title Format'
 
             when(
                 'Trying to pass with balnk title',
                 form=Update(redirectUri=' ')
             )
-            assert status == '706 Redirect uri is blank'
+            assert status == '706 Redirect URI Is Blank'
 
             when(
                 'Trying to pass without title parameter',
                 form=Remove('redirectUri')
             )
-            assert status == '706 Redirect uri is blank'
+            assert status == '706 Redirect URI Is Blank'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

@@ -13,36 +13,36 @@ USER_PASSWORD_PATTERN = re.compile('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
 
 email_validator = validate(
     email=dict(
-        required='701 Invalid email format',
-        pattern=(USER_EMAIL_PATTERN, '701 Invalid email format')
+        required='701 Invalid Email Format',
+        pattern=(USER_EMAIL_PATTERN, '701 Invalid Email Format')
     )
 )
 
 
 title_validator = validate(
     title=dict(
-        required='705 Invalid title format',
-        pattern=(USER_TITLE_PATTERN, '705 Invalid title format')
+        required='705 Invalid Title Format',
+        pattern=(USER_TITLE_PATTERN, '705 Invalid Title Format')
     )
 )
 
 
 password_validator = validate(
     password=dict(
-        required='702 Invalid password length',
-        min_length=(6,'702 Invalid password length'),
-        max_length=(20,'702 Invalid password length'),
-        pattern=(USER_PASSWORD_PATTERN, '703 Password not complex enough')
+        required='702 Invalid Password Length',
+        min_length=(6,'702 Invalid Password Length'),
+        max_length=(20,'702 Invalid Password Length'),
+        pattern=(USER_PASSWORD_PATTERN, '703 Password Not Complex Enough')
     )
 )
 
 
 new_password_validator = validate(
     newPassword=dict(
-        required='702 Invalid password length',
-        min_length=(6,'702 Invalid password length'),
-        max_length=(20,'702 Invalid password length'),
-        pattern=(USER_PASSWORD_PATTERN, '703 Password not complex enough')
+        required='702 Invalid Password Length',
+        min_length=(6,'702 Invalid Password Length'),
+        max_length=(20,'702 Invalid Password Length'),
+        pattern=(USER_PASSWORD_PATTERN, '703 Password Not Complex Enough')
     )
 )
 
