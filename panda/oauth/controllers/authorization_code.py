@@ -16,15 +16,11 @@ class AuthorizationCodeController(RestController):
     @authorize
     @validate(
         clientId=dict(required='605 We don\'t recognize this client'),
-        scope=dict(required='606 Invalid scope')
+        scopes=dict(required='606 Invalid scope')
     )
     def create(self):
         state = context.query.get('state')
-
-        try:
-            scopes = ast.literal_eval(context.query.get('scope'))
-        except ValueError:
-            raise HTTPStatus('606 Invalid scope')
+        scopes = context.query.get('scopes').split(',')
 
         for s in scopes:
             if s not in SCOPES:

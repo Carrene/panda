@@ -45,7 +45,7 @@ class TestAccessToken(LocadApplicationTestCase):
             'CREATE',
             query=dict(
                 clientId=self.client.id,
-                scope=['title'],
+                scopes='title',
                 state='123456',
                 redirectUri='http://example2.com/oauth2'
             )
