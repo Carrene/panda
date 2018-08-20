@@ -20,12 +20,12 @@ class AvailabilityController(RestController):
     @email_validator
     def email_validation(self, email):
         if DBSession.query(Member.email).filter(Member.email == email).count():
-            raise HTTPStatus('601 Email address is already registered')
+            raise HTTPStatus('601 Email Address Is Already Registered')
         return {}
 
     @title_validator
     def title_validation(self, title):
         if DBSession.query(Member.title).filter(Member.title == title).count():
-            raise HTTPStatus('604 Title is already registered')
+            raise HTTPStatus('604 Title Is Already Registered')
         return {}
 

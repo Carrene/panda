@@ -10,9 +10,9 @@ class RegisterationToken(BaseJwtPrincipal):
         try:
             return super().load(token).payload
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus('609 Token expired')
+            raise HTTPStatus('609 Token Expired')
         except itsdangerous.BadSignature:
-            raise HTTPStatus('611 Malformed token')
+            raise HTTPStatus('611 Malformed Token')
 
     @classmethod
     def get_config(cls):
@@ -26,9 +26,9 @@ class ResetPasswordToken(BaseJwtPrincipal):
         try:
             return super().load(token).payload
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus('609 Token expired')
+            raise HTTPStatus('609 Token Expired')
         except itsdangerous.BadSignature:
-            raise HTTPStatus('611 Malformed token')
+            raise HTTPStatus('611 Malformed Token')
 
     @classmethod
     def get_config(cls):

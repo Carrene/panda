@@ -29,25 +29,25 @@ class TestAvailabilities(LocadApplicationTestCase):
             assert response.status == 200
 
             when('Email not contain @', form=Update(email='userexample.com'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Email not contain dot', form=Update(email='user@examplecom'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Invalid email format', form=Update(email='@example.com'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Email not contains any domain', form=Update(email='us@.com'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when(
                 'Email address is already registered',
                 form=Update(email='already.added@example.com')
             )
-            assert status == '601 Email address is already registered'
+            assert status == '601 Email Address Is Already Registered'
 
             when('Request without email parametes', form=Remove('email'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
     def test_title_availabilities(self):
         title = 'nickname_example'
@@ -61,11 +61,11 @@ class TestAvailabilities(LocadApplicationTestCase):
             assert response.status == 200
 
             when('Title contain @', form=Update(title='nick@name'))
-            assert status == '705 Invalid title format'
+            assert status == '705 Invalid Title Format'
 
             when('Title is already registered', form=Update(title='username'))
-            assert status == '604 Title is already registered'
+            assert status == '604 Title Is Already Registered'
 
             when('Request without title parametes', form=Remove('title'))
-            assert status == '705 Invalid title format'
+            assert status == '705 Invalid Title Format'
 

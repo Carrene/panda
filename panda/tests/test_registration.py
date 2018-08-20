@@ -61,31 +61,31 @@ class TestRegisteration(LocadApplicationTestCase):
             assert 'X-New-JWT-Token' in response.headers
 
             when('Invalid password min length', form=Update(password='1Aa'))
-            assert status == '702 Invalid password length'
+            assert status == '702 Invalid Password Length'
 
             when(
                 'Invalid password max length',
                 form=Update(password='1Aa123456789abcdeABCDE')
             )
-            assert status == '702 Invalid password length'
+            assert status == '702 Invalid Password Length'
 
             when(
                 'Invalid title format',
                 form=Update(password='123AAAaaa', title='1username')
             )
-            assert status == '705 Invalid title format'
+            assert status == '705 Invalid Title Format'
 
             when ('Duplicate title', form=Update(title='username'))
-            assert status == '604 Title is already registered'
+            assert status == '604 Title Is Already Registered'
 
             when ('Duplicate Email', form=Update(title='user_name'))
-            assert status == '601 Email address is already registered'
+            assert status == '601 Email Address Is Already Registered'
 
             when (
                 'The toekn has been damaged',
                 form=Update(title='user_name', ownershipToken='token')
             )
-            assert status == '611 Malformed token'
+            assert status == '611 Malformed Token'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

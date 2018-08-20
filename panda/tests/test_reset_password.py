@@ -49,19 +49,19 @@ class TestResetPassword(LocadApplicationTestCase):
                 'Reset your CAS account password'
 
             when('Email not contain @', form=Update(email='userexample.com'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Email not contain dot', form=Update(email='user@examplecom'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Invalid email format', form=Update(email='@example.com'))
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when(
                 'Email not contains any domain',
                 form=Update(email='user@.com')
             )
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when(
                 'Email address is already registered',
@@ -74,7 +74,7 @@ class TestResetPassword(LocadApplicationTestCase):
                 'Request without email parametes',
                 form=given_form - 'email' + dict(a='a')
             )
-            assert status == '701 Invalid email format'
+            assert status == '701 Invalid Email Format'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'
@@ -119,22 +119,22 @@ class TestResetPassword(LocadApplicationTestCase):
                 'Trying to pass a short password',
                 form=Update(password='1Aa')
             )
-            assert status == '702 Invalid password length'
+            assert status == '702 Invalid Password Length'
 
             when(
                 'Trying to a pass long password',
                 form=Update(password='1Aa123456789abcdeABCDE')
             )
-            assert status == '702 Invalid password length'
+            assert status == '702 Invalid Password Length'
 
             when('Request without password parameter', form=Remove('password'))
-            assert status == '702 Invalid password length'
+            assert status == '702 Invalid Password Length'
 
             when(
                 'The token has been damaged',
                 form=Update(resetPasswordToken='token')
             )
-            assert status == '611 Malformed token'
+            assert status == '611 Malformed Token'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

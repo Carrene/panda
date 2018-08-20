@@ -21,10 +21,10 @@ class ClientController(ModelRestController):
         redirect_uri = context.form.get('redirectUri')
 
         if not title or title.isspace():
-            raise HTTPStatus('705 Invalid title format')
+            raise HTTPStatus('705 Invalid Title Format')
 
         if not redirect_uri or redirect_uri.isspace():
-            raise HTTPStatus('706 Redirect uri is blank')
+            raise HTTPStatus('706 Redirect URI Is Blank')
 
         client = Client(
             title=title,

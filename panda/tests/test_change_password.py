@@ -49,37 +49,37 @@ class TestChangePassword(LocadApplicationTestCase):
                     newPassword='NewPassword123'
                 )
             )
-            assert status == '602 Invalid current password'
+            assert status == '602 Invalid Current Password'
 
             when(
                 'Trying to pass without current password parameter',
                 form=Remove('currentPassword')
             )
-            assert status == '602 Invalid current password'
+            assert status == '602 Invalid Current Password'
 
             when(
                 'Trying to pass a simple password',
                 form=Update(newPassword='123')
             )
-            assert status == '703 Password not complex enough'
+            assert status == '703 Password Not Complex Enough'
 
             when(
                 'Trying to pass a short password',
                 form=Update(newPassword='1aA')
             )
-            assert status == '702 Invalid password length'
+            assert status == '702 Invalid Password Length'
 
             when(
                 'Trying to pass a long password',
                 form=Update(newPassword='1aA123456789123456789')
             )
-            assert status == '702 Invalid password length'
+            assert status == '702 Invalid Password Length'
 
             when(
                 'Trying to pass without new password parameter',
                 form=Remove('newPassword')
             )
-            assert status == '702 Invalid password length'
+            assert status == '702 Invalid Password Length'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

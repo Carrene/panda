@@ -34,7 +34,7 @@ class PasswordController(RestController):
 
         if current_password is None or \
                 not member.validate_password(current_password):
-            raise HTTPStatus('602 Invalid current password')
+            raise HTTPStatus('602 Invalid Current Password')
 
         member.password = new_password
         return {}

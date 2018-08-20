@@ -12,11 +12,11 @@ from ..scopes import SCOPES
 
 class AuthorizationCodeController(RestController):
 
-    @json(prevent_form='707 Form not allowed')
+    @json(prevent_form='707 Form Not Allowed')
     @authorize
     @validate(
-        clientId=dict(required='605 We don\'t recognize this client'),
-        scopes=dict(required='606 Invalid scope')
+        clientId=dict(required='605 We Don\'t Recognize This Client'),
+        scopes=dict(required='606 Invalid Scope')
     )
     def create(self):
         state = context.query.get('state')
@@ -24,13 +24,13 @@ class AuthorizationCodeController(RestController):
 
         for s in scopes:
             if s not in SCOPES:
-                raise HTTPStatus('606 Invalid scope')
+                raise HTTPStatus('606 Invalid Scope')
 
         client = DBSession.query(Client) \
             .filter(Client.id == context.query.get('clientId')) \
             .one_or_none()
         if not client:
-            raise HTTPStatus('605 We don\'t recognize this client')
+            raise HTTPStatus('605 We Don\'t Recognize This Client')
 
         redirect_uri = context.query.get('redirectUri')\
             if context.query.get('redirectUri') else client.redirect_uri

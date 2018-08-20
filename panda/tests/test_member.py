@@ -69,7 +69,7 @@ class TestMember(LocadApplicationTestCase):
                 'Trying to pass with damege token',
                 headers={'authorization': 'oauth2-accesstoken token'}
             )
-            assert status == '610 Malformed access token'
+            assert status == '610 Malformed Access Token'
 
             access_token_payload['scopes'] = ['title', 'email']
             access_token = AccessToken(access_token_payload).dump().decode()
@@ -88,5 +88,5 @@ class TestMember(LocadApplicationTestCase):
                 'Trying to pass with expired token',
                 headers={'authorization': f'oauth2-accesstoken {access_token}'}
             )
-            assert status == '609 Token expired'
+            assert status == '609 Token Expired'
 

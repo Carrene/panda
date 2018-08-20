@@ -103,13 +103,12 @@ class TestAuthorizationCode(LocadApplicationTestCase):
                 'Trying to pass not existing client',
                 query=Update(clientId='1000')
             )
-            assert status == '605 We don\'t recognize this client'
-
+            assert status == '605 We Don\'t Recognize This Client'
             when(
                 'Trying to pass without clint_id parameter',
                 query=Remove('clientId')
             )
-            assert status == '605 We don\'t recognize this client'
+            assert status == '605 We Don\'t Recognize This Client'
 
             # Related to the scope tests
             when(
@@ -125,17 +124,17 @@ class TestAuthorizationCode(LocadApplicationTestCase):
                 'Trying to pass invalid scope name',
                 query=Update(scopes='profiles')
             )
-            assert status == '606 Invalid scope'
+            assert status == '606 Invalid Scope'
 
             when(
                 'Trying to pass without scope parameter',
                 query=Remove('scopes')
             )
-            assert status == '606 Invalid scope'
+            assert status == '606 Invalid Scope'
 
             # Related to the form parameters
             when('Trying to pass with form parameters', form=dict(a='a'))
-            assert status == '707 Form not allowed'
+            assert status == '707 Form Not Allowed'
 
             # Related to the unauthorization member
             when(
