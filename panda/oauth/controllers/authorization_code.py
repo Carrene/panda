@@ -1,3 +1,5 @@
+import ast
+
 from nanohttp import json, context, HTTPStatus, validate
 from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
@@ -14,13 +16,13 @@ class AuthorizationCodeController(RestController):
     @authorize
     @validate(
         clientId=dict(required='605 We don\'t recognize this client'),
-        scope=dict(required='606 Invalid scope')
+        scopes=dict(required='606 Invalid scope')
     )
     def create(self):
-        scope = context.query.get('scope')
         state = context.query.get('state')
+        scopes = context.query.get('scopes').split(',')
 
-        for s in scope.split(','):
+        for s in scopes:
             if s not in SCOPES:
                 raise HTTPStatus('606 Invalid scope')
 
@@ -39,7 +41,7 @@ class AuthorizationCodeController(RestController):
             location = f'{location}&state={state}'
 
         authorization_code_payload = dict(
-            scope=scope,
+            scopes=scopes,
             memberId=context.identity.id,
             memberTitle=context.identity.payload['name'],
             email=context.identity.email,

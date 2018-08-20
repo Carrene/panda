@@ -45,7 +45,7 @@ class TestAccessToken(LocadApplicationTestCase):
             'CREATE',
             query=dict(
                 clientId=self.client.id,
-                scope='title',
+                scopes='title',
                 state='123456',
                 redirectUri='http://example2.com/oauth2'
             )
@@ -67,7 +67,7 @@ class TestAccessToken(LocadApplicationTestCase):
             access_token = response.json['accessToken']
             access_token_payload = AccessToken.load(access_token).payload
             assert access_token_payload['clientId'] == self.client.id
-            assert access_token_payload['scope'] == 'title'
+            assert access_token_payload['scopes'] == ['title']
             assert access_token_payload['memberId'] == self.member.id
 
             when(

@@ -36,7 +36,7 @@ class TestMember(LocadApplicationTestCase):
         access_token_payload = dict(
             clientId=self.client.id,
             memberId=self.member.id,
-            scope='title',
+            scopes=['title']
         )
         access_token = AccessToken(access_token_payload).dump().decode()
 
@@ -71,7 +71,7 @@ class TestMember(LocadApplicationTestCase):
             )
             assert status == '610 Malformed access token'
 
-            access_token_payload['scope'] = 'title+email'
+            access_token_payload['scopes'] = ['title', 'email']
             access_token = AccessToken(access_token_payload).dump().decode()
             when(
                 'Trying to pass with multi scope',

@@ -38,9 +38,9 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             url='/apiv1/tokens',
             verb='CREATE'
         )
-        scope='title'
-        state='123456'
-        redirect_uri='http://example2.com/oauth2'
+        scopes = 'title'
+        state = '123456'
+        redirect_uri = 'http://example2.com/oauth2'
 
         with self.given(
             'Create authorization code',
@@ -48,7 +48,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             'CREATE',
             query=dict(
                 clientId=self.client.id,
-                scope=scope,
+                scopes=scopes,
                 state=state,
                 redirectUri=redirect_uri
             )
@@ -57,7 +57,7 @@ class TestAuthorizationCode(LocadApplicationTestCase):
 
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            assert authorization_code['scope'] == scope
+            assert authorization_code['scopes'] == scopes.split(',')
             assert authorization_code['clientTitle'] == self.client.title
             assert authorization_code['clientId'] == self.client.id
             assert authorization_code['memberId'] == self.member.id
@@ -114,22 +114,22 @@ class TestAuthorizationCode(LocadApplicationTestCase):
             # Related to the scope tests
             when(
                 'Trying to pass multi scope',
-                query=Update(scope='title,email')
+                query=Update(scopes='title,email')
             )
             assert status == 200
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            assert authorization_code['scope'] == 'title,email'
+            assert authorization_code['scopes'] == 'title,email'.split(',')
 
             when(
                 'Trying to pass invalid scope name',
-                query=Update(scope='profiles')
+                query=Update(scopes='profiles')
             )
             assert status == '606 Invalid scope'
 
             when(
                 'Trying to pass without scope parameter',
-                query=Remove('scope')
+                query=Remove('scopes')
             )
             assert status == '606 Invalid scope'
 
