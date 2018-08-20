@@ -36,7 +36,7 @@ class TestMember(LocadApplicationTestCase):
         access_token_payload = dict(
             clientId=self.client.id,
             memberId=self.member.id,
-            scopes='title'
+            scopes=['title']
         )
         access_token = AccessToken(access_token_payload).dump().decode()
 
