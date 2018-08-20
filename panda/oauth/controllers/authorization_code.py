@@ -16,7 +16,7 @@ class AuthorizationCodeController(RestController):
     @authorize
     @validate(
         clientId=dict(required='605 We Don\'t Recognize This Client'),
-        scope=dict(required='606 Invalid Scope')
+        scopes=dict(required='606 Invalid Scope')
     )
     def create(self):
         state = context.query.get('state')
