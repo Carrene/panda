@@ -4,10 +4,10 @@ import pytest
 from nanohttp import settings, HTTPStatus
 
 from panda.oauth.tokens import AccessToken, AuthorizationCode
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestOauthTokens(LocadApplicationTestCase):
+class TestOauthTokens(LocalApplicationTestCase):
 
     def test_access_token(self):
 

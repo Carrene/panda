@@ -3,7 +3,7 @@ from restfulpy.testing import ApplicableTestCase
 from panda import Panda, cryptohelpers
 
 
-class LocadApplicationTestCase(ApplicableTestCase):
+class LocalApplicationTestCase(ApplicableTestCase):
     __application_factory__ = Panda
 
 

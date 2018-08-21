@@ -1,10 +1,10 @@
 from bddrest.authoring import Update, Remove, when, status
 
 from panda.models import Member
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestChangePassword(LocadApplicationTestCase):
+class TestChangePassword(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):

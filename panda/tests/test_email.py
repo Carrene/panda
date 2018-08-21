@@ -3,10 +3,10 @@ from nanohttp import settings
 from restfulpy.messaging import create_messenger
 
 from panda.models import RegisterEmail, Member
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestEmail(LocadApplicationTestCase):
+class TestEmail(LocalApplicationTestCase):
     __configuration__ = '''
       messaging:
         default_messenger: restfulpy.mockup.MockupMessenger

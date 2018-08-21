@@ -4,10 +4,10 @@ import hashlib
 from bddrest.authoring import Update, Remove, when, status, response
 
 from panda.models import Member
-from panda.tests.helpers import LocadApplicationTestCase, RandomMonkeyPatch
+from panda.tests.helpers import LocalApplicationTestCase, RandomMonkeyPatch
 
 
-class TestClient(LocadApplicationTestCase):
+class TestClient(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):

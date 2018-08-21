@@ -6,10 +6,10 @@ from nanohttp import settings
 
 from panda.models import Member, Client
 from panda.oauth.tokens import AccessToken
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestMember(LocadApplicationTestCase):
+class TestMember(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):

@@ -5,10 +5,10 @@ from bddrest.authoring import Remove, Update, when, status, response
 
 from panda.models import Member, Client
 from panda.oauth import AccessToken
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestAccessToken(LocadApplicationTestCase):
+class TestAccessToken(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
