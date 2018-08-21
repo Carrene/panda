@@ -1,10 +1,10 @@
 from bddrest.authoring import response, status, Update, when, Remove
 
 from panda.models import Member
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestAvailabilities(LocadApplicationTestCase):
+class TestAvailabilities(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):

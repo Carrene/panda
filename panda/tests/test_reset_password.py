@@ -4,10 +4,10 @@ from nanohttp import settings
 from restfulpy.messaging import create_messenger
 
 from panda.models import ResetPasswordEmail, Member
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestResetPassword(LocadApplicationTestCase):
+class TestResetPassword(LocalApplicationTestCase):
     __configuration__ = '''
       messaging:
         default_messenger: restfulpy.mockup.MockupMessenger

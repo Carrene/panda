@@ -2,10 +2,10 @@ from bddrest.authoring import response, Update, when, status
 from restfulpy.messaging import create_messenger
 
 from panda.models import RegisterEmail, Member
-from panda.tests.helpers import LocadApplicationTestCase
+from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestRegisteration(LocadApplicationTestCase):
+class TestRegisteration(LocalApplicationTestCase):
     __configuration__ = '''
     messaging:
       default_messenger: restfulpy.mockup.MockupMessenger
