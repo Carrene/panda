@@ -90,3 +90,7 @@ class TestMember(LocalApplicationTestCase):
             )
             assert status == '609 Token Expired'
 
+    def test_metadata_member(self):
+        with self.given('Test metadata verb', '/apiv1/members', 'METADATA'):
+            assert status == 200
+
