@@ -41,10 +41,12 @@ def insert(): # pragma: no cover
     DBSession.add(client)
     DBSession.commit()
 
+    print('\n***************  Members  ***************\n')
     print(member1.to_dict())
+    print(member2.to_dict())
+    print(member3.to_dict())
+    print('\n*****************************************')
 
-    print(f'member1: title:{member1.title} email:{member1.email} password:123abcABC')
-    print(f'member2: title:{member2.title} email:{member2.email} password:123abcABC')
-    print(f'member3: title:{member3.title} email:{member3.email} password:123abcABC')
-    print(f'client: id:{client.id} title:{client.title} rediect_uri:{client.redirect_uri} member id:{client.member_id} secret:{secret}')
-
+    print('***************  Clients  ***************\n')
+    print(client.to_dict())
+    print('\n*****************************************\n')
