@@ -1,4 +1,3 @@
-import os
 import base64
 
 from restfulpy.orm import DBSession
@@ -50,3 +49,4 @@ def insert(): # pragma: no cover
     print('***************  Clients  ***************\n')
     print(client.to_dict())
     print('\n*****************************************\n')
+
