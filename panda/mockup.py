@@ -36,7 +36,6 @@ def insert(): # pragma: no cover
         member_id=member1.id
     )
 
-    secret = base64.encodebytes(client.secret)
     DBSession.add(client)
     DBSession.commit()
 
