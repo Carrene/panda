@@ -59,9 +59,6 @@ class Panda(Application):
     def insert_mockup(self):
         mockup.insert()
 
-    def insert_basedata(self):
-        pass
-
 
 panda = Panda()
 
