@@ -11,20 +11,21 @@ def insert(): # pragma: no cover
         email='john@gmail.com',
         password='123abcABC'
     )
+    DBSession.add(member1)
 
     member2 = Member(
         title='tom',
         email='tom@gmail.com',
         password='123abcABC'
     )
+    DBSession.add(member2)
 
     member3 = Member(
         title='sarah',
         email='sarah@gmail.com',
         password='123abcABC'
     )
-
-    DBSession.add_all([member1, member2, member3])
+    DBSession.add(member3)
     DBSession.flush()
 
     client = Client(
