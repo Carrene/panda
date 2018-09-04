@@ -40,20 +40,24 @@ def insert(): # pragma: no cover
 
     print('Members has been created.')
     print(
-        f'  Title: {member1.title}\n  Email: {member1.email}\n'
-        '  Password: 123abcABC\n'
+        f'  Title: {member1.title}\n'
+        f'  Email: {member1.email}\n'
+        f'  Password: 123abcABC\n'
     )
     print(
-        f'  Title: {member2.title}\n  Email: {member2.email}\n'
-        '  Password: 123abcABC\n'
+        f'  Title: {member2.title}\n'
+        f'  Email: {member2.email}\n'
+        f'  Password: 123abcABC\n'
     )
     print(
-        f'  Title: {member3.title}\n  Email: {member3.email}\n'
-        '  Password: 123abcABC\n'
+        f'  Title: {member3.title}\n'
+        f'  Email: {member3.email}\n'
+        f'  Password: 123abcABC\n'
     )
     print('Client has been created.')
     print(
-        f'  Title: {client.title}\n  Secret: {secret}\n'
+        f'  Title: {client.title}\n'
+        f'  Secret: {secret}\n'
         f'  Redirect uri: {client.redirect_uri}\n'
         f'  Related to member with id: {client.member_id}\n'
     )
