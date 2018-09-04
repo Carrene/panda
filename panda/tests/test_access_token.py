@@ -3,7 +3,7 @@ import os
 
 from bddrest.authoring import Remove, Update, when, status, response
 
-from panda.models import Member, Client
+from panda.models import Member, Application
 from panda.oauth import AccessToken
 from panda.tests.helpers import LocalApplicationTestCase
 
@@ -22,13 +22,13 @@ class TestAccessToken(LocalApplicationTestCase):
         session.add(cls.member)
         session.flush()
 
-        cls.client = Client(
+        cls.application = Application(
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
             member_id=cls.member.id
         )
-        session.add(cls.client)
+        session.add(cls.application)
         session.commit()
 
     def test_create_access_token(self):
@@ -44,7 +44,7 @@ class TestAccessToken(LocalApplicationTestCase):
             '/apiv1/authorizationcodes',
             'CREATE',
             query=dict(
-                clientId=self.client.id,
+                applicationId=self.application.id,
                 scopes='title',
                 state='123456',
                 redirectUri='http://example2.com/oauth2'
@@ -57,8 +57,8 @@ class TestAccessToken(LocalApplicationTestCase):
             '/apiv1/accesstokens',
             'CREATE',
             form=dict(
-                clientId=self.client.id,
-                secret=base64.encodebytes(self.client.secret),
+                applicationId=self.application.id,
+                secret=base64.encodebytes(self.application.secret),
                 code=authorization_code,
             )
         ):
@@ -66,15 +66,15 @@ class TestAccessToken(LocalApplicationTestCase):
             assert response.json['memberId'] == self.member.id
             access_token = response.json['accessToken']
             access_token_payload = AccessToken.load(access_token).payload
-            assert access_token_payload['clientId'] == self.client.id
+            assert access_token_payload['applicationId'] == self.application.id
             assert access_token_payload['scopes'] == ['title']
             assert access_token_payload['memberId'] == self.member.id
 
             when(
-                'Trying to get access token using wrong client',
-                form=Update(clientId=2)
+                'Trying to get access token using wrong application',
+                form=Update(applicationId=2)
             )
-            assert status == '605 We Don\'t Recognize This Client'
+            assert status == '605 We Don\'t Recognize This Application'
 
             when(
                 'Trying to pass using damaged secret',
@@ -88,8 +88,11 @@ class TestAccessToken(LocalApplicationTestCase):
             )
             assert status == '608 Malformed Secret'
 
-            when('Trying to pass without client id', form=Remove('clientId'))
-            assert status == '708 Client Id Not In Form'
+            when(
+                'Trying to pass without application id',
+                form=Remove('applicationId')
+            )
+            assert status == '708 Application Id Not In Form'
 
             when('Trying to pass without secret', form=Remove('secret'))
             assert status == '710 Secret Not In Form'

@@ -2,7 +2,7 @@ import base64
 
 from restfulpy.orm import DBSession
 
-from .models import Client, Member
+from .models import Application, Member
 
 
 def insert(): # pragma: no cover
@@ -29,13 +29,13 @@ def insert(): # pragma: no cover
     DBSession.flush()
 
     secret = 'A1dFVpz4w/qyym+HeXKWYmm6Ocj4X5ZNv1JQ7kgHBEk='
-    client = Client(
+    application = Application(
         title='oauth',
         redirect_uri='http://example.com/oauth',
         secret=base64.decodebytes(bytes(secret, 'utf-8')),
         member_id=member1.id
     )
-    DBSession.add(client)
+    DBSession.add(application)
     DBSession.commit()
 
     print('Members has been created.')
@@ -54,11 +54,11 @@ def insert(): # pragma: no cover
         f'  Email: {member3.email}\n'
         f'  Password: 123abcABC\n'
     )
-    print('Client has been created.')
+    print('Application has been created.')
     print(
-        f'  Title: {client.title}\n'
+        f'  Title: {application.title}\n'
         f'  Secret: {secret}\n'
-        f'  Redirect uri: {client.redirect_uri}\n'
-        f'  Related to member with id: {client.member_id}\n'
+        f'  Redirect uri: {application.redirect_uri}\n'
+        f'  Related to member with id: {application.member_id}\n'
     )
 

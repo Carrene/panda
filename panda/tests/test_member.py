@@ -4,7 +4,7 @@ import time
 from bddrest.authoring import status, response, when
 from nanohttp import settings
 
-from panda.models import Member, Client
+from panda.models import Member, Application
 from panda.oauth.tokens import AccessToken
 from panda.tests.helpers import LocalApplicationTestCase
 
@@ -23,18 +23,18 @@ class TestMember(LocalApplicationTestCase):
         session.add(cls.member)
         session.flush()
 
-        cls.client = Client(
+        cls.application = Application(
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
             member_id=cls.member.id
         )
-        session.add(cls.client)
+        session.add(cls.application)
         session.commit()
 
     def test_get_member(self):
         access_token_payload = dict(
-            clientId=self.client.id,
+            applicationId=self.application.id,
             memberId=self.member.id,
             scopes=['title']
         )

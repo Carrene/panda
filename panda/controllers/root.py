@@ -5,7 +5,7 @@ import panda
 from ..oauth.controllers import AuthorizationCodeController, \
     AccessTokenController
 from .availabilities import AvailabilityController
-from .client import ClientController
+from .application import ApplicationController
 from .email import EmailController
 from .member import MemberController
 from .password import PasswordController
@@ -20,7 +20,7 @@ class ApiV1(Controller):
     tokens = TokenController()
     resetpasswordtokens = ResetPasswordTokenController()
     passwords = PasswordController()
-    clients = ClientController()
+    applications = ApplicationController()
     authorizationcodes = AuthorizationCodeController()
     accesstokens = AccessTokenController()
 

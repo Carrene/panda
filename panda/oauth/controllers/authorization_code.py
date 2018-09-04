@@ -6,7 +6,7 @@ from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
 from .. import AuthorizationCode
-from ...models import Client
+from ...models import Application
 from ..scopes import SCOPES
 
 
@@ -15,7 +15,7 @@ class AuthorizationCodeController(RestController):
     @json(prevent_form='707 Form Not Allowed')
     @authorize
     @validate(
-        clientId=dict(required='605 We Don\'t Recognize This Client'),
+        applicationId=dict(required='605 We Don\'t Recognize This Application'),
         scopes=dict(required='606 Invalid Scope')
     )
     def create(self):
@@ -26,16 +26,16 @@ class AuthorizationCodeController(RestController):
             if s not in SCOPES:
                 raise HTTPStatus('606 Invalid Scope')
 
-        client = DBSession.query(Client) \
-            .filter(Client.id == context.query.get('clientId')) \
+        application = DBSession.query(Application) \
+            .filter(Application.id == context.query.get('applicationId')) \
             .one_or_none()
-        if not client:
-            raise HTTPStatus('605 We Don\'t Recognize This Client')
+        if not application:
+            raise HTTPStatus('605 We Don\'t Recognize This Application')
 
         redirect_uri = context.query.get('redirectUri')\
-            if context.query.get('redirectUri') else client.redirect_uri
+            if context.query.get('redirectUri') else application.redirect_uri
 
-        location = f'{redirect_uri}?clint_id={client.id}'
+        location = f'{redirect_uri}?clint_id={application.id}'
 
         if state:
             location = f'{location}&state={state}'
@@ -45,8 +45,8 @@ class AuthorizationCodeController(RestController):
             memberId=context.identity.id,
             memberTitle=context.identity.payload['name'],
             email=context.identity.email,
-            clientId=client.id,
-            clientTitle=client.title,
+            applicationId=application.id,
+            applicationTitle=application.title,
             location=location
         )
         authorization_code = AuthorizationCode(authorization_code_payload)
