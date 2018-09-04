@@ -28,25 +28,31 @@ def insert(): # pragma: no cover
     DBSession.add(member3)
     DBSession.flush()
 
+    secret = 'A1dFVpz4w/qyym+HeXKWYmm6Ocj4X5ZNv1JQ7kgHBEk='
     client = Client(
         title='oauth',
         redirect_uri='http://example.com/oauth',
-        secret=base64.decodebytes(
-            bytes('A1dFVpz4w/qyym+HeXKWYmm6Ocj4X5ZNv1JQ7kgHBEk=\n', 'utf-8')
-        ),
+        secret=base64.decodebytes(bytes(secret, 'utf-8')),
         member_id=member1.id
     )
-
     DBSession.add(client)
     DBSession.commit()
 
-    print('\n***************  Members  ***************\n')
-    print(member1.to_dict())
-    print(member2.to_dict())
-    print(member3.to_dict())
-    print('\n*****************************************')
-
-    print('***************  Clients  ***************\n')
-    print(client.to_dict())
-    print('\n*****************************************\n')
+    print('# Members has been created')
+    print(
+        f' Title: {member1.title}\n Email: {member1.email}\n '
+        'Password: 123abcABC\n'
+    )
+    print(
+        f' Title: {member2.title}\n Email: {member2.email}\n '
+        'Password: 123abcABC\n'
+    )
+    print(
+        f' Title: {member3.title}\n Email: {member3.email}\n '
+        'Password: 123abcABC\n'
+    )
+    print('# Client has been created')
+    print(
+        f' Title: {client.title}\n Secret: {secret}\n '
+        'Redirect uri: {client.redirect_uri}\n')
 
