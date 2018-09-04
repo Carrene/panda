@@ -38,21 +38,23 @@ def insert(): # pragma: no cover
     DBSession.add(client)
     DBSession.commit()
 
-    print('# Members has been created')
+    print('Members has been created.')
     print(
-        f' Title: {member1.title}\n Email: {member1.email}\n '
-        'Password: 123abcABC\n'
+        f'  Title: {member1.title}\n  Email: {member1.email}\n'
+        '  Password: 123abcABC\n'
     )
     print(
-        f' Title: {member2.title}\n Email: {member2.email}\n '
-        'Password: 123abcABC\n'
+        f'  Title: {member2.title}\n  Email: {member2.email}\n'
+        '  Password: 123abcABC\n'
     )
     print(
-        f' Title: {member3.title}\n Email: {member3.email}\n '
-        'Password: 123abcABC\n'
+        f'  Title: {member3.title}\n  Email: {member3.email}\n'
+        '  Password: 123abcABC\n'
     )
-    print('# Client has been created')
+    print('Client has been created.')
     print(
-        f' Title: {client.title}\n Secret: {secret}\n '
-        'Redirect uri: {client.redirect_uri}\n')
+        f'  Title: {client.title}\n  Secret: {secret}\n'
+        f'  Redirect uri: {client.redirect_uri}\n'
+        f'  Related to member with id: {client.member_id}\n'
+    )
 
