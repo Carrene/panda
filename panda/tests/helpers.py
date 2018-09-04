@@ -6,6 +6,13 @@ from panda import Panda, cryptohelpers
 class LocalApplicationTestCase(ApplicableTestCase):
     __application_factory__ = Panda
 
+    def login(self, email, password, url, verb):
+        super().login(
+            form=dict(email=email, password=password),
+            url=url,
+            verb=verb
+        )
+
 
 class RandomMonkeyPatch:
     """
