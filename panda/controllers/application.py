@@ -1,6 +1,6 @@
 import hashlib
 
-from nanohttp import json, context, HTTPStatus, HTTPBadRequest
+from nanohttp import json, context, HTTPStatus
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
@@ -39,27 +39,5 @@ class ApplicationController(ModelRestController):
             dklen=32
         )
         DBSession.add(application)
-        return application
-
-    @authorize
-    @json
-    @Application.expose
-    @commit
-    def get(self, id):
-        try:
-            id = int(id)
-        except:
-            raise HTTPBadRequest()
-
-        application = DBSession.query(Application) \
-            .filter(
-                Application.id == id,
-                Application.member_id == context.identity.id
-            ) \
-            .one_or_none()
-
-        if application is None:
-            raise HTTPStatus('605 We Don\'t Recognize This Application')
-
         return application
 
