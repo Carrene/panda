@@ -1,11 +1,9 @@
-import base64
-import hashlib
 import os
 
-from bddrest.authoring import Update, Remove, when, status, response
+from bddrest.authoring import when, status, response
 
 from panda.models import Member, Application
-from panda.tests.helpers import LocalApplicationTestCase, RandomMonkeyPatch
+from panda.tests.helpers import LocalApplicationTestCase
 
 
 class TestMyApplication(LocalApplicationTestCase):
