@@ -11,6 +11,7 @@ from .member import MemberController
 from .password import PasswordController
 from .reset_password_token import ResetPasswordTokenController
 from .token import TokenController
+from .my_application import MyApplicationController
 
 
 class ApiV1(Controller):
@@ -23,6 +24,7 @@ class ApiV1(Controller):
     applications = ApplicationController()
     authorizationcodes = AuthorizationCodeController()
     accesstokens = AccessTokenController()
+    myapplications = MyApplicationController()
 
     @json
     def version(self):

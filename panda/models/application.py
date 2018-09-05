@@ -1,10 +1,12 @@
 import base64
 
-from restfulpy.orm import DeclarativeBase, Field, relationship
+from restfulpy.orm import DeclarativeBase, OrderingMixin, PaginationMixin, \
+    FilteringMixin, Field, relationship
 from sqlalchemy import Unicode, Integer, Binary, ForeignKey
 
 
-class Application(DeclarativeBase):
+class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
+                  FilteringMixin):
     __tablename__ = 'application'
 
     id = Field(Integer, primary_key=True)
