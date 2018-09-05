@@ -4,8 +4,8 @@ from restfulpy.orm import DeclarativeBase, Field, relationship
 from sqlalchemy import Unicode, Integer, Binary, ForeignKey
 
 
-class Client(DeclarativeBase):
-    __tablename__ = 'client'
+class Application(DeclarativeBase):
+    __tablename__ = 'application'
 
     id = Field(Integer, primary_key=True)
 
@@ -15,7 +15,11 @@ class Client(DeclarativeBase):
     redirect_uri = Field(Unicode(100))
     secret = Field(Binary(32))
 
-    member = relationship('Member', back_populates='clients', protected=True)
+    member = relationship(
+        'Member',
+        back_populates='applications',
+        protected=True
+    )
 
     def to_dict(self):
         return dict(

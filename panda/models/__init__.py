@@ -1,4 +1,4 @@
 from .member import Member
-from .client import Client
+from .application import Application
 from .messaging import RegisterEmail, ResetPasswordEmail
 

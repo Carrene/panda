@@ -7,7 +7,7 @@ from panda.models import Member
 from panda.tests.helpers import LocalApplicationTestCase, RandomMonkeyPatch
 
 
-class TestClient(LocalApplicationTestCase):
+class TestApplication(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
@@ -20,8 +20,8 @@ class TestClient(LocalApplicationTestCase):
         session.add(member)
         session.commit()
 
-    def test_define_client(self):
-        title = 'example_client'
+    def test_define_application(self):
+        title = 'example_application'
         redirect_uri = 'http://example.com/oauth2'
 
         self.login(
@@ -35,8 +35,8 @@ class TestClient(LocalApplicationTestCase):
             b'2X\x95z\x14\x7f\x80\xe2\xd1\xdeD\xf6\xd3\x9ea\x90uZ'
             b'\x00\xb3mG@\xd0\x1a"\xc7-V\r8\x11'
         ), self.given(
-            'The client has successfully defined',
-            '/apiv1/clients',
+            'The application has successfully defined',
+            '/apiv1/applications',
             'DEFINE',
             form=dict(title=title, redirectUri=redirect_uri)
         ):
@@ -83,14 +83,18 @@ class TestClient(LocalApplicationTestCase):
         self.logout()
 
         with self.given(
-            'An unauthorized member trying to define client',
-            '/apiv1/clients',
+            'An unauthorized member trying to define application',
+            '/apiv1/applications',
             'DEFINE',
             form=dict(title=title, redirectUri=redirect_uri)
         ):
             assert status == 401
 
     def test_metadata(self):
-        with self.given('Test metadata verb', '/apiv1/clients', 'METADATA'):
+        with self.given(
+            'Test metadata verb',
+            '/apiv1/applications',
+            'METADATA'
+        ):
             assert status == 200
 

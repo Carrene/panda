@@ -6,15 +6,15 @@ from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
 from .. import cryptohelpers
-from ..models import Client
+from ..models import Application
 
 
-class ClientController(ModelRestController):
-    __model__ = Client
+class ApplicationController(ModelRestController):
+    __model__ = Application
 
     @json(prevent_empty_form=True)
     @authorize
-    @Client.expose
+    @Application.expose
     @commit
     def define(self):
         title = context.form.get('title')
@@ -26,18 +26,18 @@ class ClientController(ModelRestController):
         if not redirect_uri or redirect_uri.isspace():
             raise HTTPStatus('706 Redirect URI Is Blank')
 
-        client = Client(
+        application = Application(
             title=title,
             redirect_uri=redirect_uri,
             member_id=context.identity.id
         )
-        client.secret = hashlib.pbkdf2_hmac(
+        application.secret = hashlib.pbkdf2_hmac(
             'sha256',
             str(context.identity.id).encode(),
             cryptohelpers.random(32),
             100000,
             dklen=32
         )
-        DBSession.add(client)
-        return client
+        DBSession.add(application)
+        return application
 
