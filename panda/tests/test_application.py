@@ -98,7 +98,7 @@ class TestApplication(LocalApplicationTestCase):
             'DEFINE',
             form=dict(title=title, redirectUri=redirect_uri)
         ):
-             assert status == 401
+            assert status == 401
 
     def test_metadata(self):
         with self.given(
