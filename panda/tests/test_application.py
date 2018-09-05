@@ -1,9 +1,10 @@
 import base64
 import hashlib
+import os
 
 from bddrest.authoring import Update, Remove, when, status, response
 
-from panda.models import Member
+from panda.models import Member, Application
 from panda.tests.helpers import LocalApplicationTestCase, RandomMonkeyPatch
 
 
@@ -18,6 +19,15 @@ class TestApplication(LocalApplicationTestCase):
         )
         session = cls.create_session()
         session.add(member)
+        session.flush()
+
+        cls.application = Application(
+            title='oauth',
+            redirect_uri='http://example1.com/oauth2',
+            secret=os.urandom(32),
+            member_id=member.id
+        )
+        session.add(cls.application)
         session.commit()
 
     def test_define_application(self):
@@ -88,7 +98,7 @@ class TestApplication(LocalApplicationTestCase):
             'DEFINE',
             form=dict(title=title, redirectUri=redirect_uri)
         ):
-            assert status == 401
+             assert status == 401
 
     def test_metadata(self):
         with self.given(
@@ -97,4 +107,27 @@ class TestApplication(LocalApplicationTestCase):
             'METADATA'
         ):
             assert status == 200
+
+    def test_get_application(self):
+        self.login(email='already.added@example.com', password='123abcABC')
+
+        with self.given(
+            f'Get a application using application id',
+            f'/apiv1/applications/id:{self.application.id}',
+            f'GET',
+        ):
+            assert status == 200
+            assert response.json['id'] == self.application.id
+
+            when('Trying to pass with wrong id', url_parameters=dict(id=50))
+            assert status == '605 We Don\'t Recognize This Application'
+
+            when(
+                'Trying to pass with invalid the type id',
+                url_parameters=dict(id='id')
+            )
+            assert status == 400
+
+            when('Trying with an unauthorized member', authorization=None)
+            assert status == 401
 
