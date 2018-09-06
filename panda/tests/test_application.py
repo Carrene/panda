@@ -131,3 +131,40 @@ class TestApplication(LocalApplicationTestCase):
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
 
+    def test_list_application(self):
+        with self.given(
+            'Get all available applications',
+            '/apiv1/applications',
+            'LIST'
+        ):
+            assert status == 200
+            assert len(response.json) == 3
+            assert response.json[0]['secret'] == None
+            assert response.json[0]['redirectUri'] == None
+            assert response.json[0]['memberId'] == None
+            assert response.json[0]['title'] != None
+
+            when('The request with form parameter', form=dict(param='param'))
+            assert status == '707 Form Not Allowed'
+
+            when('Trying to sorting response', query=dict(sort='id'))
+            assert status == 200
+            assert response.json[0]['id'] == 1
+            assert response.json[1]['id'] == 2
+            assert response.json[2]['id'] == 3
+
+            when('Sorting the response descending', query=dict(sort='-id'))
+            assert response.json[0]['id'] == 3
+            assert response.json[1]['id'] == 2
+            assert response.json[2]['id'] == 1
+
+            when('Trying pagination response', query=dict(take=1))
+            assert response.json[0]['id'] == 1
+
+            when('Trying pagination with skip', query=dict(take=1, skip=1))
+            assert response.json[0]['id'] == 2
+
+            when('Trying filtering response', query=dict(id=1))
+            assert response.json[0]['id'] == 1
+            assert len(response.json) == 1
+
