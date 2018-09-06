@@ -41,3 +41,30 @@ class ApplicationController(ModelRestController):
         DBSession.add(application)
         return application
 
+    @authorize
+    @json
+    @Application.expose
+    @commit
+    def get(self, id):
+        try:
+            id = int(id)
+        except:
+            raise HTTPBadRequest()
+
+        application = DBSession.query(Application) \
+            .filter(
+                Application.id == id,
+                Application.member_id == context.identity.id
+            ) \
+            .one_or_none()
+
+        if application is None:
+            raise HTTPStatus('605 We Don\'t Recognize This Application')
+
+        return application
+
+    @json(prevent_form='707 Form Not Allowed')
+    @Application.expose
+    def list(self):
+        return DBSession.query(Application)
+
