@@ -6,6 +6,17 @@ from restfulpy.orm import DeclarativeBase, OrderingMixin, PaginationMixin, \
 from sqlalchemy import Unicode, Integer, Binary, ForeignKey
 
 
+class ApplicationMember(DeclarativeBase):
+     __tablename__ = 'application_member'
+
+     member_id = Field(Integer, ForeignKey('member.id'), primary_key=True)
+     application_id = Field(
+         Integer,
+         ForeignKey('application.id'),
+         primary_key=True
+     )
+
+
 class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
                   FilteringMixin):
     __tablename__ = 'application'
@@ -22,6 +33,12 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         'Member',
         back_populates='applications',
         protected=True
+    )
+
+    members = relationship(
+        'Member',
+        secondary='application_member',
+        lazy='selectin',
     )
 
     def to_dict(self):
