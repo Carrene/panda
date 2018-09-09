@@ -63,3 +63,8 @@ class ApplicationController(ModelRestController):
 
         return application
 
+    @json(prevent_form='707 Form Not Allowed')
+    @Application.expose
+    def list(self):
+        return DBSession.query(Application)
+
