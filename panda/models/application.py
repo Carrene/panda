@@ -28,9 +28,9 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         return dict(
             id=self.id,
             title=self.title,
-            redirectUri=self._redirect_uri(),
-            memberId=self._member_id(),
-            secret=self._secret()
+            redirectUri=self.safe_redirect_uri,
+            memberId=self.safe_member_id,
+            secret=self.safe_secret
         )
 
     def validate_secret(self, secret):
@@ -39,15 +39,18 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         except:
             return False
 
-    def _am_i_owner(self):
+    def am_i_owner(self):
         return context.identity and self.member_id == context.identity.id
 
-    def _secret(self):
-        return base64.encodebytes(self.secret) if self._am_i_owner() else None
+    @property
+    def safe_secret(self):
+        return base64.encodebytes(self.secret) if self.am_i_owner() else None
 
-    def _redirect_uri(self):
-        return self.redirect_uri if self._am_i_owner() else None
+    @property
+    def safe_redirect_uri(self):
+        return self.redirect_uri if self.am_i_owner() else None
 
-    def _member_id(self):
-        return self.member_id if self._am_i_owner() else None
+    @property
+    def safe_member_id(self):
+        return self.member_id if self.am_i_owner() else None
 
