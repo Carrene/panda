@@ -1,9 +1,10 @@
 import base64
 
+from nanohttp import context
 from restfulpy.orm import DeclarativeBase, OrderingMixin, PaginationMixin, \
     FilteringMixin, Field, relationship
 from sqlalchemy import Unicode, Integer, Binary, ForeignKey
-from nanohttp import context
+
 
 class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
                   FilteringMixin):
@@ -27,9 +28,9 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         return dict(
             id=self.id,
             title=self.title,
-            redirectUri=self.redirect_uri if self.am_i_owner() else None,
-            secret=base64.encodebytes(self.secret) if self.am_i_owner() else None,
-            memberId=self.member_id if self.am_i_owner() else None
+            redirectUri=self._redirect_uri(),
+            memberId=self._member_id(),
+            secret=self._secret()
         )
 
     def validate_secret(self, secret):
@@ -38,5 +39,15 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         except:
             return False
 
-    def am_i_owner(self):
+    def _am_i_owner(self):
         return context.identity and self.member_id == context.identity.id
+
+    def _secret(self):
+        return base64.encodebytes(self.secret) if self._am_i_owner() else None
+
+    def _redirect_uri(self):
+        return self.redirect_uri if self._am_i_owner() else None
+
+    def _member_id(self):
+        return self.member_id if self._am_i_owner() else None
+
