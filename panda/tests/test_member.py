@@ -27,7 +27,7 @@ class TestMember(LocalApplicationTestCase):
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            member_id=cls.member.id
+            owner_id=cls.member.id
         )
         session.add(cls.application)
         session.commit()

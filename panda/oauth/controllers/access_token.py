@@ -3,7 +3,7 @@ from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
 from .. import AccessToken, AuthorizationCode
-from ...models import Application
+from ...models import Application, ApplicationMember
 
 
 class AccessTokenController(RestController):
@@ -25,6 +25,21 @@ class AccessTokenController(RestController):
 
         if not application.validate_secret(context.form.get('secret')):
             raise HTTPStatus('608 Malformed Secret')
+
+        application_member = DBSession.query(ApplicationMember) \
+            .filter(
+                ApplicationMember.application_id == application.id,
+                ApplicationMember.member_id == authorization_code['memberId']
+            ) \
+            .one_or_none()
+
+        if not application_member:
+            application_member = ApplicationMember(
+                application_id=application.id,
+                member_id=authorization_code['memberId']
+            )
+            DBSession.add(application_member)
+            DBSession.commit()
 
         access_token_payload = dict(
             applicationId=application.id,

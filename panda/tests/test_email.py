@@ -1,4 +1,4 @@
-from bddrest.authoring import response, Update, when, status, given_form
+from bddrest.authoring import response, Update, when, status, given
 from nanohttp import settings
 from restfulpy.messaging import create_messenger
 
@@ -70,7 +70,7 @@ class TestEmail(LocalApplicationTestCase):
 
             when(
                 'Request without email parametes',
-                form=given_form - 'email' + dict(a='a')
+                form=given - 'email' + dict(a='a')
             )
             assert status == '701 Invalid Email Format'
 
