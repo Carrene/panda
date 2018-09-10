@@ -35,7 +35,6 @@ class TestApplication(LocalApplicationTestCase):
             owner_id=cls.member1.id
         )
         session.add(cls.application1)
-        session.flush()
 
         cls.application2 = Application(
             title='oauth2',
@@ -44,7 +43,6 @@ class TestApplication(LocalApplicationTestCase):
             owner_id=cls.member1.id
         )
         session.add(cls.application2)
-        session.flush()
 
         cls.application1.members.append(member)
         cls.application2.members.append(member)
