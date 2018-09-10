@@ -23,7 +23,7 @@ services:
   - redis-server
 
 install: ./scripts/travis-install.sh
-script: py.test --cov=dolphin dolphin/tests
+script: py.test --cov=panda panda/tests
 after_success: 
   - coveralls
   - ./scripts/travis-upload-wiki.sh
