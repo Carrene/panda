@@ -17,7 +17,7 @@ class Member(DeclarativeBase):
     _password = Field('password', Unicode(128), index=True, protected=True)
     applications = relationship(
         'Application',
-        back_populates='member',
+        back_populates='owner',
         protected=True
     )
 

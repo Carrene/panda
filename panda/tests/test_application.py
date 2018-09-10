@@ -25,7 +25,7 @@ class TestApplication(LocalApplicationTestCase):
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            member_id=member.id
+            owner_id=member.id
         )
         session.add(cls.application)
         session.commit()
@@ -56,7 +56,7 @@ class TestApplication(LocalApplicationTestCase):
 
             secret = base64.encodebytes(hashlib.pbkdf2_hmac(
                 'sha256',
-                str(response.json['memberId']).encode(),
+                str(response.json['ownerId']).encode(),
                 RandomMonkeyPatch.random(32),
                 100000,
                 dklen=32
@@ -141,7 +141,7 @@ class TestApplication(LocalApplicationTestCase):
             assert len(response.json) == 3
             assert response.json[0]['secret'] == None
             assert response.json[0]['redirectUri'] == None
-            assert response.json[0]['memberId'] == None
+            assert response.json[0]['ownerId'] == None
             assert response.json[0]['title'] != None
 
             when('The request with form parameter', form=dict(param='param'))

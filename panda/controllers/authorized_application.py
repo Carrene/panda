@@ -3,16 +3,17 @@ from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession
 
-from ..models import Application
+from ..models import Application, ApplicationMember
 
 
-class MyApplicationController(ModelRestController):
+class AuthorizedApplicationController(ModelRestController):
     __model__ = Application
 
     @authorize
     @json(prevent_form='707 Form Not Allowed')
     @Application.expose
     def list(self):
-        return DBSession.query(Application) \
-            .filter(Application.owner_id == context.identity.id)
+        application = DBSession.query(Application) \
+            .filter(ApplicationMember.member_id == context.identity.id)
+        return application
 

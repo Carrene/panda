@@ -29,7 +29,7 @@ class ApplicationController(ModelRestController):
         application = Application(
             title=title,
             redirect_uri=redirect_uri,
-            member_id=context.identity.id
+            owner_id=context.identity.id
         )
         application.secret = hashlib.pbkdf2_hmac(
             'sha256',
@@ -54,7 +54,7 @@ class ApplicationController(ModelRestController):
         application = DBSession.query(Application) \
             .filter(
                 Application.id == id,
-                Application.member_id == context.identity.id
+                Application.owner_id == context.identity.id
             ) \
             .one_or_none()
 
