@@ -32,7 +32,7 @@ class TestApplication(LocalApplicationTestCase):
             title='oauth1',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            member_id=cls.member1.id
+            owner_id=cls.member1.id
         )
         session.add(cls.application1)
         session.flush()
@@ -41,7 +41,7 @@ class TestApplication(LocalApplicationTestCase):
             title='oauth2',
             redirect_uri='http://example2.com/oauth2',
             secret=os.urandom(32),
-            member_id=cls.member1.id
+            owner_id=cls.member1.id
         )
         session.add(cls.application2)
         session.flush()

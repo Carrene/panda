@@ -23,13 +23,13 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
 
     id = Field(Integer, primary_key=True)
 
-    member_id = Field(Integer, ForeignKey('member.id'))
+    owner_id = Field(Integer, ForeignKey('member.id'))
 
     title = Field(Unicode(100))
     redirect_uri = Field(Unicode(100))
     secret = Field(Binary(32))
 
-    member = relationship(
+    owner = relationship(
         'Member',
         back_populates='applications',
         protected=True
@@ -46,7 +46,7 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
             id=self.id,
             title=self.title,
             redirectUri=self.safe_redirect_uri,
-            memberId=self.safe_member_id,
+            ownerId=self.safe_owner_id,
             secret=self.safe_secret
         )
 
@@ -57,7 +57,7 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
             return False
 
     def am_i_owner(self):
-        return context.identity and self.member_id == context.identity.id
+        return context.identity and self.owner_id == context.identity.id
 
     @property
     def safe_secret(self):
@@ -68,6 +68,6 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         return self.redirect_uri if self.am_i_owner() else None
 
     @property
-    def safe_member_id(self):
-        return self.member_id if self.am_i_owner() else None
+    def safe_owner_id(self):
+        return self.owner_id if self.am_i_owner() else None
 
