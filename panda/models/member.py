@@ -66,6 +66,7 @@ class Member(DeclarativeBase):
 
     @classmethod
     def current(cls):
-        return DBSession.query(cls).\
-            filter(cls.email == context.identity.email).one()
+        return DBSession.query(cls) \
+            .filter(cls.email == context.identity.email) \
+            .one()
 
