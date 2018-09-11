@@ -6,7 +6,7 @@ from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
 from .. import cryptohelpers
-from ..models import Application
+from ..models import Application, ApplicationMember
 
 
 class ApplicationController(ModelRestController):
@@ -67,4 +67,34 @@ class ApplicationController(ModelRestController):
     @Application.expose
     def list(self):
         return DBSession.query(Application)
+
+    @authorize
+    @json(prevent_form='707 Form Not Allowed')
+    @Application.expose
+    @commit
+    def revoke(self, id):
+        try:
+            id = int(id)
+        except:
+            raise HTTPBadRequest()
+
+        application = DBSession.query(Application) \
+            .filter(Application.id == id) \
+            .one_or_none()
+
+        if application is None:
+            HTTPBadRequest()
+
+        application_member = DBSession.query(ApplicationMember) \
+            .filter(
+                ApplicationMember.application_id == id,
+                ApplicationMember.member_id == context.identity.id
+            ) \
+            .one_or_none()
+
+        if application_member is None:
+            raise HTTPBadRequest()
+
+        DBSession.delete(application_member)
+        return application
 
