@@ -35,7 +35,6 @@ class TestApplicationRevoke(LocalApplicationTestCase):
         )
         session.add(cls.member1)
         session.flush()
-
         cls.application.members.append(cls.member1)
         session.commit()
 
