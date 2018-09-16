@@ -33,7 +33,7 @@ def insert(): # pragma: no cover
         title='oauth',
         redirect_uri='http://example.com/oauth',
         secret=base64.decodebytes(bytes(secret, 'utf-8')),
-        member_id=member1.id
+        owner_id=member1.id
     )
     DBSession.add(application)
     DBSession.commit()
@@ -59,6 +59,6 @@ def insert(): # pragma: no cover
         f'  Title: {application.title}\n'
         f'  Secret: {secret}\n'
         f'  Redirect uri: {application.redirect_uri}\n'
-        f'  Related to member with id: {application.member_id}\n'
+        f'  Related to member with id: {application.owner_id}\n'
     )
 
