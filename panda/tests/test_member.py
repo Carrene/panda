@@ -14,6 +14,13 @@ class TestMember(LocalApplicationTestCase):
     @classmethod
     def mockup(cls):
         session = cls.create_session()
+        owner = Member(
+            email='owner@example.com',
+            title='owner_title',
+            password='123abcABC'
+        )
+        session.add(owner)
+        session.flush()
 
         cls.member = Member(
             email='member@example.com',
@@ -23,18 +30,27 @@ class TestMember(LocalApplicationTestCase):
         session.add(cls.member)
         session.flush()
 
-        cls.application = Application(
+        cls.application1 = Application(
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            owner_id=cls.member.id
+            owner_id=owner.id
         )
-        session.add(cls.application)
+        cls.application1.members.append(cls.member)
+        session.add(cls.application1)
+
+        cls.application2 = Application(
+            title='oauth',
+            redirect_uri='http://example2.com/oauth2',
+            secret=os.urandom(32),
+            owner_id=owner.id
+        )
+        session.add(cls.application2)
         session.commit()
 
     def test_get_member(self):
         access_token_payload = dict(
-            applicationId=self.application.id,
+            applicationId=self.application1.id,
             memberId=self.member.id,
             scopes=['title']
         )
@@ -52,7 +68,7 @@ class TestMember(LocalApplicationTestCase):
 
             when(
                 'Trying to pass using another member id',
-                url_parameters=dict(id='2')
+                url_parameters=dict(id='1')
             )
             assert status == '403 Forbidden'
 
@@ -89,6 +105,18 @@ class TestMember(LocalApplicationTestCase):
                 headers={'authorization': f'oauth2-accesstoken {access_token}'}
             )
             assert status == '609 Token Expired'
+
+            access_token_payload = dict(
+                applicationId=self.application2.id,
+                memberId=self.member.id,
+                scopes=['title']
+            )
+            access_token = AccessToken(access_token_payload).dump().decode()
+            when(
+                'The member revoke the authorization application',
+                headers={'authorization': f'oauth2-accesstoken {access_token}'}
+            )
+            assert status == 403
 
     def test_metadata(self):
         with self.given('Test metadata verb', '/apiv1/members', 'METADATA'):

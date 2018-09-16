@@ -2,7 +2,7 @@ from nanohttp import json, context, HTTPStatus, HTTPForbidden
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
-from ..models import Member
+from ..models import Member, ApplicationMember
 from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator
 from ..oauth.tokens import AccessToken
@@ -53,7 +53,15 @@ class MemberController(ModelRestController):
         if id != context.identity.payload['memberId']:
             raise HTTPForbidden()
 
-        member = DBSession.query(Member).filter(Member.id == id).one_or_none()
+        member = DBSession.query(Member) \
+            .filter(
+                Member.id == id,
+                ApplicationMember.application_id == \
+                    context.identity.payload['applicationId'],
+                ApplicationMember.member_id == \
+                    context.identity.payload['memberId']
+            ) \
+            .one_or_none()
         if not member:
             raise HTTPForbidden()
 
