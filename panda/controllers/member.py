@@ -56,8 +56,10 @@ class MemberController(ModelRestController):
         member = DBSession.query(Member) \
             .filter(
                 Member.id == id,
-                ApplicationMember.application_id == context.identity.payload['applicationId'],
-                ApplicationMember.member_id == context.identity.payload['memberId']
+                ApplicationMember.application_id == \
+                    context.identity.payload['applicationId'],
+                ApplicationMember.member_id == \
+                    context.identity.payload['memberId']
             ) \
             .one_or_none()
         if not member:
