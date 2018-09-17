@@ -128,7 +128,6 @@ class TestMember(LocalApplicationTestCase):
             when('Trying to get another member', url_parameters=dict(id=1))
             assert status == 403
 
-
     def test_metadata(self):
         with self.given('Test metadata verb', '/apiv1/members', 'METADATA'):
             assert status == 200
