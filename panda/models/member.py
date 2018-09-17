@@ -81,7 +81,7 @@ class Member(DeclarativeBase):
 
         member = dict.fromkeys(SCOPES.keys(), None)
         member['id'] = self.id
-        for scope in context.identity.payload['scopes']:
+        for scope in context.identity.scopes:
             member[scope] = SCOPES[scope](self)
 
         return member

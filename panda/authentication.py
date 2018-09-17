@@ -41,8 +41,8 @@ class Authenticator(StatefulAuthenticator):
         access_token = AccessToken.load(encoded_token.split(' ')[1])
         if not DBSession.query(ApplicationMember) \
                 .filter(
-                    ApplicationMember.application_id == access_token.payload['applicationId'],
-                    ApplicationMember.member_id == access_token.payload['memberId']
+                    ApplicationMember.application_id == access_token.application_id,
+                    ApplicationMember.member_id == access_token.member_id
                 ) \
                 .one_or_none():
             raise HTTPForbidden()

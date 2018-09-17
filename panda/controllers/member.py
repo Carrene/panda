@@ -49,25 +49,15 @@ class MemberController(ModelRestController):
     @json
     @Member.expose
     def get(self, id):
-        if id == 'me':
-            return self._get_me()
+        if id != 'me':
+            if context.identity.roles != 'admin':
+                raise HTTPForbidden()
 
-        return self._get_id(id)
+        if id == 'me': id = context.identity.id
 
-    def _get_me(self):
-        member = DBSession.query(Member).get(context.identity.id)
-        if not member:
-            raise HTTPForbidden()
-
-        return member
-
-    def _get_id(self, id):
         try:
             id = int(id)
         except:
-            raise HTTPForbidden()
-
-        if context.identity.roles != 'admin':
             raise HTTPForbidden()
 
         member = DBSession.query(Member).get(id)
