@@ -57,7 +57,7 @@ class Member(DeclarativeBase):
             id=self.id,
             email=self.email,
             name=self.title,
-            roles=self.role
+            roles=[self.role]
         ))
 
     def create_refresh_principal(self):

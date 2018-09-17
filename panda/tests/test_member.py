@@ -133,7 +133,7 @@ class TestMember(LocalApplicationTestCase):
             assert status == 200
 
     def test_get_member_by_id(self):
-        self.login(email='admin@example.com',password='123abcABC')
+        self.login(email='admin@example.com', password='123abcABC')
         with self.given(
             'Get member as admin',
             '/apiv1/members/id:1',
