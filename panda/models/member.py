@@ -7,6 +7,9 @@ from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer
 from sqlalchemy.orm import synonym
 
+from ..oauth.scopes import SCOPES
+from ..oauth.tokens import AccessToken
+
 
 class Member(DeclarativeBase):
     __tablename__ = 'member'
@@ -14,6 +17,7 @@ class Member(DeclarativeBase):
     id = Field(Integer, primary_key=True)
     email = Field(Unicode(100), unique=True, index=True)
     title = Field(Unicode(100), unique=True)
+    role = Field(Unicode(100))
     _password = Field('password', Unicode(128), index=True, protected=True)
     applications = relationship(
         'Application',
@@ -52,7 +56,8 @@ class Member(DeclarativeBase):
         return JwtPrincipal(dict(
             id=self.id,
             email=self.email,
-            name=self.title
+            name=self.title,
+            roles=self.role
         ))
 
     def create_refresh_principal(self):
@@ -69,4 +74,15 @@ class Member(DeclarativeBase):
         return DBSession.query(cls) \
             .filter(cls.email == context.identity.email) \
             .one()
+
+    def to_dict(self):
+        if not isinstance(context.identity, AccessToken):
+            return super().to_dict()
+
+        member = dict.fromkeys(SCOPES.keys(), None)
+        member['id'] = self.id
+        for scope in context.identity.payload['scopes']:
+            member[scope] = SCOPES[scope](self)
+
+        return member
 
