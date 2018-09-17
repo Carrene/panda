@@ -15,7 +15,8 @@ class TestApplication(LocalApplicationTestCase):
         member = Member(
             email='already.added@example.com',
             title='username',
-            password='123abcABC'
+            password='123abcABC',
+            role='member'
         )
         session = cls.create_session()
         session.add(member)
@@ -23,7 +24,8 @@ class TestApplication(LocalApplicationTestCase):
         cls.member1 = Member(
             email='member1@example.com',
             title='username1',
-            password='123abcABC'
+            password='123abcABC',
+            role='member'
         )
         session.add(cls.member1)
         session.flush()

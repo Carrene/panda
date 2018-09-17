@@ -16,7 +16,8 @@ class TestEmail(LocalApplicationTestCase):
         member = Member(
             email='already.added@example.com',
             title='username',
-            password='123abcABC'
+            password='123abcABC',
+            role='member'
         )
         session = cls.create_session()
         session.add(member)

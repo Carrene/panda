@@ -17,7 +17,8 @@ class TestAccessToken(LocalApplicationTestCase):
         cls.member = Member(
             email='member@example.com',
             title='member_title',
-            password='123abcABC'
+            password='123abcABC',
+            role='member'
         )
         session.add(cls.member)
         session.flush()

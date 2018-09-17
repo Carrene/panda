@@ -1,12 +1,12 @@
 from nanohttp import json, context, HTTPStatus, HTTPForbidden
+from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 
-from ..models import Member, ApplicationMember
+from ..models import Member
+from ..oauth.tokens import AccessToken
 from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator
-from ..oauth.tokens import AccessToken
-from ..oauth.scopes import SCOPES
 
 
 class MemberController(ModelRestController):
@@ -31,7 +31,12 @@ class MemberController(ModelRestController):
         if DBSession.query(Member.email).filter(Member.email == email).count():
             raise HTTPStatus('601 Email Address Is Already Registered')
 
-        member = Member(email=email, title=title, password=password)
+        member = Member(
+            email=email,
+            title=title,
+            password=password,
+            role='member'
+        )
         DBSession.add(member)
         principal = member.create_jwt_principal()
         context.response_headers.add_header(
@@ -40,34 +45,34 @@ class MemberController(ModelRestController):
         )
         return member
 
-    @json()
+    @authorize
+    @json
+    @Member.expose
     def get(self, id):
+        if id == 'me':
+            return self._get_me()
+
+        return self._get_id(id)
+
+    def _get_me(self):
+        member = DBSession.query(Member).get(context.identity.id)
+        if not member:
+            raise HTTPForbidden()
+
+        return member
+
+    def _get_id(self, id):
         try:
             id = int(id)
         except:
             raise HTTPForbidden()
 
-        if not isinstance(context.identity, AccessToken):
+        if context.identity.roles != 'admin':
             raise HTTPForbidden()
 
-        if id != context.identity.payload['memberId']:
-            raise HTTPForbidden()
-
-        member = DBSession.query(Member) \
-            .filter(
-                Member.id == id,
-                ApplicationMember.application_id == \
-                    context.identity.payload['applicationId'],
-                ApplicationMember.member_id == \
-                    context.identity.payload['memberId']
-            ) \
-            .one_or_none()
+        member = DBSession.query(Member).get(id)
         if not member:
             raise HTTPForbidden()
 
-        member_scope = dict.fromkeys(SCOPES.keys(), None)
-        member_scope['id'] = member.id
-        for scope in context.identity.payload['scopes']:
-            member_scope[scope] = SCOPES[scope](member)
-        return member_scope
+        return member
 

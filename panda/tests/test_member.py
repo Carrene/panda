@@ -14,10 +14,19 @@ class TestMember(LocalApplicationTestCase):
     @classmethod
     def mockup(cls):
         session = cls.create_session()
+        admin = Member(
+            email='admin@example.com',
+            title='admin_title',
+            password='123abcABC',
+            role='admin'
+        )
+        session.add(admin)
+
         owner = Member(
             email='owner@example.com',
             title='owner_title',
-            password='123abcABC'
+            password='123abcABC',
+            role='member'
         )
         session.add(owner)
         session.flush()
@@ -25,7 +34,8 @@ class TestMember(LocalApplicationTestCase):
         cls.member = Member(
             email='member@example.com',
             title='member_title',
-            password='123abcABC'
+            password='123abcABC',
+            role='member'
         )
         session.add(cls.member)
         session.flush()
@@ -48,7 +58,7 @@ class TestMember(LocalApplicationTestCase):
         session.add(cls.application2)
         session.commit()
 
-    def test_get_member(self):
+    def test_get_member_by_me(self):
         access_token_payload = dict(
             applicationId=self.application1.id,
             memberId=self.member.id,
@@ -58,7 +68,7 @@ class TestMember(LocalApplicationTestCase):
 
         with self.given(
             'Get member according to scopes',
-            f'/apiv1/members/id: {self.member.id}',
+            f'/apiv1/members/id: me',
             'GET',
             headers={'authorization': f'oauth2-accesstoken {access_token}'},
         ):
@@ -66,20 +76,8 @@ class TestMember(LocalApplicationTestCase):
             assert response.json['title'] == self.member.title
             assert response.json['id'] == self.member.id
 
-            when(
-                'Trying to pass using another member id',
-                url_parameters=dict(id='1')
-            )
-            assert status == '403 Forbidden'
-
-            when(
-                'Trying to pass using id is alphabetical',
-                url_parameters=dict(id='a')
-            )
-            assert status == '403 Forbidden'
-
             when('Trying to pass without headers', headers={})
-            assert status == '403 Forbidden'
+            assert status == 401
 
             when(
                 'Trying to pass with damege token',
@@ -118,7 +116,36 @@ class TestMember(LocalApplicationTestCase):
             )
             assert status == 403
 
+        self.login(email=self.member.email, password='123abcABC')
+        with self.given(
+            'Get member as member',
+            '/apiv1/members/id:me',
+            'GET',
+        ):
+            assert status == 200
+            assert response.json['id'] == self.member.id
+
+            when('Trying to get another member', url_parameters=dict(id=1))
+            assert status == 403
+
+
     def test_metadata(self):
         with self.given('Test metadata verb', '/apiv1/members', 'METADATA'):
             assert status == 200
+
+    def test_get_member_by_id(self):
+        self.login(email='admin@example.com',password='123abcABC')
+        with self.given(
+            'Get member as admin',
+            '/apiv1/members/id:1',
+            'GET',
+        ):
+            assert status == 200
+            assert response.json['id'] == 1
+
+            when('Get another member as admin', url_parameters=dict(id=2))
+            assert response.json['id'] == 2
+
+            when('Trying to pass with unauthorized member', authorization=None)
+            assert status == 401
 
