@@ -76,7 +76,7 @@ class TestMember(LocalApplicationTestCase):
             assert response.json['title'] == self.member.title
             assert response.json['id'] == self.member.id
 
-            when('Trying to pass without headers', headers={})
+            when('Trying to pass without authorization headers', headers={})
             assert status == 401
 
             when(
@@ -144,6 +144,18 @@ class TestMember(LocalApplicationTestCase):
 
             when('Get another member as admin', url_parameters=dict(id=2))
             assert response.json['id'] == 2
+
+            when(
+                'Trying to get the not exist member',
+                url_parameters=dict(id=200)
+            )
+            assert status == 404
+
+            when(
+                'Trying to pass using id is alphabetical',
+                url_parameters=dict(id='a')
+            )
+            assert status == 404
 
             when('Trying to pass with unauthorized member', authorization=None)
             assert status == 401
