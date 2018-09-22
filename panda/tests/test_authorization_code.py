@@ -17,7 +17,8 @@ class TestAuthorizationCode(LocalApplicationTestCase):
         cls.member = Member(
             email='member@example.com',
             title='member_Title',
-            password='123abcABC'
+            password='123abcABC',
+            role='member'
         )
         session.add(cls.member)
         session.flush()

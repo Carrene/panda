@@ -35,11 +35,25 @@ class AccessToken(BaseJwtPrincipal):
         return settings.access_token
 
     @property
+    def application_id(self):
+        return self.payload.get('applicationId')
+
+    @property
+    def member_id(self):
+        return self.payload.get('memberId')
+
+    @property
+    def scopes(self):
+        return self.payload.get('scopes')
+
+    @property
     def id(self):
-        return self.payload.get('id')
+        return self.payload.get('memberId')
 
     @property
     def session_id(self):
         return self.payload.get('sessionId')
 
+    def assert_roles(self):
+        pass
 
