@@ -1,6 +1,6 @@
 import hashlib
 
-from nanohttp import json, context, HTTPStatus, HTTPBadRequest
+from nanohttp import json, context, HTTPStatus, HTTPBadRequest, HTTPNotFound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
@@ -96,5 +96,27 @@ class ApplicationController(ModelRestController):
             raise HTTPBadRequest()
 
         DBSession.delete(application_member)
+        return application
+
+    @authorize
+    @json
+    @Application.expose
+    @commit
+    def update(self, id):
+        try:
+            id = int(id)
+        except (ValueError, TypeError):
+            raise HTTPNotFound()
+
+        application = DBSession.query(Application).get(id)
+
+        if application is None:
+            raise HTTPNotFound()
+
+        if application.owner_id != context.identity.id:
+            raise HTTPNotFound()
+
+        application.update_from_request()
+
         return application
 
