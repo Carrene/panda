@@ -2,7 +2,7 @@ import base64
 import hashlib
 import os
 
-from bddrest.authoring import Update, Remove, when, status, response
+from bddrest.authoring import Update, Remove, when, status, response, given
 
 from panda.models import Member, Application
 from panda.tests.helpers import LocalApplicationTestCase, RandomMonkeyPatch
@@ -20,13 +20,12 @@ class TestApplication(LocalApplicationTestCase):
         )
         session = cls.create_session()
         session.add(member1)
-        session.flush()
 
         cls.application1 = Application(
             title='application1',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            owner_id=member1.id
+            owner=member1
         )
         session.add(cls.application1)
 
@@ -37,13 +36,12 @@ class TestApplication(LocalApplicationTestCase):
             role='member'
         )
         session.add(member2)
-        session.flush()
 
         cls.application2 = Application(
             title='application2',
             redirect_uri='http://example2.com/oauth2',
             secret=os.urandom(32),
-            owner_id=member2.id
+            owner=member2
         )
         session.add(cls.application2)
         session.commit()
@@ -65,6 +63,30 @@ class TestApplication(LocalApplicationTestCase):
             assert response.json['redirectUri'] == redirectUri
 
             when(
+                'Trying to pass with balnk redirect URI and without title',
+                form=given - 'title' | dict(redirectUri='')
+            )
+            assert status == '706 Redirect URI Is Blank'
+
+            when(
+                'Trying to pass with space redirect URI and without title',
+                form=given - 'title' | dict(redirectUri=' ')
+            )
+            assert status == '706 Redirect URI Is Blank'
+
+            when(
+                'Trying to pass with blank title and without redirect URI',
+                form=given - 'redirectUri' | dict(title='')
+            )
+            assert status == '712 Title Is Blank'
+
+            when(
+                'Trying to pass with space title and without redirect URI',
+                form=given - 'redirectUri' | dict(title=' ')
+            )
+            assert status == '712 Title Is Blank'
+
+            when(
                 'Trying to pass with wrong id',
                 url_parameters=dict(id=self.application2.id)
             )
@@ -76,6 +98,8 @@ class TestApplication(LocalApplicationTestCase):
             )
             assert status == 404
 
+            when('Trying to pass with empty form', form={})
+            assert status == 400
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
