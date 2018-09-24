@@ -1,11 +1,9 @@
-import base64
-import hashlib
 import os
 
-from bddrest.authoring import Update, Remove, when, status, response, given
+from bddrest.authoring import when, status, response, given
 
 from panda.models import Member, Application
-from panda.tests.helpers import LocalApplicationTestCase, RandomMonkeyPatch
+from panda.tests.helpers import LocalApplicationTestCase
 
 
 class TestApplication(LocalApplicationTestCase):
@@ -63,32 +61,38 @@ class TestApplication(LocalApplicationTestCase):
             assert response.json['redirectUri'] == redirectUri
 
             when(
-                'Trying to pass with balnk redirect URI and without title',
+                'Trying to pass with the balnk redirect URI and without title',
                 form=given - 'title' | dict(redirectUri='')
             )
             assert status == '706 Redirect URI Is Blank'
 
             when(
-                'Trying to pass with space redirect URI and without title',
+                'Redirect URI contains only spaces and without title',
                 form=given - 'title' | dict(redirectUri=' ')
             )
             assert status == '706 Redirect URI Is Blank'
 
             when(
-                'Trying to pass with blank title and without redirect URI',
+                'Trying to pass with the blank title and without redirect URI',
                 form=given - 'redirectUri' | dict(title='')
             )
             assert status == '712 Title Is Blank'
 
             when(
-                'Trying to pass with space title and without redirect URI',
+                'Title contains only spaces and without redirect URI',
                 form=given - 'redirectUri' | dict(title=' ')
             )
             assert status == '712 Title Is Blank'
 
             when(
-                'Trying to pass with wrong id',
+                'Trying to pass with wrong application id',
                 url_parameters=dict(id=self.application2.id)
+            )
+            assert status == 404
+
+            when(
+                'The application not exist with this id',
+                url_parameters=dict(id=10)
             )
             assert status == 404
 

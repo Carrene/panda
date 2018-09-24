@@ -1,6 +1,6 @@
 import re
 
-from nanohttp import validate, HTTPStatus
+from nanohttp import validate, HTTPStatus, context
 
 
 USER_EMAIL_PATTERN = \
@@ -12,20 +12,15 @@ USER_PASSWORD_PATTERN = re.compile('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
 
 
 def application_title_value_validation(title, container, field):
-    if title is None:
-        return title
-
-    if not title or title.isspace():
+    if 'title' in context.form and (not title or title.isspace()):
         raise HTTPStatus('712 Title Is Blank')
 
     return title
 
 
 def application_redirect_uri_value_validation(redirectUri, container, field):
-    if redirectUri is None:
-        return redirectUri
-
-    if not redirectUri or redirectUri.isspace():
+    if 'redirectUri' in context.form and \
+            (not redirectUri or redirectUri.isspace()):
         raise HTTPStatus('706 Redirect URI Is Blank')
 
     return redirectUri
