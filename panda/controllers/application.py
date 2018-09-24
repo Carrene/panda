@@ -7,7 +7,7 @@ from restfulpy.orm import DBSession, commit
 
 from .. import cryptohelpers
 from ..models import Application, ApplicationMember
-from panda.validators import application_validator
+from ..validators import application_validator
 
 
 class ApplicationController(ModelRestController):
