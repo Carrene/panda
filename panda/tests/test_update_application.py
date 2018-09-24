@@ -50,7 +50,7 @@ class TestApplication(LocalApplicationTestCase):
         redirectUri = 'http://example.com/oauth2'
 
         with self.given(
-            f'',
+            f'Updating the application',
             f'/apiv1/applications/id:{self.application1.id}',
             f'UPDATE',
             form=dict(title=title, redirectUri=redirectUri)

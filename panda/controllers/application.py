@@ -111,7 +111,6 @@ class ApplicationController(ModelRestController):
             raise HTTPNotFound()
 
         application = DBSession.query(Application).get(id)
-
         if application is None:
             raise HTTPNotFound()
 
@@ -119,6 +118,5 @@ class ApplicationController(ModelRestController):
             raise HTTPNotFound()
 
         application.update_from_request()
-
         return application
 
