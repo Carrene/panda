@@ -1,9 +1,10 @@
-from nanohttp import HTTPStatus, context, HTTPForbidden
+from nanohttp import HTTPStatus, HTTPForbidden
 from restfulpy.authentication import StatefulAuthenticator
 from restfulpy.orm import DBSession
 
 from .models import Member, ApplicationMember
 from .oauth.tokens import AccessToken
+from .tokens import AuthorizationToken
 
 
 class Authenticator(StatefulAuthenticator):
@@ -36,7 +37,7 @@ class Authenticator(StatefulAuthenticator):
 
     def verify_token(self, encoded_token):
         if not encoded_token.startswith('oauth2-accesstoken'):
-            return super().verify_token(encoded_token)
+            return AuthorizationToken.load(encoded_token)
 
         access_token = AccessToken.load(encoded_token.split(' ')[1])
         if not DBSession.query(ApplicationMember) \
