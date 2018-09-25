@@ -1,6 +1,6 @@
 import re
 
-from nanohttp import validate
+from nanohttp import validate, HTTPStatus, context
 
 
 USER_EMAIL_PATTERN = \
@@ -9,6 +9,21 @@ USER_TITLE_PATTERN = re.compile('^[a-zA-Z][\w]{5,16}$')
 
 # Password be to have numbers, uppercase, and lowercase
 USER_PASSWORD_PATTERN = re.compile('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
+
+
+def application_title_value_validation(title, container, field):
+    if 'title' in context.form and (not title or title.isspace()):
+        raise HTTPStatus('712 Title Is Blank')
+
+    return title
+
+
+def application_redirect_uri_value_validation(redirectUri, container, field):
+    if 'redirectUri' in context.form and \
+            (not redirectUri or redirectUri.isspace()):
+        raise HTTPStatus('706 Redirect URI Is Blank')
+
+    return redirectUri
 
 
 email_validator = validate(
@@ -43,6 +58,16 @@ new_password_validator = validate(
         min_length=(6,'702 Invalid Password Length'),
         max_length=(20,'702 Invalid Password Length'),
         pattern=(USER_PASSWORD_PATTERN, '703 Password Not Complex Enough')
+    )
+)
+
+
+application_validator = validate(
+    title=dict(
+        callback=application_title_value_validation
+    ),
+    redirectUri=dict(
+        callback=application_redirect_uri_value_validation
     )
 )
 
