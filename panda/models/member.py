@@ -6,6 +6,8 @@ from restfulpy.orm import DeclarativeBase, Field, DBSession, relationship
 from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer
 from sqlalchemy.orm import synonym
+from cas import CASPrincipal
+
 
 from ..oauth.scopes import SCOPES
 from ..oauth.tokens import AccessToken
@@ -53,12 +55,13 @@ class Member(DeclarativeBase):
     )
 
     def create_jwt_principal(self):
-        return JwtPrincipal(dict(
-            id=self.id,
-            email=self.email,
-            name=self.title,
-            roles=[self.role]
-        ))
+        return CASPrincipal({
+            'id': self.id,
+            'referenceId': self.id,
+            'email': self.email,
+            'name': self.title,
+            'roles': [self.role]
+        })
 
     def create_refresh_principal(self):
         return JwtRefreshToken(dict(id=self.id))
