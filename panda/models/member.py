@@ -9,7 +9,6 @@ from sqlalchemy.orm import synonym
 
 from ..oauth.scopes import SCOPES
 from ..oauth.tokens import AccessToken
-from ..tokens import AuthorizationToken
 
 
 class Member(DeclarativeBase):
@@ -54,9 +53,8 @@ class Member(DeclarativeBase):
     )
 
     def create_jwt_principal(self):
-        return AuthorizationToken(dict(
+        return JwtPrincipal(dict(
             id=self.id,
-            refId=self.id,
             email=self.email,
             name=self.title,
             roles=[self.role]
