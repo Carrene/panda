@@ -33,6 +33,6 @@ class TestLogout(LocalApplicationTestCase):
         ):
             assert status == 200
 
-            when('Trying to pass unathorized member')
+            when('Trying to pass unathorized member', authorization=None)
             assert status == 401
 

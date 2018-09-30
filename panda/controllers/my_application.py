@@ -14,5 +14,5 @@ class MyApplicationController(ModelRestController):
     @Application.expose
     def list(self):
         return DBSession.query(Application) \
-            .filter(Application.owner_id == context.identity.id)
+            .filter(Application.owner_id == context.identity.ref_id)
 

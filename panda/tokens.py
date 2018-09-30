@@ -1,6 +1,6 @@
 import itsdangerous
 from nanohttp import settings, HTTPStatus
-from restfulpy.principal import BaseJwtPrincipal
+from restfulpy.principal import BaseJwtPrincipal, JwtPrincipal
 
 
 class RegisterationToken(BaseJwtPrincipal):
@@ -33,4 +33,11 @@ class ResetPasswordToken(BaseJwtPrincipal):
     @classmethod
     def get_config(cls):
         return settings.reset_password
+
+
+class AuthorizationToken(JwtPrincipal):
+
+    @property
+    def ref_id(self):
+        return self.payload.get('refId')
 
