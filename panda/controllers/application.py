@@ -73,7 +73,7 @@ class ApplicationController(ModelRestController):
     @json(prevent_form='707 Form Not Allowed')
     @Application.expose
     @commit
-    def revoke(self, id):
+    def logout(self, id):
         try:
             id = int(id)
         except:
