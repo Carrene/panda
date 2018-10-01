@@ -6,7 +6,7 @@ from panda.models import Member, Application
 from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestApplicationRevoke(LocalApplicationTestCase):
+class TestApplicationLogout(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
@@ -40,13 +40,13 @@ class TestApplicationRevoke(LocalApplicationTestCase):
         cls.application.members.append(cls.member1)
         session.commit()
 
-    def test_revoke_application(self):
+    def test_logout_application(self):
         self.login(email='member1@example.com', password='123abcABC')
 
         with self.given(
-            f'Revoke the authorization of a application using application id',
+            f'Logout from the application using application id',
             f'/apiv1/applications/id:{self.application.id}',
-            f'REVOKE',
+            f'LOGOUT',
         ):
             assert status == 200
             assert response.json['id'] == self.application.id
