@@ -74,7 +74,7 @@ class TestApplicationRevoke(LocalApplicationTestCase):
             assert len(self.application2.members) == 1
 
             when(
-                'The member isn\'t owner application',
+                'The member isn\'t the owner of the application',
                 url_parameters=dict(id=self.application2.id)
             )
             assert status == 404
@@ -82,7 +82,7 @@ class TestApplicationRevoke(LocalApplicationTestCase):
             when('Trying to pass with wrong id', url_parameters=dict(id=50))
             assert status == 404
 
-            when('Invalid the type id', url_parameters=dict(id='id'))
+            when('Type of the id is invalid', url_parameters=dict(id='id'))
             assert status == 404
 
             when('Send request with form parameter', form=dict(param='param'))
