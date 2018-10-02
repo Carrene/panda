@@ -49,8 +49,8 @@ class ApplicationController(ModelRestController):
     def get(self, id):
         try:
             id = int(id)
-        except:
-            raise HTTPBadRequest()
+        except(ValueError, TypeError):
+            raise HTTPNotFound()
 
         application = DBSession.query(Application) \
             .filter(
@@ -60,7 +60,7 @@ class ApplicationController(ModelRestController):
             .one_or_none()
 
         if application is None:
-            raise HTTPStatus('605 We Don\'t Recognize This Application')
+            raise HTTPNotFound()
 
         return application
 
@@ -76,15 +76,12 @@ class ApplicationController(ModelRestController):
     def logout(self, id):
         try:
             id = int(id)
-        except:
-            raise HTTPBadRequest()
+        except(ValueError, TypeError):
+            raise HTTPNotFound()
 
-        application = DBSession.query(Application) \
-            .filter(Application.id == id) \
-            .one_or_none()
-
+        application = DBSession.query(Application).get(id)
         if application is None:
-            HTTPBadRequest()
+            raise HTTPNotFound()
 
         application_member = DBSession.query(ApplicationMember) \
             .filter(
@@ -94,7 +91,7 @@ class ApplicationController(ModelRestController):
             .one_or_none()
 
         if application_member is None:
-            raise HTTPBadRequest()
+            raise HTTPNotFound()
 
         DBSession.delete(application_member)
         return application
@@ -107,7 +104,7 @@ class ApplicationController(ModelRestController):
     def update(self, id):
         try:
             id = int(id)
-        except (ValueError, TypeError):
+        except(ValueError, TypeError):
             raise HTTPNotFound()
 
         application = DBSession.query(Application).get(id)

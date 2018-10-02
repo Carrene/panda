@@ -121,13 +121,13 @@ class TestApplication(LocalApplicationTestCase):
             assert response.json['id'] == self.application.id
 
             when('Trying to pass with wrong id', url_parameters=dict(id=50))
-            assert status == '605 We Don\'t Recognize This Application'
+            assert status == 404
 
             when(
                 'Trying to pass with invalid the type id',
                 url_parameters=dict(id='id')
             )
-            assert status == 400
+            assert status == 404
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
