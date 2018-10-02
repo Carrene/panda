@@ -137,3 +137,21 @@ class ApplicationController(ModelRestController):
         application.members.clear()
         return application
 
+    @authorize
+    @json(prevent_form='707 Form Not Allowed')
+    @Application.expose
+    @commit
+    def delete(self, id):
+        try:
+            id = int(id)
+        except(ValueError, TypeError):
+            raise HTTPNotFound()
+
+        application = DBSession.query(Application).get(id)
+        if application is None or \
+                application.owner_id != context.identity.reference_id:
+            raise HTTPNotFound()
+
+        DBSession.delete(application)
+        return application
+
