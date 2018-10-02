@@ -120,3 +120,20 @@ class ApplicationController(ModelRestController):
         application.update_from_request()
         return application
 
+    @authorize
+    @json(prevent_form='707 Form Not Allowed')
+    @Application.expose
+    @commit
+    def revoke(self, id):
+        try:
+            id = int(id)
+        except(ValueError, TypeError):
+            raise HTTPNotFound()
+
+        application = DBSession.query(Application).get(id)
+        if application is None or application.owner_id != context.identity.id:
+            raise HTTPNotFound()
+
+        application.members.clear()
+        return application
+
