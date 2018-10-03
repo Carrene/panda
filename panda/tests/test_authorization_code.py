@@ -13,32 +13,24 @@ class TestAuthorizationCode(LocalApplicationTestCase):
     @classmethod
     def mockup(cls):
         session = cls.create_session()
-
         cls.member = Member(
             email='member@example.com',
             title='member_Title',
             password='123abcABC',
             role='member'
         )
-        session.add(cls.member)
-        session.flush()
-
         cls.application = Application(
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            owner_id=cls.member.id
+            owner=cls.member
         )
         session.add(cls.application)
         session.commit()
 
     def test_create_authorization_code(self):
-        self.login(
-            email=self.member.email,
-            password='123abcABC',
-            url='/apiv1/tokens',
-            verb='CREATE'
-        )
+        self.login(email=self.member.email, password='123abcABC')
+
         scopes = 'title'
         state = '123456'
         redirect_uri = 'http://example2.com/oauth2'

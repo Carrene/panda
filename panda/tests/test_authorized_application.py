@@ -1,40 +1,34 @@
-import base64
-import hashlib
 import os
 
-from bddrest.authoring import Update, Remove, when, status, response
+from bddrest.authoring import when, status, response
 
 from panda.models import Member, Application
-from panda.tests.helpers import LocalApplicationTestCase, RandomMonkeyPatch
+from panda.tests.helpers import LocalApplicationTestCase
 
 
 class TestApplication(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
+        session = cls.create_session()
         member = Member(
             email='already.added@example.com',
             title='username',
             password='123abcABC',
             role='member'
         )
-        session = cls.create_session()
-        session.add(member)
-
         cls.member1 = Member(
             email='member1@example.com',
             title='username1',
             password='123abcABC',
             role='member'
         )
-        session.add(cls.member1)
-        session.flush()
-
         cls.application1 = Application(
             title='oauth1',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            owner_id=cls.member1.id
+            owner=cls.member1,
+            members=[member]
         )
         session.add(cls.application1)
 
@@ -42,12 +36,10 @@ class TestApplication(LocalApplicationTestCase):
             title='oauth2',
             redirect_uri='http://example2.com/oauth2',
             secret=os.urandom(32),
-            owner_id=cls.member1.id
+            owner=cls.member1,
+            members=[member]
         )
         session.add(cls.application2)
-
-        cls.application1.members.append(member)
-        cls.application2.members.append(member)
         session.commit()
 
     def test_metadata(self):

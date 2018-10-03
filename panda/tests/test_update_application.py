@@ -10,15 +10,13 @@ class TestApplication(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
+        session = cls.create_session()
         member1 = Member(
             email='member1@example.com',
             title='member1',
             password='123abcABC',
             role='member'
         )
-        session = cls.create_session()
-        session.add(member1)
-
         cls.application1 = Application(
             title='application1',
             redirect_uri='http://example1.com/oauth2',
@@ -33,8 +31,6 @@ class TestApplication(LocalApplicationTestCase):
             password='123abcABC',
             role='member'
         )
-        session.add(member2)
-
         cls.application2 = Application(
             title='application2',
             redirect_uri='http://example2.com/oauth2',

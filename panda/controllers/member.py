@@ -49,10 +49,9 @@ class MemberController(ModelRestController):
     @Member.expose
     def get(self, id):
         id = context.identity.id if id == 'me' else id
-
         try:
             id = int(id)
-        except (ValueError, TypeError):
+        except(ValueError, TypeError):
             raise HTTPNotFound()
 
         member = DBSession.query(Member).get(id)

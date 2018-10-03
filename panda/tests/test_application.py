@@ -12,21 +12,18 @@ class TestApplication(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
+        session = cls.create_session()
         member = Member(
             email='already.added@example.com',
             title='username',
             password='123abcABC',
             role='member'
         )
-        session = cls.create_session()
-        session.add(member)
-        session.flush()
-
         cls.application = Application(
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            owner_id=member.id
+            owner=member
         )
         session.add(cls.application)
         session.commit()
@@ -35,12 +32,7 @@ class TestApplication(LocalApplicationTestCase):
         title = 'example_application'
         redirect_uri = 'http://example.com/oauth2'
 
-        self.login(
-            email='already.added@example.com',
-            password='123abcABC',
-            url='/apiv1/tokens',
-            verb='CREATE'
-        )
+        self.login(email='already.added@example.com', password='123abcABC')
 
         with RandomMonkeyPatch(
             b'2X\x95z\x14\x7f\x80\xe2\xd1\xdeD\xf6\xd3\x9ea\x90uZ'
@@ -121,13 +113,13 @@ class TestApplication(LocalApplicationTestCase):
             assert response.json['id'] == self.application.id
 
             when('Trying to pass with wrong id', url_parameters=dict(id=50))
-            assert status == '605 We Don\'t Recognize This Application'
+            assert status == 404
 
             when(
                 'Trying to pass with invalid the type id',
                 url_parameters=dict(id='id')
             )
-            assert status == 400
+            assert status == 404
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401

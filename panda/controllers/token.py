@@ -11,7 +11,6 @@ class TokenController(RestController):
     def create(self):
         email = context.form.get('email')
         password = context.form.get('password')
-
         if email and password is None:
             raise HTTPStatus('603 Incorrect Email Or Password')
 
@@ -20,12 +19,12 @@ class TokenController(RestController):
 
         if principal is None:
             raise HTTPStatus('603 Incorrect Email Or Password')
+
         return dict(token=principal.dump())
 
     @authorize
     @json
     def invalidate(self):
         context.application.__authenticator__.logout()
-
         return {}
 
