@@ -10,21 +10,18 @@ class TestMyApplication(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
+        session = cls.create_session()
         member = Member(
             email='user@example.com',
             title='username',
             password='123abcABC',
             role='member'
         )
-        session = cls.create_session()
-        session.add(member)
-        session.commit()
-
         application1 = Application(
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            owner_id=member.id
+            owner=member
         )
         session.add(application1)
 
@@ -32,7 +29,7 @@ class TestMyApplication(LocalApplicationTestCase):
             title='oauth',
             redirect_uri='http://example2.com/oauth2',
             secret=os.urandom(32),
-            owner_id=member.id
+            owner=member
         )
         session.add(application2)
         session.commit()

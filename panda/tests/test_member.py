@@ -28,32 +28,26 @@ class TestMember(LocalApplicationTestCase):
             password='123abcABC',
             role='member'
         )
-        session.add(owner)
-        session.flush()
-
         cls.member = Member(
             email='member@example.com',
             title='member_title',
             password='123abcABC',
             role='member'
         )
-        session.add(cls.member)
-        session.flush()
-
         cls.application1 = Application(
             title='oauth',
             redirect_uri='http://example1.com/oauth2',
             secret=os.urandom(32),
-            owner_id=owner.id
+            owner=owner,
+            members=[cls.member]
         )
-        cls.application1.members.append(cls.member)
         session.add(cls.application1)
 
         cls.application2 = Application(
             title='oauth',
             redirect_uri='http://example2.com/oauth2',
             secret=os.urandom(32),
-            owner_id=owner.id
+            owner=owner
         )
         session.add(cls.application2)
         session.commit()

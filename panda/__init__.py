@@ -2,10 +2,9 @@ from os.path import join, dirname
 
 from restfulpy.application import Application
 
-from .tokens import RegisterationToken, ResetPasswordToken
+from . import mockup
 from .authentication import Authenticator
 from .controllers.root import Root
-from . import mockup
 
 
 __version__ = '0.1.0-dev'
