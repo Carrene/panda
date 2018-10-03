@@ -22,17 +22,12 @@ class TestChangePassword(LocalApplicationTestCase):
         session = self.create_session()
         old_password_hash = session.query(Member).one().password
 
-        self.login(
-            email='already.added@example.com',
-            password='123abcABC',
-            url='/apiv1/tokens',
-            verb='CREATE'
-        )
+        self.login(email='already.added@example.com', password='123abcABC')
 
         with self.given(
             'The password has been successfully changed',
             '/apiv1/passwords',
-            'change',
+            'CHANGE',
             form=dict(
                 currentPassword='123abcABC',
                 newPassword='NewPassword123'
