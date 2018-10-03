@@ -1,6 +1,6 @@
 import hashlib
 
-from nanohttp import json, context, HTTPStatus, HTTPBadRequest, HTTPNotFound
+from nanohttp import json, context, HTTPStatus, HTTPNotFound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit

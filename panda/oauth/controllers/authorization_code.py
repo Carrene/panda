@@ -1,5 +1,3 @@
-import ast
-
 from nanohttp import json, context, HTTPStatus, validate
 from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
@@ -15,7 +13,9 @@ class AuthorizationCodeController(RestController):
     @json(prevent_form='707 Form Not Allowed')
     @authorize
     @validate(
-        applicationId=dict(required='605 We Don\'t Recognize This Application'),
+        applicationId=dict(
+            required='605 We Don\'t Recognize This Application'
+        ),
         scopes=dict(required='606 Invalid Scope')
     )
     def create(self):

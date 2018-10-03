@@ -52,13 +52,13 @@ class TestApplicationLogout(LocalApplicationTestCase):
             assert response.json['id'] == self.application.id
 
             when('Trying to pass with wrong id', url_parameters=dict(id=50))
-            assert status == 400
+            assert status == 404
 
             when(
                 'Trying to pass with invalid the type id',
                 url_parameters=dict(id='id')
             )
-            assert status == 400
+            assert status == 404
 
             when('Send request with form parameter', form=dict(param='param'))
             assert status == '707 Form Not Allowed'
