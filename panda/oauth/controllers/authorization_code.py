@@ -35,7 +35,7 @@ class AuthorizationCodeController(RestController):
         redirect_uri = context.query.get('redirectUri')\
             if context.query.get('redirectUri') else application.redirect_uri
 
-        location = f'{redirect_uri}?clint_id={application.id}'
+        location = f'{redirect_uri}?application_id={application.id}'
 
         if state:
             location = f'{location}&state={state}'
