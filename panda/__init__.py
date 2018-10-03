@@ -43,7 +43,7 @@ class Panda(Application):
 
     access_token:
       secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
-      max_age: 86400  # seconds
+      max_age: 2592000  # seconds
       algorithm: HS256
     '''
 
