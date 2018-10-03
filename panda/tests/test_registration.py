@@ -3,6 +3,7 @@ from restfulpy.messaging import create_messenger
 
 from panda.models import RegisterEmail, Member
 from panda.tests.helpers import LocalApplicationTestCase
+from panda.tokens import RegisterationToken
 
 
 class TestRegisteration(LocalApplicationTestCase):
@@ -28,28 +29,13 @@ class TestRegisteration(LocalApplicationTestCase):
         email = 'user@example.com'
         title = 'nickname'
         password = '123abdABD'
-
-        with self.given(
-            'Claim a email',
-            '/apiv1/emails',
-            'CLAIM',
-            form=dict(email=email)
-        ):
-            assert status == 200
-            assert 'email' in response.json
-            assert response.json['email'] == email
-
-            task = RegisterEmail.pop()
-            task.do_(None)
-            registeration_token = \
-                messanger.last_message['body']['registeration_token']
+        registeration_token = RegisterationToken(dict(email=email)).dump()
 
         with self.given(
             'Register a member',
             '/apiv1/members',
             'REGISTER',
             form=dict(
-                email=email,
                 title=title,
                 password=password,
                 ownershipToken=registeration_token
