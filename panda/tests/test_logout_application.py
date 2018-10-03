@@ -10,34 +10,27 @@ class TestApplicationLogout(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
+        session = cls.create_session()
         member = Member(
             email='already.added@example.com',
             title='username',
             password='123abcABC',
             role='member'
         )
-        session = cls.create_session()
-        session.add(member)
-        session.flush()
-
-        cls.application = Application(
-            title='oauth',
-            redirect_uri='http://example1.com/oauth2',
-            secret=os.urandom(32),
-            owner_id=member.id
-        )
-        session.add(cls.application)
-        session.commit()
-
         cls.member1 = Member(
             email='member1@example.com',
             title='username1',
             password='123abcABC',
             role='member'
         )
-        session.add(cls.member1)
-        session.flush()
-        cls.application.members.append(cls.member1)
+        cls.application = Application(
+            title='oauth',
+            redirect_uri='http://example1.com/oauth2',
+            secret=os.urandom(32),
+            owner=member,
+            members=[cls.member1]
+        )
+        session.add(cls.application)
         session.commit()
 
     def test_logout_application(self):
