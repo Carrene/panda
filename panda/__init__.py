@@ -55,7 +55,7 @@ class Panda(Application):
             version=__version__,
         )
 
-    def insert_mockup(self):
+    def insert_mockup(self, *args):
         mockup.insert()
 
 
