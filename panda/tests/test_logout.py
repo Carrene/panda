@@ -19,12 +19,7 @@ class TestLogout(LocalApplicationTestCase):
         session.commit()
 
     def test_logout(self):
-        self.login(
-            email='already.added@example.com',
-            password='123abcABC',
-            url='/apiv1/tokens',
-            verb='CREATE'
-        )
+        self.login(email='already.added@example.com', password='123abcABC')
 
         with self.given(
             'The member has been successfully logout',
