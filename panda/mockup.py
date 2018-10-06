@@ -37,7 +37,7 @@ def insert(): # pragma: no cover
         password='123abcABC',
         role='admin'
     )
-    DBSession.add(member3)
+    DBSession.add(admin)
     DBSession.flush()
 
     secret = 'A1dFVpz4w/qyym+HeXKWYmm6Ocj4X5ZNv1JQ7kgHBEk='
@@ -45,7 +45,7 @@ def insert(): # pragma: no cover
         title='oauth',
         redirect_uri='http://example.com/oauth',
         secret=base64.decodebytes(bytes(secret, 'utf-8')),
-        owner_id=member1.id
+        owner=member1
     )
     DBSession.add(application)
     DBSession.commit()
@@ -81,6 +81,6 @@ def insert(): # pragma: no cover
         f'  Title: {application.title}\n'
         f'  Secret: {secret}\n'
         f'  Redirect uri: {application.redirect_uri}\n'
-        f'  Related to member with id: {application.owner_id}\n'
+        f'  Owner of application is john\n'
     )
 
