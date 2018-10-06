@@ -1,7 +1,10 @@
+import time
+
 from bddrest.authoring import response, Update, when, status
+from nanohttp import settings
 from restfulpy.messaging import create_messenger
 
-from panda.models import RegisterEmail, Member
+from panda.models import Member
 from panda.tests.helpers import LocalApplicationTestCase
 from panda.tokens import RegisterationToken
 
@@ -69,10 +72,19 @@ class TestRegisteration(LocalApplicationTestCase):
             assert status == '601 Email Address Is Already Registered'
 
             when (
-                'The toekn has been damaged',
-                form=Update(title='user_name', ownershipToken='token')
+                'The token has been damaged',
+                form=Update(ownershipToken='token')
             )
             assert status == '611 Malformed Token'
+
+            settings.registeration.max_age = 0.3
+            registeration_token = RegisterationToken(dict(email=email)).dump()
+            time.sleep(1)
+            when(
+                'The token is expired',
+                form=Update(ownershipToken=registeration_token)
+            )
+            assert status == '609 Token Expired'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'
