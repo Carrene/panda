@@ -37,7 +37,7 @@ class Authenticator(StatefulAuthenticator):
 
     def verify_token(self, encoded_token):
         if not encoded_token.startswith('oauth2-accesstoken'):
-            return CASPrincipal.load(encoded_token)
+            return super().verify_token(encoded_token)
 
         access_token = AccessToken.load(encoded_token.split(' ')[1])
         if not DBSession.query(ApplicationMember) \

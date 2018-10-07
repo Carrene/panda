@@ -30,7 +30,7 @@ class ApplicationController(ModelRestController):
         application = Application(
             title=title,
             redirect_uri=redirect_uri,
-            owner_id=context.identity.reference_id
+            owner_id=context.identity.id
         )
         application.secret = hashlib.pbkdf2_hmac(
             'sha256',
@@ -55,7 +55,7 @@ class ApplicationController(ModelRestController):
         application = DBSession.query(Application) \
             .filter(
                 Application.id == id,
-                Application.owner_id == context.identity.reference_id
+                Application.owner_id == context.identity.id
             ) \
             .one_or_none()
 
@@ -86,7 +86,7 @@ class ApplicationController(ModelRestController):
         application_member = DBSession.query(ApplicationMember) \
             .filter(
                 ApplicationMember.application_id == id,
-                ApplicationMember.member_id == context.identity.reference_id
+                ApplicationMember.member_id == context.identity.id
             ) \
             .one_or_none()
 
@@ -111,7 +111,7 @@ class ApplicationController(ModelRestController):
         if application is None:
             raise HTTPNotFound()
 
-        if application.owner_id != context.identity.reference_id:
+        if application.owner_id != context.identity.id:
             raise HTTPNotFound()
 
         application.update_from_request()
@@ -146,7 +146,7 @@ class ApplicationController(ModelRestController):
 
         application = DBSession.query(Application).get(id)
         if application is None or \
-                application.owner_id != context.identity.reference_id:
+                application.owner_id != context.identity.id:
             raise HTTPNotFound()
 
         DBSession.delete(application)
