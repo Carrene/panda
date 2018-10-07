@@ -55,7 +55,7 @@ class TestRegisteration(LocalApplicationTestCase):
 
             when(
                 'Invalid password max length',
-                form=Update(password='1Aa123456789abcdeABCDE')
+                form=Update(password='1Aa123456789abcdeABCD')
             )
             assert status == '702 Invalid Password Length'
 

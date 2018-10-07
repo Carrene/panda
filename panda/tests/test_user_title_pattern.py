@@ -33,7 +33,7 @@ def test_user_title_pattern():
     assert not pattern.match('nick>name')
     assert not pattern.match('nick/name')
     assert not pattern.match('nick\name')
-    assert not pattern.match('nickname_nickname_')
+    assert not pattern.match('nickname_nickname_nickname')
     assert not pattern.match('nick,ame')
     assert not pattern.match('nick:ame')
     assert not pattern.match('nick;ame')

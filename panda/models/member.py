@@ -17,10 +17,32 @@ class Member(DeclarativeBase):
     __tablename__ = 'member'
 
     id = Field(Integer, primary_key=True)
-    email = Field(Unicode(100), unique=True, index=True)
-    title = Field(Unicode(100), unique=True)
+    email = Field(
+        Unicode(100),
+        unique=True,
+        index=True,
+        pattern='(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)',
+        required=True
+    )
+    title = Field(
+        Unicode(100),
+        unique=True,
+        pattern='^[a-zA-Z][\w]{5,19}$',
+        required=True,
+        min_length=6,
+        max_length=20
+    )
     role = Field(Unicode(100))
-    _password = Field('password', Unicode(128), index=True, protected=True)
+    _password = Field(
+        'password',
+        Unicode(128),
+        index=True,
+        protected=True,
+        pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+',
+        min_length=6,
+        max_length=20,
+        required=True
+    )
     applications = relationship(
         'Application',
         back_populates='owner',
