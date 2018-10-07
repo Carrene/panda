@@ -5,7 +5,7 @@ from nanohttp import validate, HTTPStatus, context
 
 USER_EMAIL_PATTERN = \
     re.compile('(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
-USER_TITLE_PATTERN = re.compile('^[a-zA-Z][\w]{5,16}$')
+USER_TITLE_PATTERN = re.compile('^[a-zA-Z][\w]{5,19}$')
 
 # Password be to have numbers, uppercase, and lowercase
 USER_PASSWORD_PATTERN = re.compile('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
