@@ -11,6 +11,8 @@ with open(join(dirname(__file__), 'panda', '__init__.py')) as v_file:
 
 dependencies = [
     'restfulpy >= 2.3.1',
+    'kavenegar',
+    'requests'
 ]
 
 
