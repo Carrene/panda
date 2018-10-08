@@ -5,6 +5,7 @@ from restfulpy.application import Application
 from . import mockup
 from .authentication import Authenticator
 from .controllers.root import Root
+from .cli.email import EmailLauncher
 
 
 __version__ = '0.1.0-dev'
@@ -32,7 +33,7 @@ class Panda(Application):
       callback_url: http://cas.carrene.com/register
 
     messaging:
-      default_messenger: restfulpy.messaging.ConsoleMessenger
+      default_messenger: restfulpy.messaging.SmtpProvider
       template_dirs:
         - %(root_path)s/panda/email_templates
 
@@ -45,6 +46,12 @@ class Panda(Application):
       secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
       max_age: 2592000  # seconds
       algorithm: HS256
+
+    smtp:
+      host: smtp.gmail.com
+      username: cas@carrene.com
+      password: V3NxJF4abPNUvkAV
+      local_hostname: carrene.com
     '''
 
     def __init__(self, application_name='panda', root=Root()):
@@ -57,6 +64,10 @@ class Panda(Application):
 
     def insert_mockup(self, *args):
         mockup.insert()
+
+
+    def register_cli_launchers(self, subparsers):
+        EmailLauncher.register(subparsers)
 
 
 panda = Panda()
