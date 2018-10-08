@@ -30,6 +30,15 @@ class Member(DeclarativeBase):
         min_length=6,
         max_length=20
     )
+    phone = Field(
+        Unicode(16),
+        nullable=True,
+        unique=True,
+        pattern='[+]{0,1}[\d+]{7,15}',
+        required=False,
+        min_length=8,
+        max_length=16
+    )
     role = Field(Unicode(100))
     _password = Field(
         'password',
