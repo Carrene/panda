@@ -50,7 +50,7 @@ class Panda(Application):
     smtp:
       host: smtp.gmail.com
       username: cas@carrene.com
-      password: V3NxJF4abPNUvkAV
+      password: <password>
       local_hostname: carrene.com
     '''
 
