@@ -65,7 +65,6 @@ class Panda(Application):
     def insert_mockup(self, *args):
         mockup.insert()
 
-
     def register_cli_launchers(self, subparsers):
         EmailLauncher.register(subparsers)
 

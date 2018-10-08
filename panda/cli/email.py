@@ -42,3 +42,4 @@ class EmailLauncher(Launcher, RequireSubCommand):  # pragma: no cover
         )
         SendEmailLauncher.register(user_subparsers)
         return parser
+
