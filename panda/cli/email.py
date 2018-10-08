@@ -6,6 +6,7 @@ from ..tokens import RegisterationToken
 
 
 class SendEmailLauncher(Launcher):  # pragma: no cover
+
     @classmethod
     def create_parser(cls, subparsers):
         parser = subparsers.add_parser('send', help='Sends an email.')
@@ -33,6 +34,7 @@ class SendEmailLauncher(Launcher):  # pragma: no cover
 
 
 class EmailLauncher(Launcher, RequireSubCommand):  # pragma: no cover
+
     @classmethod
     def create_parser(cls, subparsers):
         parser = subparsers.add_parser('email', help="Manage emails")
