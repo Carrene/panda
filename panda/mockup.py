@@ -29,7 +29,6 @@ def insert(): # pragma: no cover
         role='member'
     )
     DBSession.add(member3)
-    DBSession.flush()
 
     admin = Member(
         title='admin',
@@ -38,7 +37,6 @@ def insert(): # pragma: no cover
         role='admin'
     )
     DBSession.add(admin)
-    DBSession.flush()
 
     secret = 'A1dFVpz4w/qyym+HeXKWYmm6Ocj4X5ZNv1JQ7kgHBEk='
     application = Application(
