@@ -7,6 +7,7 @@ from restfulpy.messaging import create_messenger
 from panda.models import Member
 from panda.tests.helpers import LocalApplicationTestCase
 from panda.tokens import RegisterationToken
+from panda.tokens import PhoneNumberActivationToken
 
 
 class TestPhone(LocalApplicationTestCase):
@@ -42,7 +43,9 @@ class TestPhone(LocalApplicationTestCase):
             form=dict(phoneNumber='+989351234567')
         ):
             assert status == 200
-            assert 'activationToken' in response.json
+            activation_token = PhoneNumberActivationToken \
+                .load(response.json['activationToken'])
+            assert activation_token['phoneNumber'] == '+989351234567'
 
             when(
                 'Duplicate phone number',

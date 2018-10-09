@@ -1,3 +1,5 @@
+# pragma: no cover
+
 import requests
 import ujson
 from kavenegar import APIException, HTTPException, KavenegarAPI
