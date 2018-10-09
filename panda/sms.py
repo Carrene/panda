@@ -6,16 +6,11 @@ from nanohttp import settings, HTTPStatus
 
 class SmsProvider:  # pragma: no cover
     def send(self, to_number, text):
-        pass
-#        logger.info(
-#            'SMS is sending for number : %s with text : %s by : %s' %
-#            (to_number, text, self.__class__.__name__)
-#        )
+        NotImplementedError()
 
 
 class CmSmsProvider(SmsProvider):  # pragma: no cover
     def send(self, to_number, text):
-        super().send(to_number, text)
         headers = {'Content-Type': 'application/json'}
         data = {
             "messages": {
@@ -42,7 +37,6 @@ class CmSmsProvider(SmsProvider):  # pragma: no cover
 
 class IranSmsProvider(SmsProvider):  # pragma: no cover
     def send(self, to_number, text):
-        super().send(to_number, text)
         try:
             api = KavenegarAPI(settings.sms.kavenegar.apiKey)
             params = {
@@ -80,7 +74,6 @@ class AutomaticSmsProvider(SmsProvider):  # pragma: no cover
 
 class ConsoleSmsProvider(SmsProvider):  # pragma: no cover
     def send(self, to_number, text):
-        super().send(to_number, text)
         print(
             'SMS send request received for number : %s with text : %s' %
             (to_number, text)
