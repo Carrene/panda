@@ -28,3 +28,4 @@ class PhoneNumberActivationTokenController(RestController):
         DBSession.add(Member.create_otp(phone, context.identity.id))
         token = PhoneNumberActivationToken(dict(phoneNumber=phone))
         return dict(activationToken=token.dump())
+
