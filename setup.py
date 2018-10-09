@@ -1,6 +1,6 @@
 import re
-
 from os.path import join, dirname
+
 from setuptools import setup, find_packages
 
 
@@ -10,9 +10,10 @@ with open(join(dirname(__file__), 'panda', '__init__.py')) as v_file:
 
 
 dependencies = [
-    'restfulpy >= 2.3.1',
+    'restfulpy >= 2.4.1',
     'kavenegar',
-    'requests'
+    'requests',
+    'oathcy',
 ]
 
 
