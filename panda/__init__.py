@@ -52,6 +52,31 @@ class Panda(Application):
       username: cas@carrene.com
       password: <password>
       local_hostname: carrene.com
+
+    sms:
+      provider: panda.sms.ConsoleSmsProvider
+      cm:
+        sender: cas@Carrene
+        refrence: Carrene
+        token: <token>
+        url: https://gw.cmtelecom.com/v1.0/message
+      kavenegar:
+        apiKey: <key>
+
+    phone:
+      activation_token:
+        secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
+        max_age: 360  # seconds
+        algorithm: HS256
+      activation_code:
+        length: 6
+        hash_algorithm: SHA-1
+        time_interval: 59 # seconds
+        challenge_limit: 40
+        seed: !!python/bytes 8QYEd+yEh4fcZ5aAVqrlXBWuToeXTyOeHFun8OzOL48=
+        window: 4
+      jwt:
+        max_age: 86400
     '''
 
     def __init__(self, application_name='panda', root=Root()):

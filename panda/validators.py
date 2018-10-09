@@ -9,6 +9,7 @@ USER_TITLE_PATTERN = re.compile('^[a-zA-Z][\w]{5,19}$')
 
 # Password be to have numbers, uppercase, and lowercase
 USER_PASSWORD_PATTERN = re.compile('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
+PHONE_PATTERN = '^[+]{0,1}[\d+]{7,15}$'
 
 
 def application_title_value_validation(title, container, field):
@@ -68,6 +69,14 @@ application_validator = validate(
     ),
     redirectUri=dict(
         callback=application_redirect_uri_value_validation
+    )
+)
+
+
+phone_number_validator = validate(
+    phoneNumber=dict(
+        required='713 Invalid Phone Number',
+        pattern=(PHONE_PATTERN, '713 Invalid Phone Number')
     )
 )
 

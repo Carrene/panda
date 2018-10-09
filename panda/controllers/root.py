@@ -13,6 +13,7 @@ from .reset_password_token import ResetPasswordTokenController
 from .token import TokenController
 from .my_application import MyApplicationController
 from .authorized_application import AuthorizedApplicationController
+from .phones import PhoneNumberActivationTokenController
 
 
 class ApiV1(Controller):
@@ -27,6 +28,7 @@ class ApiV1(Controller):
     accesstokens = AccessTokenController()
     myapplications = MyApplicationController()
     authorizedapplications = AuthorizedApplicationController()
+    phonenumberactivationtokens = PhoneNumberActivationTokenController()
 
     @json
     def version(self):

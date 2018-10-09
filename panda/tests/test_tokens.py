@@ -4,7 +4,8 @@ import pytest
 from nanohttp import settings, HTTPStatus
 
 from panda.tests.helpers import LocalApplicationTestCase
-from panda.tokens import RegisterationToken, ResetPasswordToken
+from panda.tokens import RegisterationToken, ResetPasswordToken, \
+    PhoneNumberActivationToken
 
 
 class TestTokens(LocalApplicationTestCase):
@@ -58,4 +59,29 @@ class TestTokens(LocalApplicationTestCase):
             dump = registeration_token.dump()
             time.sleep(1)
             load = RegisterationToken.load(dump.decode())
+
+    def test_phone_number_activation_token(self):
+
+        # Create registeration token using dump and load mothods
+        payload = dict(phoneNumber='+989351234567')
+        activation_token = PhoneNumberActivationToken(payload)
+        dump = activation_token.dump()
+        load = PhoneNumberActivationToken.load(dump.decode())
+        assert load.payload == payload
+
+        # Trying to load token using bad signature token
+        with pytest.raises(
+            HTTPStatus('607 Malformed Token').__class__
+        ):
+            load = PhoneNumberActivationToken.load('token')
+
+        # Trying to load token when token is expired
+        with pytest.raises(
+            HTTPStatus('609 Token Expired').__class__
+        ):
+            settings.phone.activation_token.max_age = 0.3
+            activation_token = PhoneNumberActivationToken(payload)
+            dump = activation_token.dump()
+            time.sleep(1)
+            load = PhoneNumberActivationToken.load(dump.decode())
 
