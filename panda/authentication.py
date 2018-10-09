@@ -1,7 +1,6 @@
 from nanohttp import HTTPStatus, context, HTTPForbidden
 from restfulpy.authentication import StatefulAuthenticator
 from restfulpy.orm import DBSession
-from cas import CASPrincipal
 
 from .models import Member, ApplicationMember
 from .oauth.tokens import AccessToken
