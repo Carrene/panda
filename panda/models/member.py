@@ -37,7 +37,7 @@ class Member(DeclarativeBase):
         Unicode(16),
         nullable=True,
         unique=True,
-        pattern='[+]{0,1}[\d+]{7,15}',
+        pattern='^[+]{0,1}[\d+]{7,15}$',
         required=False,
         min_length=8,
         max_length=16
@@ -124,12 +124,12 @@ class Member(DeclarativeBase):
     def _create_activation_session(cls, phone):
         ocra_suite = OCRASuite(
             'time',
-            settings.phone.activation.length,
-            settings.phone.activation.hash_algorithm,
-            settings.phone.activation.time_interval,
-            settings.phone.activation.challenge_limit
+            settings.phone.activation_code.length,
+            settings.phone.activation_code.hash_algorithm,
+            settings.phone.activation_code.time_interval,
+            settings.phone.activation_code.challenge_limit
         )
-        seed = settings.phone.activation.seed
+        seed = settings.phone.activation_code.seed
         return TimeBasedChallengeResponse(
             ocra_suite, derivate_seed(seed, str(phone))
         )

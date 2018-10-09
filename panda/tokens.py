@@ -48,7 +48,7 @@ class PhoneNumberActivationToken(BaseJwtPrincipal):
 
     @classmethod
     def get_config(cls):
-        return settings.reset_password
+        return settings.phone.activation_token
 
     @property
     def phone_number(self):

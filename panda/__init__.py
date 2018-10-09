@@ -64,7 +64,11 @@ class Panda(Application):
         apiKey: <key>
 
     phone:
-      activation:
+      activation_token:
+        secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
+        max_age: 360  # seconds
+        algorithm: HS256
+      activation_code:
         length: 6
         hash_algorithm: SHA-1
         time_interval: 59 # seconds
