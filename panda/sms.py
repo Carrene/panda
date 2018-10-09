@@ -1,16 +1,16 @@
-import ujson
 import requests
-
-from nanohttp import settings, HTTPStatus
+import ujson
 from kavenegar import APIException, HTTPException, KavenegarAPI
+from nanohttp import settings, HTTPStatus
 
 
 class SmsProvider:  # pragma: no cover
     def send(self, to_number, text):
-        logger.info(
-            'SMS is sending for number : %s with text : %s by : %s' %
-            (to_number, text, self.__class__.__name__)
-        )
+        pass
+#        logger.info(
+#            'SMS is sending for number : %s with text : %s by : %s' %
+#            (to_number, text, self.__class__.__name__)
+#        )
 
 
 class CmSmsProvider(SmsProvider):  # pragma: no cover
@@ -31,13 +31,13 @@ class CmSmsProvider(SmsProvider):  # pragma: no cover
         data = ujson.dumps(data)
 
         try:
-        response = requests.post(
-            settings.sms.cm.url,
-            data=data,
-            headers=headers
-        )
+            response = requests.post(
+                settings.sms.cm.url,
+                data=data,
+                headers=headers
+            )
         except(requests.exceptions.RequestException):
-            raise HTTPStatus('617 SMS Cannot Be Sent')
+            raise HTTPStatus('800 SMS Provider Internal Error')
 
 
 class IranSmsProvider(SmsProvider):  # pragma: no cover
@@ -47,12 +47,12 @@ class IranSmsProvider(SmsProvider):  # pragma: no cover
             api = KavenegarAPI(settings.sms.kavenegar.apiKey)
             params = {
                 'sender': '',  # optional
-                'receptor': to_number,
+                'receptor': str(to_number),
                 'message': text,
             }
             api.sms_send(params)
         except(APIException, HTTPException):
-            raise HTTPStatus('617 SMS Cannot Be Sent')
+            raise HTTPStatus('800 SMS Provider Internal Error')
 
 
 class AutomaticSmsProvider(SmsProvider):  # pragma: no cover
