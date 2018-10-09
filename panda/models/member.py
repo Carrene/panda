@@ -1,7 +1,7 @@
 import os
 from hashlib import sha256
 
-from nanohttp import context
+from nanohttp import context, settings
 from restfulpy.orm import DeclarativeBase, Field, DBSession, relationship
 from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer
@@ -9,6 +9,9 @@ from sqlalchemy.orm import synonym
 
 from ..oauth.scopes import SCOPES
 from ..oauth.tokens import AccessToken
+from .messaging import OTPSMS
+from ..cryptohelpers import OCRASuite, ChallengeResponse, \
+    TimeBasedChallengeResponse, derivate_seed
 
 
 class Member(DeclarativeBase):
@@ -116,4 +119,37 @@ class Member(DeclarativeBase):
             member[scope] = SCOPES[scope](self)
 
         return member
+
+    @classmethod
+    def _create_activation_session(cls, phone):
+        ocra_suite = OCRASuite(
+            'time',
+            settings.phone.activation.length,
+            settings.phone.activation.hash_algorithm,
+            settings.phone.activation.time_interval,
+            settings.phone.activation.challenge_limit
+        )
+        seed = settings.phone.activation.seed
+        return TimeBasedChallengeResponse(
+            ocra_suite, derivate_seed(seed, str(phone))
+        )
+
+    @classmethod
+    def generate_activation_code(cls, phone, id):
+        session = cls._create_activation_session(phone)
+        return session.generate(challenge=id)
+
+    @classmethod
+    def verify_activation_code(cls, phone, id, code):
+        session = cls._create_activation_session(phone)
+        result, ___ = session.verify(
+            code, id, settings.phone.activation.window
+        )
+        return result
+
+    @classmethod
+    def create_otp(cls, phone, id):
+        return OTPSMS(
+            receiver=phone, code=cls.generate_activation_code(phone, str(id))
+        )
 
