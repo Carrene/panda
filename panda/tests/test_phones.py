@@ -43,9 +43,9 @@ class TestPhone(LocalApplicationTestCase):
             form=dict(phoneNumber='+989351234567')
         ):
             assert status == 200
-            activation_token = PhoneNumberActivationToken \
+            principal_activation_token = PhoneNumberActivationToken \
                 .load(response.json['activationToken'])
-            assert activation_token['phoneNumber'] == '+989351234567'
+            assert principal_activation_token.phone_number == '+989351234567'
 
             when(
                 'Duplicate phone number',

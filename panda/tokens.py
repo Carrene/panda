@@ -40,7 +40,7 @@ class PhoneNumberActivationToken(BaseJwtPrincipal):
     @classmethod
     def load(cls, token):
         try:
-            return super().load(token).payload
+            return super().load(token)
         except itsdangerous.SignatureExpired:
             raise HTTPStatus('609 Token Expired')
         except itsdangerous.BadSignature:
