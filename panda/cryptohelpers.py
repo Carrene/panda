@@ -6,7 +6,7 @@ import time
 from oathcy import OCRAChallengeResponseServer, OCRAChallengeResponseClient
 
 
-def random(size):
+def random(size): # pragma: no cover
     return os.urandom(size)
 
 
@@ -18,14 +18,14 @@ hash_algorithm_sizes = {
 }
 
 
-def split_seed(seed, hash_algorithm):
+def split_seed(seed, hash_algorithm): # pragma: no cover
     if not isinstance(seed, bytes):
         raise TypeError('seed argument must be bytes')
 
     return seed[:hash_algorithm_sizes[hash_algorithm]]
 
 
-def derivate_seed(base_seed, second_factor):
+def derivate_seed(base_seed, second_factor): # pragma: no cover
     sha = hashlib.sha3_256()
     sha.update(second_factor.encode())
     hashed = sha.digest()
@@ -35,7 +35,7 @@ def derivate_seed(base_seed, second_factor):
     return bytes(result)
 
 
-class AbstractAlgorithm:
+class AbstractAlgorithm: # pragma: no cover
     def __init__(self, seed, drift=0):
         self.seed = seed
         self.drift = drift
@@ -51,7 +51,7 @@ class AbstractAlgorithm:
         raise NotImplementedError()
 
 
-class OCRASuite:
+class OCRASuite: # pragma: no cover
     algorithm = 'OCRA-1'
 
     def __init__(self, counter_type, length, hash_algorithm,
@@ -183,7 +183,7 @@ class OCRASuite:
         )
 
 
-class ChallengeResponse(AbstractAlgorithm):
+class ChallengeResponse(AbstractAlgorithm): # pragma: no cover
     def __init__(self, ocra_suite, seed, drift=0):
         if not isinstance(ocra_suite, OCRASuite):
             ocra_suite = OCRASuite.load(ocra_suite)
@@ -209,7 +209,7 @@ class ChallengeResponse(AbstractAlgorithm):
         )
 
 
-class MacBasedChallengeResponse(ChallengeResponse):
+class MacBasedChallengeResponse(ChallengeResponse): # pragma: no cover
     def __init__(self, ocra_suite, seed, counter, drift=0):
         super().__init__(ocra_suite, seed, drift=drift)
         self.counter = counter
@@ -236,7 +236,7 @@ class MacBasedChallengeResponse(ChallengeResponse):
         )
 
 
-class TimeBasedChallengeResponse(ChallengeResponse):
+class TimeBasedChallengeResponse(ChallengeResponse): # pragma: no cover
     def __init__(self, ocra_suite, seed, drift=0):
         super().__init__(ocra_suite, seed, drift=drift)
         self.time_interval = self.ocra_suite.time_interval
