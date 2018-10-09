@@ -54,7 +54,7 @@ class Panda(Application):
       local_hostname: carrene.com
 
     sms:
-      provider: panda.sms.ConsolSmsProvider
+      provider: panda.sms.ConsoleSmsProvider
       cm:
         sender: cas@Carrene
         refrence: Carrene
@@ -69,7 +69,7 @@ class Panda(Application):
         hash_algorithm: SHA-1
         time_interval: 59 # seconds
         challenge_limit: 40
-        seed: <seed>
+        seed: !!python/bytes 8QYEd+yEh4fcZ5aAVqrlXBWuToeXTyOeHFun8OzOL48=
         window: 4
       jwt:
         max_age: 86400
