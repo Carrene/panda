@@ -143,7 +143,7 @@ class Member(DeclarativeBase):
     def verify_activation_code(cls, phone, id, code):
         session = cls._create_activation_session(phone)
         result, ___ = session.verify(
-            code, id, settings.phone.activation.window
+            code, str(id), settings.phone.activation_code.window
         )
         return result
 

@@ -54,3 +54,7 @@ class PhoneNumberActivationToken(BaseJwtPrincipal):
     def phone_number(self):
         return self.payload.get('phoneNumber')
 
+    @property
+    def member_id(self):
+        return self.payload.get('memberId')
+
