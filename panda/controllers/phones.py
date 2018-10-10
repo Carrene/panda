@@ -72,10 +72,3 @@ class PhoneNumberController(RestController):
         DBSession.add(current_member)
         return dict(phoneNumber=activation_token_principal.phone_number)
 
-
-
-
-
-
-
-
