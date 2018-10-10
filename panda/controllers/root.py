@@ -30,6 +30,7 @@ class ApiV1(Controller):
     authorizedapplications = AuthorizedApplicationController()
     phonenumberactivationtokens = PhoneNumberActivationTokenController()
     phonenumbers = PhoneNumberController()
+
     @json
     def version(self):
         return {
