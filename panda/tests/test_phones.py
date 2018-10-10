@@ -99,7 +99,7 @@ class TestPhone(LocalApplicationTestCase):
                 self.member1.id
             )
             when(
-                'The phone number has exists',
+                'The phone number has existed',
                 form=Update(activationCode=code, activationToken=token)
             )
             assert status == '616 Phone Number Already Exists'
