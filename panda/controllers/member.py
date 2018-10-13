@@ -5,7 +5,7 @@ from restfulpy.orm import DBSession, commit
 
 from ..models import Member
 from ..tokens import RegisterationToken
-from ..validators import title_validator, password_validator
+from ..validators import title_validator, password_validator, member_validator
 
 
 class MemberController(ModelRestController):
@@ -60,5 +60,18 @@ class MemberController(ModelRestController):
         if member.id != context.identity.id:
             context.identity.assert_roles('admin')
 
+        return member
+
+    @authorize
+    @member_validator
+    @json(form_whitelist=(
+        ['name'],
+        '717 Invalid Field, Only The Name Parameter Accepted'
+    ))
+    @Member.expose
+    @commit
+    def update(self):
+        member = DBSession.query(Member).get(context.identity.id)
+        member.update_from_request()
         return member
 
