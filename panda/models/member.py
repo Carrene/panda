@@ -7,11 +7,11 @@ from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer
 from sqlalchemy.orm import synonym
 
+from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
+    derivate_seed
 from ..oauth.scopes import SCOPES
 from ..oauth.tokens import AccessToken
 from .messaging import OTPSMS
-from ..cryptohelpers import OCRASuite, ChallengeResponse, \
-    TimeBasedChallengeResponse, derivate_seed
 
 
 class Member(DeclarativeBase):
@@ -32,6 +32,14 @@ class Member(DeclarativeBase):
         required=True,
         min_length=6,
         max_length=20
+    )
+    name = Field(
+        Unicode(20),
+        nullable=True,
+        min_length=3,
+        max_length=20,
+        required=False,
+        pattern='^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$'
     )
     phone = Field(
         Unicode(16),
