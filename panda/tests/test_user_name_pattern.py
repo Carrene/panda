@@ -1,0 +1,36 @@
+from panda.validators import NAME_PATTERN as pattern
+
+
+def test_user_name_pattern():
+    assert pattern.match('use')
+    assert pattern.match('user')
+    assert pattern.match('user user')
+    assert pattern.match('user,user')
+    assert pattern.match('user, user')
+    assert pattern.match('user.user')
+    assert pattern.match('user. user')
+    assert pattern.match('user\'user')
+    assert pattern.match('User user')
+    assert pattern.match('user User')
+    assert pattern.match('User User')
+    assert pattern.match('user U\'ser')
+
+    assert not pattern.match(' user')
+    assert not pattern.match('user1')
+    assert not pattern.match('user:')
+    assert not pattern.match('user?user')
+    assert not pattern.match('user`user')
+    assert not pattern.match('')
+    assert not pattern.match('u')
+    assert not pattern.match('U')
+    assert not pattern.match('user user user user u')
+    assert not pattern.match('  ')
+    assert not pattern.match('user*')
+    assert not pattern.match('user@')
+    assert not pattern.match('user$')
+    assert not pattern.match('user%')
+    assert not pattern.match('user^')
+    assert not pattern.match('user!')
+    assert not pattern.match('user~')
+    assert not pattern.match('user|')
+
