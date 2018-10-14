@@ -23,12 +23,16 @@ class Member(DeclarativeBase):
         unique=True,
         index=True,
         pattern='(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)',
+        python_type=str,
+        not_none=True,
         required=True
     )
     title = Field(
         Unicode(100),
         unique=True,
         pattern='^[a-zA-Z][\w]{5,19}$',
+        python_type=str,
+        not_none=True,
         required=True,
         min_length=6,
         max_length=20
@@ -36,6 +40,7 @@ class Member(DeclarativeBase):
     name = Field(
         Unicode(20),
         nullable=True,
+        python_type=str,
         min_length=3,
         max_length=20,
         required=False,
@@ -46,6 +51,7 @@ class Member(DeclarativeBase):
         nullable=True,
         unique=True,
         pattern='^[+]{0,1}[\d+]{7,15}$',
+        python_type=str,
         required=False,
         min_length=8,
         max_length=16
@@ -59,7 +65,9 @@ class Member(DeclarativeBase):
         pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+',
         min_length=6,
         max_length=20,
-        required=True
+        required=True,
+        python_type=str,
+        not_none=True
     )
     applications = relationship(
         'Application',

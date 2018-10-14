@@ -25,8 +25,18 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
 
     owner_id = Field(Integer, ForeignKey('member.id'))
 
-    title = Field(Unicode(100), required=True)
-    redirect_uri = Field(Unicode(100), required=True)
+    title = Field(
+        Unicode(100),
+        required=True,
+        not_none=True,
+        python_type=str
+    )
+    redirect_uri = Field(
+        Unicode(100),
+        required=True,
+        not_none=True,
+        python_type=str
+    )
     secret = Field(Binary(32))
 
     owner = relationship(

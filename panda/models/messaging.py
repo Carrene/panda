@@ -22,6 +22,7 @@ class ResetPasswordEmail(Email):
 
     template_filename = 'reset_password_email.mako'
 
+
 class SMS(RestfulpyTask):  # pragma: no cover
     __tablename__ = 'sms'
     _provider = None
