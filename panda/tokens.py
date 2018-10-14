@@ -8,7 +8,7 @@ class RegisterationToken(BaseJwtPrincipal):
     @classmethod
     def load(cls, token):
         try:
-            return super().load(token).payload
+            return super().load(token)
         except itsdangerous.SignatureExpired:
             raise HTTPStatus('609 Token Expired')
         except itsdangerous.BadSignature:
@@ -18,13 +18,17 @@ class RegisterationToken(BaseJwtPrincipal):
     def get_config(cls):
         return settings.registeration
 
+    @property
+    def email(self):
+        return self.payload.get('email')
+
 
 class ResetPasswordToken(BaseJwtPrincipal):
 
     @classmethod
     def load(cls, token):
         try:
-            return super().load(token).payload
+            return super().load(token)
         except itsdangerous.SignatureExpired:
             raise HTTPStatus('609 Token Expired')
         except itsdangerous.BadSignature:
@@ -33,6 +37,10 @@ class ResetPasswordToken(BaseJwtPrincipal):
     @classmethod
     def get_config(cls):
         return settings.reset_password
+
+    @property
+    def email(self):
+        return self.payload.get('email')
 
 
 class PhoneNumberActivationToken(BaseJwtPrincipal):

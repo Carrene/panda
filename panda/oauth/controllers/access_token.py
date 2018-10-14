@@ -29,26 +29,26 @@ class AccessTokenController(RestController):
         application_member = DBSession.query(ApplicationMember) \
             .filter(
                 ApplicationMember.application_id == application.id,
-                ApplicationMember.member_id == authorization_code['memberId']
+                ApplicationMember.member_id == authorization_code.member_id
             ) \
             .one_or_none()
 
         if not application_member:
             application_member = ApplicationMember(
                 application_id=application.id,
-                member_id=authorization_code['memberId']
+                member_id=authorization_code.member_id
             )
             DBSession.add(application_member)
             DBSession.commit()
 
         access_token_payload = dict(
             applicationId=application.id,
-            memberId=authorization_code['memberId'],
-            scopes=authorization_code['scopes'],
+            memberId=authorization_code.member_id,
+            scopes=authorization_code.scopes,
         )
         access_token = AccessToken(access_token_payload)
         return dict(
             accessToken=access_token.dump(),
-            memberId=authorization_code['memberId']
+            memberId=authorization_code.member_id
         )
 
