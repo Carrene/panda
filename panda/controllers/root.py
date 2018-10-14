@@ -4,16 +4,14 @@ from restfulpy.controllers import RootController
 import panda
 from ..oauth.controllers import AuthorizationCodeController, \
     AccessTokenController
+from .applications import ApplicationController, MyApplicationController,\
+    AuthorizedApplicationController
 from .availabilities import AvailabilityController
-from .application import ApplicationController
 from .email import EmailController
 from .member import MemberController
-from .password import PasswordController
-from .reset_password_token import ResetPasswordTokenController
-from .token import TokenController
-from .my_application import MyApplicationController
-from .authorized_application import AuthorizedApplicationController
+from .passwords import PasswordController, ResetPasswordTokenController
 from .phones import PhoneNumberActivationTokenController, PhoneNumberController
+from .token import TokenController
 
 
 class ApiV1(Controller):

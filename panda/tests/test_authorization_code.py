@@ -50,14 +50,14 @@ class TestAuthorizationCode(LocalApplicationTestCase):
 
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            assert authorization_code['scopes'] == scopes.split(',')
-            assert authorization_code['applicationTitle'] == \
+            assert authorization_code.scopes == scopes.split(',')
+            assert authorization_code.payload['applicationTitle'] == \
                 self.application.title
-            assert authorization_code['applicationId'] == self.application.id
-            assert authorization_code['memberId'] == self.member.id
-            assert authorization_code['email'] == self.member.email
+            assert authorization_code.application_id == self.application.id
+            assert authorization_code.member_id == self.member.id
+            assert authorization_code.email == self.member.email
 
-            location_parse = urlparse(authorization_code['location'])
+            location_parse = urlparse(authorization_code.payload['location'])
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
             }
@@ -72,7 +72,7 @@ class TestAuthorizationCode(LocalApplicationTestCase):
             )
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            location_parse = urlparse(authorization_code['location'])
+            location_parse = urlparse(authorization_code.location)
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
             }
@@ -86,7 +86,7 @@ class TestAuthorizationCode(LocalApplicationTestCase):
             )
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            location_parse = urlparse(authorization_code['location'])
+            location_parse = urlparse(authorization_code.location)
             location_query_string = {
                 k: v[0] for k, v in parse_qs(location_parse.query).items()
             }
@@ -112,7 +112,7 @@ class TestAuthorizationCode(LocalApplicationTestCase):
             assert status == 200
             authorization_code = \
                 AuthorizationCode.load(response.json['authorizationCode'])
-            assert authorization_code['scopes'] == 'title,email'.split(',')
+            assert authorization_code.scopes == 'title,email'.split(',')
 
             when(
                 'Trying to pass invalid scope name',

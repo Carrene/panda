@@ -16,13 +16,34 @@ Setting up development Environment on Linux
 
 ### Install Project (edit mode)
 
-#### Working copy
+#### Cython
+
+    $ pip install cython
+
+#### oath.cy
+
+    $ cd /path/to/workspace
+    $ git clone git@github.com:Carrene/oath.cy.git
+    $ cd oath.cy
+    $ pip install -e .
+
+#### panda
     
     $ cd /path/to/workspace
     $ git clone git@github.com:Carrene/panda.git
     $ cd panda
     $ pip install -e .
  
+###$ For development
+    
+    $ cd path/to/owl
+    $ pip install -r requirements-dev.txt
+    
+### Enabling the bash auto completion for panda
+
+    $ owl autocompletion install   
+    $ deactivate && workon owl
+
 ### Setup Database
 
 #### Configuration
@@ -52,7 +73,7 @@ smtp:
 
 And or
 
-    $ panda db create --drop --basedata 
+    $ panda db create --drop
 
 #### Drop old database: **TAKE CARE ABOUT USING THAT**
 
@@ -65,4 +86,22 @@ And or
 Or, you can add `--drop` to drop the previously created database: **TAKE CARE ABOUT USING THAT**
 
     $ panda [-c path/to/config.yml] db create --drop
+
+### Running tests
+
+    $ pytest
+ 
+### Serving
+
+- Using python builtin http server
+
+```bash
+$ owl [-c path/to/config.yml] serve
+```    
+
+- Gunicorn
+
+```bash
+$ ./gunicorn
+```
 
