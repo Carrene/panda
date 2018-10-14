@@ -15,18 +15,12 @@
       <td>
         <table class="header" bgcolor="#1A237E" align="center" style="height: 160px; width: 100%">
           <tr>
-            <td valign="bottom" style="padding-left: 55px">
-              <img src="http://nightly.cas.carrene.com/logo.png" alt="CAS" width="80px">
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" style="padding-left: 50px">
-              <p style="font-size: 10px; font-weight: 100; color: #FFF; margin: 0">
-                <span style="font-weight: 500">A</span>uthentication <span style="font-weight: 500">S</span>ervice</p>
+            <td valign="center" style="padding-left: 35px">
+              <img src="http://nightly.cas.carrene.com/logo.png" alt="CAS" width="135px">
             </td>
           </tr>
         </table>
-        <table class="body" style="background-color: #FFF; padding: 50px 50px 145px 50px; display: block; border: 1px solid #CCC">
+        <table class="body" style="background-color: #FFF; padding: 50px 50px 145px 50px; display: block; border: 1px solid #EEE">
           <tr>
             <td valign="bottom">
               <p style="font-size: 30px; font-weight: bold; color: #1A237E; margin: 0">Hi dear
