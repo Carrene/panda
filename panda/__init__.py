@@ -30,7 +30,7 @@ class Panda(Application):
       secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
       max_age: 86400  # seconds
       algorithm: HS256
-      callback_url: http://cas.carrene.com/register
+      callback_url: http://nightly.cas.carrene.com/signup
 
     messaging:
       default_messenger: restfulpy.messaging.SmtpProvider
