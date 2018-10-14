@@ -4,7 +4,7 @@ import os
 from bddrest.authoring import Remove, Update, when, status, response
 
 from panda.models import Member, Application
-from panda.oauth import AccessToken
+from panda.oauth import AccessToken, AuthorizationCode
 from panda.tests.helpers import LocalApplicationTestCase
 
 
@@ -31,21 +31,17 @@ class TestAccessToken(LocalApplicationTestCase):
     def test_create_access_token(self):
         self.login(email=self.member.email, password='123abcABC')
 
-        with self.given(
-            'Create authorization code',
-            '/apiv1/authorizationcodes',
-            'CREATE',
-            query=dict(
-                applicationId=self.application.id,
-                scopes='title',
-                state='123456',
-                redirectUri='http://example2.com/oauth2'
-            )
-        ):
-            authorization_code = response.json['authorizationCode']
+        authorization_code_principal = AuthorizationCode(dict(
+            scopes=['title'],
+            state='123456',
+            rediectUri='http://example2.com/oauth2',
+            applicationId=self.application.id,
+            memberId=self.member.id
+        ))
+        authorization_code = authorization_code_principal.dump()
 
         with self.given(
-            'Create access token',
+            'Create a access token',
             '/apiv1/accesstokens',
             'CREATE',
             form=dict(
@@ -57,10 +53,10 @@ class TestAccessToken(LocalApplicationTestCase):
             assert status == 200
             assert response.json['memberId'] == self.member.id
             access_token = response.json['accessToken']
-            access_token_payload = AccessToken.load(access_token).payload
-            assert access_token_payload['applicationId'] == self.application.id
-            assert access_token_payload['scopes'] == ['title']
-            assert access_token_payload['memberId'] == self.member.id
+            access_token_principal = AccessToken.load(access_token)
+            assert access_token_principal.application_id == self.application.id
+            assert access_token_principal.scopes == ['title']
+            assert access_token_principal.member_id == self.member.id
 
             when(
                 'Trying to get access token using wrong application',

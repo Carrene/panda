@@ -17,7 +17,7 @@ class TestTokens(LocalApplicationTestCase):
         reset_password_token = ResetPasswordToken(payload)
         dump = reset_password_token.dump()
         load = ResetPasswordToken.load(dump.decode())
-        assert load == payload
+        assert load.payload == payload
 
         # Trying to load token using bad signature token
         with pytest.raises(
@@ -42,7 +42,7 @@ class TestTokens(LocalApplicationTestCase):
         registeration_token = RegisterationToken(payload)
         dump = registeration_token.dump()
         load = RegisterationToken.load(dump.decode())
-        assert load == payload
+        assert load.payload == payload
 
         # Trying to load token using bad signature token
         with pytest.raises(

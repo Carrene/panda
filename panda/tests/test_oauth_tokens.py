@@ -15,8 +15,8 @@ class TestOauthTokens(LocalApplicationTestCase):
         payload = dict(a=1, b=2)
         access_token = AccessToken(payload)
         dump = access_token.dump()
-        load = AccessToken.load(dump.decode()).payload
-        assert load == payload
+        load = AccessToken.load(dump.decode())
+        assert load.payload == payload
 
         # Trying to load token using bad signature token
         with pytest.raises(
@@ -41,7 +41,7 @@ class TestOauthTokens(LocalApplicationTestCase):
         authorization_code = AuthorizationCode(payload)
         dump = authorization_code.dump()
         load = AuthorizationCode.load(dump.decode())
-        assert load == payload
+        assert load.payload == payload
 
         # Trying to load token using bad signature token
         with pytest.raises(

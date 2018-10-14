@@ -4,6 +4,7 @@ from restfulpy.messaging import create_messenger
 
 from panda.models import ResetPasswordEmail, Member
 from panda.tests.helpers import LocalApplicationTestCase
+from panda.tokens import ResetPasswordToken
 
 
 class TestResetPassword(LocalApplicationTestCase):
@@ -86,20 +87,7 @@ class TestResetPassword(LocalApplicationTestCase):
         password = 'NewPassword123'
 
         hash_old_password = session.query(Member).one().password
-
-        with self.given(
-            'Ask reset password token',
-            '/apiv1/resetpasswordtokens',
-            'ASK',
-            form=dict(email=email)
-        ):
-            assert status == 200
-
-            task = ResetPasswordEmail.pop()
-            task.do_(None)
-
-            reset_password_token =\
-                messanger.last_message['body']['reset_password_token']
+        reset_password_principal = ResetPasswordToken(dict(email=email))
 
         with self.given(
             'Reset your CAS account password',
@@ -107,7 +95,7 @@ class TestResetPassword(LocalApplicationTestCase):
             'RESET',
             form=dict(
                 password=password,
-                resetPasswordToken=reset_password_token
+                resetPasswordToken=reset_password_principal.dump()
             )
         ):
             assert status == 200

@@ -83,10 +83,7 @@ class TestPhone(LocalApplicationTestCase):
             'Binding the phone number to member',
             '/apiv1/phonenumbers',
             'BIND',
-            form=dict(
-                activationCode=code,
-                activationToken=token
-            )
+            form=dict(activationCode=code, activationToken=token)
         ):
             assert status == 200
             assert response.json['phoneNumber'] == phone_number

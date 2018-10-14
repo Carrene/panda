@@ -2,7 +2,6 @@ import time
 
 from bddrest.authoring import response, Update, when, status
 from nanohttp import settings
-from restfulpy.messaging import create_messenger
 
 from panda.models import Member
 from panda.tests.helpers import LocalApplicationTestCase
@@ -10,10 +9,9 @@ from panda.tokens import RegisterationToken
 
 
 class TestRegisteration(LocalApplicationTestCase):
-    __configuration__ = '''
-    messaging:
-      default_messenger: restfulpy.mockup.MockupMessenger
-    '''
+    __metadata__ = {
+        r'^/apiv1/members.*': Member.json_metadata()['fields']
+    }
 
     @classmethod
     def mockup(cls):
@@ -28,7 +26,6 @@ class TestRegisteration(LocalApplicationTestCase):
         session.commit()
 
     def test_register_member(self):
-        messanger = create_messenger()
         email = 'user@example.com'
         title = 'nickname'
         password = '123abdABD'
@@ -65,14 +62,13 @@ class TestRegisteration(LocalApplicationTestCase):
             )
             assert status == '705 Invalid Title Format'
 
-            when ('Duplicate title', form=Update(title='username'))
+            when('Duplicate title', form=Update(title='username'))
             assert status == '604 Title Is Already Registered'
 
-            when ('Duplicate Email', form=Update(title='user_name'))
+            when('Duplicate Email', form=Update(title='user_name'))
             assert status == '601 Email Address Is Already Registered'
 
-            when (
-                'The token has been damaged',
+            when('The token has been damaged',
                 form=Update(ownershipToken='token')
             )
             assert status == '611 Malformed Token'
