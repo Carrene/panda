@@ -20,8 +20,8 @@ class MemberController(ModelRestController):
         title = context.form.get('title')
         password = context.form.get('password')
         ownership_token = context.form.get('ownershipToken')
-        regiteration_token_payload = RegisterationToken.load(ownership_token)
-        email = regiteration_token_payload['email']
+        regiteration_token_principal = RegisterationToken.load(ownership_token)
+        email = regiteration_token_principal.email
 
         if DBSession.query(Member.title).filter(Member.title == title).count():
             raise HTTPStatus('604 Title Is Already Registered')

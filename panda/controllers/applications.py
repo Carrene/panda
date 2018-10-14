@@ -152,3 +152,26 @@ class ApplicationController(ModelRestController):
         DBSession.delete(application)
         return application
 
+
+class MyApplicationController(ModelRestController):
+    __model__ = Application
+
+    @authorize
+    @json(prevent_form='707 Form Not Allowed')
+    @Application.expose
+    def list(self):
+        return DBSession.query(Application) \
+            .filter(Application.owner_id == context.identity.id)
+
+
+class AuthorizedApplicationController(ModelRestController):
+    __model__ = Application
+
+    @authorize
+    @json(prevent_form='707 Form Not Allowed')
+    @Application.expose
+    def list(self):
+        application = DBSession.query(Application) \
+            .filter(ApplicationMember.member_id == context.identity.id)
+        return application
+
