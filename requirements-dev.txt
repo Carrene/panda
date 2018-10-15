@@ -1,4 +1,5 @@
 -r requirements-ci.txt
 -r requirements-deploy.txt
+-r requirements-private.txt
 ipython
 pytest-pudb
