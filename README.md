@@ -34,9 +34,9 @@ Setting up development Environment on Linux
     $ cd panda
     $ pip install -e .
  
-###$ For development
+### For development
     
-    $ cd path/to/owl
+    $ cd path/to/panda
     $ pip install -r requirements-dev.txt
     
 ### Enabling the bash auto completion for panda
