@@ -18,8 +18,8 @@ eval `ssh-agent -s`
 ssh-add travis-oathcy_rsa
 ssh-add travis-wiki_rsa
 
-pip3 install -U pip setuptools wheel cython
-pip3 install -U git+ssh://git@github.com/Carrene/oath.cy.git
+pip3 install -U pip setuptools wheel 
 pip3 install -r requirements-ci.txt
+pip3 install -r requirements-private.txt
 pip3 install -e .
 
