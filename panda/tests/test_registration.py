@@ -9,9 +9,6 @@ from panda.tokens import RegisterationToken
 
 
 class TestRegisteration(LocalApplicationTestCase):
-    __metadata__ = {
-        r'^/apiv1/members.*': Member.json_metadata()['fields']
-    }
 
     @classmethod
     def mockup(cls):
