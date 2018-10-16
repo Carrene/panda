@@ -22,10 +22,16 @@ class Member(DeclarativeBase):
         Unicode(100),
         unique=True,
         index=True,
+        min_length=7,
+        max_length=100,
         pattern='(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)',
         python_type=str,
         not_none=True,
-        required=True
+        required=True,
+        watermark='Enter your email address',
+        example='user@example.com',
+        label='Email Address',
+        name='Email',
     )
     title = Field(
         Unicode(100),
@@ -35,7 +41,10 @@ class Member(DeclarativeBase):
         not_none=True,
         required=True,
         min_length=6,
-        max_length=20
+        max_length=20,
+        example='user',
+        watermark='Enter your title',
+        label='Title',
     )
     name = Field(
         Unicode(20),
@@ -44,7 +53,10 @@ class Member(DeclarativeBase):
         min_length=3,
         max_length=20,
         required=False,
-        pattern='^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$'
+        pattern='^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$',
+        example='User name',
+        label='Name',
+        watermark='Enter your name',
     )
     phone = Field(
         Unicode(16),
@@ -54,7 +66,10 @@ class Member(DeclarativeBase):
         python_type=str,
         required=False,
         min_length=8,
-        max_length=16
+        max_length=16,
+        watermark='Enter your phone number',
+        label='Phone Number',
+        example='+9891234567',
     )
     role = Field(Unicode(100))
     _password = Field(
@@ -62,12 +77,16 @@ class Member(DeclarativeBase):
         Unicode(128),
         index=True,
         protected=True,
+        json='password',
         pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+',
+        example='123abcABC',
+        watermark='Enter your password',
+        label='password',
         min_length=6,
         max_length=20,
         required=True,
         python_type=str,
-        not_none=True
+        not_none=True,
     )
     applications = relationship(
         'Application',
