@@ -41,8 +41,8 @@ Setting up development Environment on Linux
     
 ### Enabling the bash auto completion for panda
 
-    $ owl autocompletion install   
-    $ deactivate && workon owl
+    $ panda autocompletion install   
+    $ deactivate && workon panda
 
 ### Setup Database
 
