@@ -6,10 +6,14 @@ from panda.tests.helpers import LocalApplicationTestCase
 class TestMember(LocalApplicationTestCase):
 
     def test_metadata(self):
-        with self.given('Test metadata verb', '/apiv1/members', 'METADATA'):
-            assert status == 200
-
+        with self.given(
+            'Test metadata verb',
+            '/apiv1/members',
+            'METADATA'
+        ):
             fields = response.json['fields']
+
+            assert status == 200
 
             assert fields['email']['pattern'] is not None
             assert fields['email']['not_none'] is not None
