@@ -54,7 +54,7 @@ class Member(DeclarativeBase):
         max_length=20,
         required=False,
         pattern='^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$',
-        example='User name',
+        example='User',
         label='Name',
         watermark='Enter your name',
     )
@@ -81,7 +81,7 @@ class Member(DeclarativeBase):
         pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+',
         example='123abcABC',
         watermark='Enter your password',
-        label='password',
+        label='Password',
         min_length=6,
         max_length=20,
         required=True,
