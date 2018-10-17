@@ -27,7 +27,7 @@ Setting up development Environment on Linux
     $ cd oath.cy
     $ pip install -e .
 
-#### panda
+#### Panda
     
     $ cd /path/to/workspace
     $ git clone git@github.com:Carrene/panda.git
@@ -38,7 +38,7 @@ Setting up development Environment on Linux
     
     $ cd path/to/panda
     $ pip install -r requirements-dev.txt
-    
+
 ### Enabling the bash auto completion for panda
 
     $ panda autocompletion install   
