@@ -29,13 +29,21 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         Unicode(100),
         required=True,
         not_none=True,
-        python_type=str
+        python_type=str,
+        label='Title',
+        min_length=1,
+        max_length=100,
+        watermark='Enter your title'
     )
     redirect_uri = Field(
         Unicode(100),
         required=True,
         not_none=True,
-        python_type=str
+        label='Redirect Uri',
+        min_length=1,
+        max_length=100,
+        python_type=str,
+        watermark='Enter your redirect uri'
     )
     secret = Field(Binary(32))
 

@@ -93,11 +93,3 @@ class TestApplication(LocalApplicationTestCase):
         ):
             assert status == 401
 
-    def test_metadata(self):
-        with self.given(
-            'Test metadata verb',
-            '/apiv1/applications',
-            'METADATA'
-        ):
-            assert status == 200
-

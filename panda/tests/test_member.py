@@ -122,10 +122,6 @@ class TestMember(LocalApplicationTestCase):
             when('Trying to get another member', url_parameters=dict(id=1))
             assert status == 403
 
-    def test_metadata(self):
-        with self.given('Test metadata verb', '/apiv1/members', 'METADATA'):
-            assert status == 200
-
     def test_get_member_by_id(self):
         self.login(email='admin@example.com', password='123abcABC')
         with self.given(
