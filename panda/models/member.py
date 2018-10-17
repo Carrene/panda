@@ -31,7 +31,6 @@ class Member(DeclarativeBase):
         watermark='Enter your email address',
         example='user@example.com',
         label='Email Address',
-        name='Email',
     )
     title = Field(
         Unicode(100),
