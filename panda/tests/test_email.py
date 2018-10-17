@@ -4,6 +4,7 @@ from restfulpy.messaging import create_messenger
 
 from panda.models import RegisterEmail, Member
 from panda.tests.helpers import LocalApplicationTestCase
+from panda.tokens import RegisterationToken
 
 
 class TestEmail(LocalApplicationTestCase):
@@ -24,13 +25,14 @@ class TestEmail(LocalApplicationTestCase):
         session.commit()
 
     def test_claim_email_ownership(self):
-        messanger = create_messenger()
+        messenger = create_messenger()
         email = 'user@example.com'
 
         with self.given(
             'Claim a email',
             '/apiv1/emails',
             'CLAIM',
+            query=dict(a=1),
             form=dict(email=email)
         ):
             assert response.status == 200
@@ -40,12 +42,14 @@ class TestEmail(LocalApplicationTestCase):
             task = RegisterEmail.pop()
             task.do_(None)
 
-            assert messanger.last_message['to'] == email
-
+            assert messenger.last_message['to'] == email
+            token = messenger.last_message['body']['registeration_token']
+            registration_token = RegisterationToken.load(token)
+            assert registration_token.payload['email'] == email
+            assert registration_token.payload['a'] == '1'
             assert settings.registeration.callback_url == \
-                messanger.last_message['body']['registeration_callback_url']
-
-            assert messanger.last_message['subject'] == \
+                messenger.last_message['body']['registeration_callback_url']
+            assert messenger.last_message['subject'] == \
                 'Register your CAS account'
 
             when('Email not contain @', form=Update(email='userexample.com'))
