@@ -14,20 +14,6 @@ class RegisterEmail(Email):
 
     template_filename = 'register_email.mako'
 
-    #FIXME This method must be removed
-    def do_(self, attachments=None):
-        messenger = create_messenger()
-        messenger.send(
-            self.to,
-            self.subject,
-            self.body,
-            cc=self.cc,
-            bcc=self.bcc,
-            template_filename=self.template_filename,
-            from_=self.from_,
-            attachments=None
-        )
-
 
 class ResetPasswordEmail(Email):
     __mapper_args__ = {
@@ -35,20 +21,6 @@ class ResetPasswordEmail(Email):
     }
 
     template_filename = 'reset_password_email.mako'
-
-    #FIXME This method must be removed
-    def do_(self, attachments=None):
-        messenger = create_messenger()
-        messenger.send(
-            self.to,
-            self.subject,
-            self.body,
-            cc=self.cc,
-            bcc=self.bcc,
-            template_filename=self.template_filename,
-            from_=self.from_,
-            attachments=None
-        )
 
 
 class SMS(RestfulpyTask):  # pragma: no cover
