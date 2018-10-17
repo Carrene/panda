@@ -18,7 +18,9 @@ class EmailController(RestController):
         if DBSession.query(Member.email).filter(Member.email == email).count():
             raise HTTPStatus('601 Email Address Is Already Registered')
 
-        token = RegisterationToken(dict(email=email))
+        payload = context.query
+        payload['email'] = email
+        token = RegisterationToken(payload)
         DBSession.add(
             RegisterEmail(
                 to=email,
