@@ -39,7 +39,7 @@ access_token_fields = dict(
     applicationId=application_id
 )
 authorization_code_fields = dict(
-    application=application_id,
+    applicationId=application_id,
     scopes=scopes,
     state=state,
     redirectUri=redirect_uri

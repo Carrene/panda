@@ -1,4 +1,4 @@
+git+ssh://git@github.com/Carrene/oath.cy.git
 coverage
 coveralls
 pytest-cov
-cython
