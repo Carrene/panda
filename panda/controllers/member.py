@@ -7,6 +7,7 @@ from sqlalchemy_media import store_manager
 from ..models import Member
 from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator, member_validator
+from ..models.member import MemberAvatar
 
 
 class MemberController(ModelRestController):

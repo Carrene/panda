@@ -99,15 +99,9 @@ class Member(DeclarativeBase):
         example='+9891234567',
     )
     role = Field(Unicode(100))
-    _avatar = Field(
-        'avatar',
-        Avatar.as_mutable(JSON),
+    avatar = Field(
+        MemberAvatar.as_mutable(JSON),
         nullable=True,
-        protected=False,
-        json='avatar',
-        not_none=False,
-        label='Avatar',
-        required=False,
     )
     _password = Field(
         'password',
