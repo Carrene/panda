@@ -4,14 +4,32 @@ from hashlib import sha256
 from nanohttp import context, settings
 from restfulpy.orm import DeclarativeBase, Field, DBSession, relationship
 from restfulpy.principal import JwtPrincipal, JwtRefreshToken
-from sqlalchemy import Unicode, Integer
+from sqlalchemy import Unicode, Integer, JSON
 from sqlalchemy.orm import synonym
+from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
+    ImageProcessor
 
 from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
     derivate_seed
 from ..oauth.scopes import SCOPES
 from ..oauth.tokens import AccessToken
 from .messaging import OTPSMS
+
+
+class MemberAvatar(Image):
+    __pre_processors__ = [
+        ImageAnalyzer(),
+        ImageValidator(
+            minimum=(80, 80),
+            maximum=(1280, 960),
+            min_aspect_ratio=1.2,
+            content_types=['image/jpeg', 'image/png']
+        ),
+        ImageProcessor(
+            fmt='jpeg',
+            width=120,
+        )
+    ]
 
 
 class Member(DeclarativeBase):
@@ -71,6 +89,10 @@ class Member(DeclarativeBase):
         example='+9891234567',
     )
     role = Field(Unicode(100))
+    avatar = Field(
+        MemberAvatar.as_mutable(JSON),
+        nullable=True,
+    )
     _password = Field(
         'password',
         Unicode(128),

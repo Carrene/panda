@@ -2,10 +2,12 @@ from nanohttp import json, context, HTTPStatus, HTTPNotFound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
+from sqlalchemy_media import store_manager
 
 from ..models import Member
 from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator, member_validator
+from ..models.member import MemberAvatar
 
 
 class MemberController(ModelRestController):
@@ -63,6 +65,7 @@ class MemberController(ModelRestController):
 
         return member
 
+    @store_manager(DBSession)
     @authorize
     @member_validator
     @json(form_whitelist=(

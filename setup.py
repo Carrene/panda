@@ -14,6 +14,7 @@ dependencies = [
     'kavenegar',
     'requests',
     'oathcy',
+    'sqlalchemy_media >= 0.17.1',
 ]
 
 
