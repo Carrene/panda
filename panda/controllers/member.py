@@ -36,6 +36,7 @@ class MemberController(ModelRestController):
             role='member'
         )
         DBSession.add(member)
+        DBSession.flush()
         principal = member.create_jwt_principal()
         context.response_headers.add_header(
             'X-New-JWT-Token',
