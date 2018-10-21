@@ -1,13 +1,15 @@
 import os
 from hashlib import sha256
 
-from nanohttp import context, settings
+from nanohttp import context, settings, HTTPStatus
 from restfulpy.orm import DeclarativeBase, Field, DBSession, relationship
 from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer, JSON
 from sqlalchemy.orm import synonym
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
     ImageProcessor
+from sqlalchemy_media.exceptions import DimensionValidationError, \
+    AspectRatioValidationError
 
 from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
     derivate_seed
@@ -20,9 +22,10 @@ class MemberAvatar(Image):
     __pre_processors__ = [
         ImageAnalyzer(),
         ImageValidator(
-            minimum=(30, 30),
-            maximum=(900, 900),
+            minimum=(200, 200),
+            maximum=(300, 300),
             min_aspect_ratio=1,
+            max_aspect_ratio=1,
             content_types=['image/jpeg', 'image/png']
         ),
         ImageProcessor(fmt='jpeg')
@@ -87,6 +90,7 @@ class Member(DeclarativeBase):
     )
     role = Field(Unicode(100))
     _avatar = Field(
+        'avatar',
         MemberAvatar.as_mutable(JSON),
         nullable=True,
         protected=True,
@@ -118,14 +122,20 @@ class Member(DeclarativeBase):
 
     def _set_avatar(self, value):
         if value is not None:
-            self._avatar = MemberAvatar.create_from(value)
+            try:
+                self._avatar = MemberAvatar.create_from(value)
+            except DimensionValidationError as e:
+                raise HTTPStatus(f'720 {e}')
+            except AspectRatioValidationError as e:
+                raise HTTPStatus(f'721 {e}')
+
         else:
             self._avatar = None
 
     avatar = synonym(
         '_avatar',
         descriptor=property(_get_avatar, _set_avatar),
-        info=dict(protected=False),
+        info=dict(protected=False, json='avatar'),
     )
 
     def _hash_password(cls, password):
