@@ -35,6 +35,7 @@ class Avatar(Image):
             max_aspect_ratio=1,
             content_types=['image/jpeg', 'image/png']
         ),
+        ImageProcessor(fmt='jpeg')
     ]
 
     __max_length__ = 50 * KB
@@ -99,9 +100,10 @@ class Member(DeclarativeBase):
         example='+9891234567',
     )
     role = Field(Unicode(100))
-    avatar = Field(
+    _avatar = Field(
         MemberAvatar.as_mutable(JSON),
         nullable=True,
+        protected=True,
     )
     _password = Field(
         'password',
