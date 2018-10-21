@@ -2,7 +2,7 @@ from nanohttp import json, context, HTTPStatus, HTTPNotFound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
-from sqlalchemy_media import store_manager
+from sqlalchemy_media import store_manager, StoreManager
 
 from ..models import Member
 from ..tokens import RegisterationToken

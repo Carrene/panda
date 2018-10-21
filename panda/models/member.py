@@ -20,15 +20,12 @@ class MemberAvatar(Image):
     __pre_processors__ = [
         ImageAnalyzer(),
         ImageValidator(
-            minimum=(80, 80),
-            maximum=(1280, 960),
-            min_aspect_ratio=1.2,
+            minimum=(30, 30),
+            maximum=(900, 900),
+            min_aspect_ratio=1,
             content_types=['image/jpeg', 'image/png']
         ),
-        ImageProcessor(
-            fmt='jpeg',
-            width=120,
-        )
+        ImageProcessor(fmt='jpeg')
     ]
 
 
@@ -89,9 +86,10 @@ class Member(DeclarativeBase):
         example='+9891234567',
     )
     role = Field(Unicode(100))
-    avatar = Field(
+    _avatar = Field(
         MemberAvatar.as_mutable(JSON),
         nullable=True,
+        protected=True,
     )
     _password = Field(
         'password',
@@ -113,6 +111,21 @@ class Member(DeclarativeBase):
         'Application',
         back_populates='owner',
         protected=True
+    )
+
+    def _get_avatar(self):
+        return self._avatar.locate() if self._avatar else None
+
+    def _set_avatar(self, value):
+        if value is not None:
+            self._avatar = MemberAvatar.create_from(value)
+        else:
+            self._avatar = None
+
+    avatar = synonym(
+        '_avatar',
+        descriptor=property(_get_avatar, _set_avatar),
+        info=dict(protected=False),
     )
 
     def _hash_password(cls, password):
