@@ -165,7 +165,8 @@ class Member(DeclarativeBase):
         )
         seed = settings.phone.activation_code.seed
         return TimeBasedChallengeResponse(
-            ocra_suite, derivate_seed(seed, str(phone))
+            ocra_suite,
+            derivate_seed(seed, str(phone))
         )
 
     @classmethod
@@ -177,13 +178,16 @@ class Member(DeclarativeBase):
     def verify_activation_code(cls, phone, id, code):
         session = cls._create_activation_session(phone)
         result, ___ = session.verify(
-            code, str(id), settings.phone.activation_code.window
+            code,
+            str(id),
+            settings.phone.activation_code.window
         )
         return result
 
     @classmethod
     def create_otp(cls, phone, id):
         return OTPSMS(
-            receiver=phone, code=cls.generate_activation_code(phone, str(id))
+            receiver=phone,
+            code=cls.generate_activation_code(phone, str(id))
         )
 
