@@ -16,7 +16,7 @@
         <table class="header" bgcolor="#463B5B" align="center" style="height: 160px; width: 100%">
           <tr>
             <td valign="center" style="padding-left: 35px">
-              <img src="http://nightly.cas.carrene.com/logo.png" alt="CAS" width="135px">
+              <img src="http://nightly.cas.carrene.com/maestro-light.png" alt="maestro" width="55px">
             </td>
           </tr>
         </table>
