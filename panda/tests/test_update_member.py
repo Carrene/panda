@@ -29,11 +29,11 @@ class TestMember(LocalApplicationTestCase):
         session.add(cls.member)
         session.commit()
 
-    def test_update_name(self):
+    def test_update_member(self):
         self.login(email=self.member.email, password='123456')
 
         with self.given(
-            'Updating name of member',
+            'Updating profile of member',
             '/apiv1/members',
             'UPDATE',
             multipart=dict(name='username')
@@ -47,9 +47,7 @@ class TestMember(LocalApplicationTestCase):
                 'Trying to pass without name parameter',
                 multipart=Remove('name')
             )
-            assert response.json['id'] == self.member.id
-            assert response.json['name'] == 'username'
-            assert response.json['avatar'] is None
+            assert status == 400
 
             when('The name have numbers', form=Update(name='name1'))
             assert status == '716 Invalid Name Format'
@@ -83,25 +81,25 @@ class TestMember(LocalApplicationTestCase):
                 'Invalide the maxmimum size of avatar',
                 multipart=dict(avatar=INVALID_MAXIMUM_SIZE_AVATAR_PATH)
             )
-            assert status == 720
+            assert status == 618
 
             when(
                 'Invalide the minimum size of avatar',
                 multipart=dict(avatar=INVALID_MAXIMUM_SIZE_AVATAR_PATH)
             )
-            assert status == 720
+            assert status == 618
 
             when(
                 'Invalide aspect ratio of avatar',
                 multipart=dict(avatar=INVALID_RATIO_AVATAR_PATH)
             )
-            assert status == 721
+            assert status == 619
 
-            when(
-                'Invalide format of avatar',
-                multipart=dict(avatar=INVALID_FORMAT_AVATAR_PATH)
-            )
-            assert status == 721
+#            when(
+#                'Invalide format of avatar',
+#                multipart=dict(avatar=INVALID_FORMAT_AVATAR_PATH)
+#            )
+#            assert status == 620
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401

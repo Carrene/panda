@@ -9,7 +9,7 @@ from sqlalchemy.orm import synonym
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
     ImageProcessor
 from sqlalchemy_media.exceptions import DimensionValidationError, \
-    AspectRatioValidationError
+    AspectRatioValidationError, AnalyzeError
 
 from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
     derivate_seed
@@ -125,9 +125,11 @@ class Member(DeclarativeBase):
             try:
                 self._avatar = MemberAvatar.create_from(value)
             except DimensionValidationError as e:
-                raise HTTPStatus(f'720 {e}')
+                raise HTTPStatus(f'618 {e}')
             except AspectRatioValidationError as e:
-                raise HTTPStatus(f'721 {e}')
+                raise HTTPStatus(f'619 {e}')
+#            except AnalyzeError as e:
+#                raise HTTPStatus(f'620 {e}')
 
         else:
             self._avatar = None
