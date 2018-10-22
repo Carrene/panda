@@ -158,6 +158,8 @@ class Member(DeclarativeBase):
 
             except MaximumLengthIsReachedError as e:
                 raise HTTPStatus(f'621 {e}')
+            except FileNotFoundError as e:
+                raise HTTPStatus(f'622 No Such File Or Directory')
 
         else:
             self._avatar = None
