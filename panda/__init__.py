@@ -81,9 +81,12 @@ class Panda(Application):
       jwt:
         max_age: 86400
 
-    avatar_storage:
-      file_system_dir: %(root_path)s/data/avatar-storage
-      base_url: http://localhost:8080/avatar
+    avatar:
+      storage:
+        file_system_dir: %(root_path)s/data/avatar-storage
+        base_url: http://localhost:8080/avatar
+      length:
+        maximum: 50 # KB
     '''
 
     def __init__(self, application_name='panda', root=Root()):
@@ -106,8 +109,8 @@ class Panda(Application):
             'fs',
             functools.partial(
                 FileSystemStore,
-                settings.avatar_storage.file_system_dir,
-                base_url=settings.avatar_storage.base_url,
+                settings.avatar.storage.file_system_dir,
+                base_url=settings.avatar.storage.base_url,
             ),
             default=True
         )

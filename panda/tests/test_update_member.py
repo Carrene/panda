@@ -13,7 +13,8 @@ INVALID_FORMAT_AVATAR_PATH = join(AVATARS_DIR, 'test.pdf')
 INVALID_MAXIMUM_SIZE_AVATAR_PATH = join(AVATARS_DIR, '550*550.jpg')
 INVALID_MINIMUM_SIZE_AVATAR_PATH = join(AVATARS_DIR, '50*50.jpg')
 INVALID_RATIO_AVATAR_PATH = join(AVATARS_DIR, '300*200.jpg')
-INVALID_MAXMIMUM_LENGTH_AVATAR_PATH = join(AVATARS_DIR, '1100*1100.jpg')
+INVALID_MAXMIMUM_LENGTH_AVATAR_PATH = join(AVATARS_DIR, 'maximum-length.jpg')
+INVALID_AVATAR_PATH = join(AVATARS_DIR, 'not-exist.jpg')
 
 
 class TestMember(LocalApplicationTestCase):
@@ -103,10 +104,16 @@ class TestMember(LocalApplicationTestCase):
             assert status == 620
 
             when(
-                'Invalid the maxmimum length od avatar',
+                'Invalid the maxmimum length of avatar',
                 multipart=dict(avatar=INVALID_MAXMIMUM_LENGTH_AVATAR_PATH)
             )
             assert status == 621
+
+            when(
+                'Invalid the avatar path',
+                multipart=dict(avatar=INVALID_AVATAR_PATH)
+            )
+            assert status == 622
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
