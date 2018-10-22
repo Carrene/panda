@@ -8,8 +8,9 @@ from sqlalchemy import Unicode, Integer, JSON
 from sqlalchemy.orm import synonym
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
     ImageProcessor
+from sqlalchemy_media.constants import KB
 from sqlalchemy_media.exceptions import DimensionValidationError, \
-    AspectRatioValidationError, AnalyzeError
+    AspectRatioValidationError, AnalyzeError, MaximumLengthIsReachedError
 
 from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
     derivate_seed
@@ -30,6 +31,10 @@ class MemberAvatar(Image):
         ),
         ImageProcessor(fmt='jpeg')
     ]
+
+    __max_length__ = 50 * KB
+    __min_length__ = 1 * KB
+
 
 
 class Member(DeclarativeBase):
@@ -128,8 +133,10 @@ class Member(DeclarativeBase):
                 raise HTTPStatus(f'618 {e}')
             except AspectRatioValidationError as e:
                 raise HTTPStatus(f'619 {e}')
-#            except AnalyzeError as e:
-#                raise HTTPStatus(f'620 {e}')
+            except AnalyzeError as e:
+                raise HTTPStatus(f'620 {e}')
+            except MaximumLengthIsReachedError as e:
+                raise HTTPStatus(f'621 {e}')
 
         else:
             self._avatar = None

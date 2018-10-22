@@ -10,9 +10,10 @@ TEST_DIR = abspath(dirname(__file__))
 AVATARS_DIR = join(TEST_DIR, 'stuff/avatars')
 VALID_AVATAR_PATH = join(AVATARS_DIR, '225*225.jpg')
 INVALID_FORMAT_AVATAR_PATH = join(AVATARS_DIR, 'test.pdf')
-INVALID_MAXIMUM_SIZE_AVATAR_PATH = join(AVATARS_DIR, '1100*1100.jpg')
+INVALID_MAXIMUM_SIZE_AVATAR_PATH = join(AVATARS_DIR, '550*550.jpg')
 INVALID_MINIMUM_SIZE_AVATAR_PATH = join(AVATARS_DIR, '50*50.jpg')
 INVALID_RATIO_AVATAR_PATH = join(AVATARS_DIR, '300*200.jpg')
+INVALID_MAXMIMUM_LENGTH_AVATAR_PATH = join(AVATARS_DIR, '1100*1100.jpg')
 
 
 class TestMember(LocalApplicationTestCase):
@@ -78,28 +79,34 @@ class TestMember(LocalApplicationTestCase):
             assert response.json['avatar'] is not None
 
             when(
-                'Invalide the maxmimum size of avatar',
+                'Invalid the maxmimum size of avatar',
                 multipart=dict(avatar=INVALID_MAXIMUM_SIZE_AVATAR_PATH)
             )
             assert status == 618
 
             when(
-                'Invalide the minimum size of avatar',
+                'Invalid the minimum size of avatar',
                 multipart=dict(avatar=INVALID_MAXIMUM_SIZE_AVATAR_PATH)
             )
             assert status == 618
 
             when(
-                'Invalide aspect ratio of avatar',
+                'Invalid the aspect ratio of avatar',
                 multipart=dict(avatar=INVALID_RATIO_AVATAR_PATH)
             )
             assert status == 619
 
-#            when(
-#                'Invalide format of avatar',
-#                multipart=dict(avatar=INVALID_FORMAT_AVATAR_PATH)
-#            )
-#            assert status == 620
+            when(
+                'Invalid the format of avatar',
+                multipart=dict(avatar=INVALID_FORMAT_AVATAR_PATH)
+            )
+            assert status == 620
+
+            when(
+                'Invalid the maxmimum length od avatar',
+                multipart=dict(avatar=INVALID_MAXMIMUM_LENGTH_AVATAR_PATH)
+            )
+            assert status == 621
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
