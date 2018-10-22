@@ -42,8 +42,8 @@ class Member(DeclarativeBase):
         min_length=6,
         max_length=20,
         example='user',
-        watermark='Enter your title',
-        label='Title',
+        watermark='Enter your username',
+        label='Username',
     )
     name = Field(
         Unicode(20),
