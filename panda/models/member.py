@@ -7,10 +7,11 @@ from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer, JSON
 from sqlalchemy.orm import synonym
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
-    ImageProcessor
+    ImageProcessor, MagicAnalyzer, ContentTypeValidator
 from sqlalchemy_media.constants import KB
 from sqlalchemy_media.exceptions import DimensionValidationError, \
-    AspectRatioValidationError, AnalyzeError, MaximumLengthIsReachedError
+    AspectRatioValidationError, MaximumLengthIsReachedError, \
+    ContentTypeValidationError
 
 from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
     derivate_seed
@@ -19,8 +20,13 @@ from ..oauth.tokens import AccessToken
 from .messaging import OTPSMS
 
 
-class MemberAvatar(Image):
+class Avatar(Image):
     __pre_processors__ = [
+        MagicAnalyzer(),
+        ContentTypeValidator([
+            'image/jpeg',
+            'image/png',
+        ]),
         ImageAnalyzer(),
         ImageValidator(
             minimum=(200, 200),
@@ -95,7 +101,7 @@ class Member(DeclarativeBase):
     role = Field(Unicode(100))
     _avatar = Field(
         'avatar',
-        MemberAvatar.as_mutable(JSON),
+        Avatar.as_mutable(JSON),
         nullable=True,
         protected=True,
     )
@@ -127,17 +133,19 @@ class Member(DeclarativeBase):
     def _set_avatar(self, value):
         if value is not None:
             try:
-                self._avatar = MemberAvatar.create_from(value)
+                self._avatar = Avatar.create_from(value)
+
             except DimensionValidationError as e:
                 raise HTTPStatus(f'618 {e}')
+
             except AspectRatioValidationError as e:
                 raise HTTPStatus(f'619 {e}')
-            except AnalyzeError as e:
+
+            except ContentTypeValidationError as e:
                 raise HTTPStatus(f'620 {e}')
+
             except MaximumLengthIsReachedError as e:
                 raise HTTPStatus(f'621 {e}')
-            except FileNotFoundError as e:
-                raise HTTPStatus(f'622 No Such File Or Directory')
 
         else:
             self._avatar = None
