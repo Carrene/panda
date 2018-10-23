@@ -14,7 +14,8 @@ from sqlalchemy_media.exceptions import DimensionValidationError, \
     ContentTypeValidationError, ImageProcessor
 from sqlalchemy_media.constants import KB
 from sqlalchemy_media.exceptions import DimensionValidationError, \
-    AspectRatioValidationError, AnalyzeError, MaximumLengthIsReachedError
+    AspectRatioValidationError, MaximumLengthIsReachedError, \
+    ContentTypeValidationError
 
 from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
     derivate_seed
@@ -157,8 +158,6 @@ class Member(DeclarativeBase):
 
             except MaximumLengthIsReachedError as e:
                 raise HTTPStatus(f'621 {e}')
-            except FileNotFoundError as e:
-                raise HTTPStatus(f'622 No Such File Or Directory')
 
         else:
             self._avatar = None
