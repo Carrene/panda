@@ -36,23 +36,26 @@ class TestMember(LocalApplicationTestCase):
             assert response.json['name'] == 'username'
 
             when('The name have numbers', form=Update(name='name1'))
-            assert status == '716 Invalid Format Name'
+            assert status == '716 Invalid Name Format'
 
-            when('Invalid the min lenght of name', form=Update(name='n'))
-            assert status == '716 Invalid Format Name'
+            when(
+                'The name is less than the minimum length',
+                form=Update(name='n')
+            )
+            assert status == '716 Invalid Name Format'
 
             when(
                 'Invalid the max lenght of name',
                 form=Update(name='name name name name n')
             )
-            assert status == '716 Invalid Format Name'
+            assert status == '716 Invalid Name Format'
 
             when(
                 'Trying to pass with redundant parameters in form',
                 form=Update(title='title')
             )
             assert status == '717 Invalid Field, Only The Name Parameter ' \
-                'Accepted'
+                'Is Accepted'
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
