@@ -45,6 +45,7 @@ class Avatar(Image):
     __min_length__ = 1 * KB
     __prefix__ = 'avatar'
 
+
 class Member(DeclarativeBase):
     __tablename__ = 'member'
 
