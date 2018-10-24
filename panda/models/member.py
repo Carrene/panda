@@ -103,7 +103,6 @@ class Member(DeclarativeBase):
         'avatar',
         Avatar.as_mutable(JSON),
         nullable=True,
-        protected=True,
     )
     _password = Field(
         'password',
@@ -153,7 +152,7 @@ class Member(DeclarativeBase):
     avatar = synonym(
         '_avatar',
         descriptor=property(_get_avatar, _set_avatar),
-        info=dict(protected=False, json='avatar'),
+        info=dict(json='avatar'),
     )
 
     def _hash_password(cls, password):
