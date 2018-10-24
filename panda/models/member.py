@@ -7,7 +7,7 @@ from restfulpy.principal import JwtPrincipal, JwtRefreshToken
 from sqlalchemy import Unicode, Integer, JSON
 from sqlalchemy.orm import synonym
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
-    ImageProcessor, MagicAnalyzer, ContentTypeValidator
+    MagicAnalyzer, ContentTypeValidator
 from sqlalchemy_media.constants import KB
 from sqlalchemy_media.exceptions import DimensionValidationError, \
     AspectRatioValidationError, MaximumLengthIsReachedError, \
@@ -35,7 +35,6 @@ class Avatar(Image):
             max_aspect_ratio=1,
             content_types=['image/jpeg', 'image/png']
         ),
-        ImageProcessor(fmt='jpeg')
     ]
 
     __max_length__ = 50 * KB
