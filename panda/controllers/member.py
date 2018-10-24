@@ -67,7 +67,7 @@ class MemberController(ModelRestController):
     @member_validator
     @json(form_whitelist=(
         ['name'],
-        '717 Invalid Field, Only The Name Parameter Accepted'
+        '717 Invalid Field, Only The Name Parameter Is Accepted'
     ))
     @Member.expose
     @commit
