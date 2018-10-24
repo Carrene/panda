@@ -84,7 +84,7 @@ phone_number_validator = validate(
 
 member_validator = validate(
     name=dict(
-        pattern=(NAME_PATTERN, '716 Invalid Format Name')
+        pattern=(NAME_PATTERN, '716 Invalid Name Format')
     ),
 )
 
