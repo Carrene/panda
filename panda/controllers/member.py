@@ -75,7 +75,6 @@ class MemberController(ModelRestController):
         ),
         prevent_empty_form=True
     )
-
     @Member.expose
     @commit
     def update(self):
