@@ -1,6 +1,6 @@
 from os.path import abspath, dirname, join
 
-from nanohttp import Controller, json, Static
+from nanohttp import Controller, json, Static, settings
 from restfulpy.controllers import RootController
 
 import panda
@@ -17,7 +17,7 @@ from .token import TokenController
 
 
 here = abspath(dirname(__file__))
-avatar_storage = abspath(join(here, '../..', 'data/avatar-storage'))
+avatar_storage = abspath(join(here, '../..', 'data/assets'))
 
 
 class ApiV1(Controller):

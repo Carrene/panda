@@ -40,6 +40,7 @@ class Avatar(Image):
 
     __max_length__ = 50 * KB
     __min_length__ = 1 * KB
+    __prefix__ = 'avatar'
 
 
 class Member(DeclarativeBase):
