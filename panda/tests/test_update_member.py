@@ -65,7 +65,7 @@ class TestMember(LocalApplicationTestCase):
 
             when(
                 'Invalid the max lenght of name',
-                multipart=Update(name='name name name name n')
+                multipart=Update(name='n' * (20 + 1))
             )
             assert status == '716 Invalid Name Format'
 
