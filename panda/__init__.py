@@ -81,12 +81,9 @@ class Panda(Application):
       jwt:
         max_age: 86400
 
-    assets:
-      storage:
-        file_system_dir: %(root_path)s/data/assets
-        base_url: http://localhost:8080/assets
-      length:
-        maximum: 50 # KB
+    storage:
+      file_system_dir: %(root_path)s/data/assets
+      base_url: http://localhost:8080/assets
     '''
 
     def __init__(self, application_name='panda', root=Root()):
@@ -109,8 +106,8 @@ class Panda(Application):
             'fs',
             functools.partial(
                 FileSystemStore,
-                settings.assets.storage.file_system_dir,
-                base_url=settings.assets.storage.base_url,
+                settings.storage.file_system_dir,
+                base_url=settings.storage.base_url,
             ),
             default=True
         )
