@@ -54,12 +54,12 @@ class TestMember(LocalApplicationTestCase):
             )
             assert status == 400
 
-            when('The name have numbers', form=Update(name='name1'))
+            when('The name have numbers', multipart=Update(name='name1'))
             assert status == '716 Invalid Name Format'
 
             when(
                 'The name is less than the minimum length',
-                form=Update(name='n')
+                multipart=Update(name='n')
             )
             assert status == '716 Invalid Name Format'
 
@@ -85,35 +85,35 @@ class TestMember(LocalApplicationTestCase):
 
             with open(INVALID_MAXIMUM_SIZE_AVATAR_PATH, 'rb') as f:
                 when(
-                    'Invalid the maxmimum size of avatar',
+                    'The avatar size is exceeded the maximum size',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
                 assert status == 618
 
             with open(INVALID_MINIMUM_SIZE_AVATAR_PATH, 'rb') as f:
                 when(
-                    'Invalid the minimum size of avatar',
+                    'The avatar size is less than minimum size',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
                 assert status == 618
 
             with open(INVALID_RATIO_AVATAR_PATH, 'rb') as f:
                 when(
-                    'Invalid the aspect ratio of avatar',
+                    'Aspect ratio of the avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
                 assert status == 619
 
             with open(INVALID_FORMAT_AVATAR_PATH, 'rb') as f:
                 when(
-                    'Invalid the format of avatar',
+                    'Format of the avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
                 assert status == 620
 
             with open(INVALID_MAXMIMUM_LENGTH_AVATAR_PATH, 'rb') as f:
                 when(
-                    'Invalid the maxmimum length of avatar',
+                    'The maxmimum length of avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
                 assert status == 621
