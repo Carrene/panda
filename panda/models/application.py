@@ -3,7 +3,7 @@ import base64
 from nanohttp import context
 from restfulpy.orm import DeclarativeBase, OrderingMixin, PaginationMixin, \
     FilteringMixin, Field, relationship
-from sqlalchemy import Unicode, Integer, Binary, ForeignKey
+from sqlalchemy import Unicode, Integer, LargeBinary, ForeignKey
 
 
 class ApplicationMember(DeclarativeBase):
@@ -45,7 +45,7 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         python_type=str,
         watermark='Enter your redirect uri'
     )
-    secret = Field(Binary(32))
+    secret = Field(LargeBinary(32))
 
     owner = relationship(
         'Member',
