@@ -74,7 +74,7 @@ class TestMember(LocalApplicationTestCase):
                 multipart=Update(title='title')
             )
             assert status == '717 Invalid Field, Only The Name And Avatar ' \
-                'Parameter Is Accepted'
+                'Parameters Are Accepted'
 
             with open(VALID_AVATAR_PATH, 'rb') as f:
                 when(

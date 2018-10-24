@@ -70,7 +70,8 @@ class MemberController(ModelRestController):
     @json(
         form_whitelist=(
             ['name', 'avatar'],
-            '717 Invalid Field, Only The Name And Avatar Parameter Is Accepted'
+            '717 Invalid Field, Only The Name And Avatar Parameters Are ' \
+            'Accepted'
         ),
         prevent_empty_form=True
     )
