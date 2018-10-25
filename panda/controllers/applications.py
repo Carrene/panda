@@ -4,6 +4,7 @@ from nanohttp import json, context, HTTPStatus, HTTPNotFound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
+from sqlalchemy_media import store_manager
 
 from .. import cryptohelpers
 from ..models import Application, ApplicationMember
@@ -97,7 +98,15 @@ class ApplicationController(ModelRestController):
         return application
 
     @authorize
-    @json(prevent_empty_form=True)
+    @store_manager(DBSession)
+    @json(
+        form_whitelist=(
+            ['title', 'redirectUri', 'icon'],
+            '717 Invalid Field, Only The Title, Redirect Uri And Icon ' \
+            'Parameters Are Accepted'
+        ),
+        prevent_empty_form=True
+    )
     @application_validator
     @Application.expose
     @commit
