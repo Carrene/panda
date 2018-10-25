@@ -1,6 +1,6 @@
 import base64
 
-from nanohttp import context
+from nanohttp import context, HTTPStatus
 from restfulpy.orm import DeclarativeBase, OrderingMixin, PaginationMixin, \
     FilteringMixin, Field, relationship
 from sqlalchemy import Unicode, Integer, LargeBinary, ForeignKey, JSON
@@ -99,7 +99,8 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
             title=self.title,
             redirectUri=self.safe_redirect_uri,
             ownerId=self.safe_owner_id,
-            secret=self.safe_secret
+            secret=self.safe_secret,
+            icon=self.icon,
         )
 
     def validate_secret(self, secret):
@@ -124,7 +125,7 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         return self.owner_id if self.am_i_owner() else None
 
     def _get_icon(self):
-        return self._avatar.locate() if self._avatar else None
+        return self._icon.locate() if self._icon else None
 
     def _set_icon(self, value):
         if value is not None:
