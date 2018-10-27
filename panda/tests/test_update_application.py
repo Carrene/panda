@@ -14,7 +14,7 @@ VALID_ICON_PATH = join(STUFF_DIR, 'icon-150x150.jpg')
 INVALID_FORMAT_ICON_PATH = join(STUFF_DIR, 'test.pdf')
 INVALID_MAXIMUM_SIZE_ICON_PATH = join(STUFF_DIR, 'icon-550x550.jpg')
 INVALID_MINIMUM_SIZE_ICON_PATH = join(STUFF_DIR, 'icon-50x50.jpg')
-INVALID_RATIO_ICON_PATH = join(STUFF_DIR, 'icon-300x200.jpg')
+INVALID_RATIO_ICON_PATH = join(STUFF_DIR, 'icon-150x100.jpg')
 INVALID_MAXMIMUM_LENGTH_ICON_PATH = join(
     STUFF_DIR,
     'icon-maximum-length.jpg'
@@ -137,12 +137,12 @@ class TestApplication(LocalApplicationTestCase):
                 )
                 assert status == 618
 
-#            with open(INVALID_RATIO_ICON_PATH, 'rb') as f:
-#                when(
-#                    'Aspect ratio of the icon is invalid',
-#                    multipart=dict(icon=io.BytesIO(f.read()))
-#                )
-#                assert status == 619
+            with open(INVALID_RATIO_ICON_PATH, 'rb') as f:
+                when(
+                    'Aspect ratio of the icon is invalid',
+                    multipart=dict(icon=io.BytesIO(f.read()))
+                )
+                assert status == 619
 
             with open(INVALID_FORMAT_ICON_PATH, 'rb') as f:
                 when(
@@ -151,12 +151,12 @@ class TestApplication(LocalApplicationTestCase):
                 )
                 assert status == 620
 
-#            with open(INVALID_MAXMIMUM_LENGTH_ICON_PATH, 'rb') as f:
-#                when(
-#                    'The maxmimum length of icon is invalid',
-#                    multipart=dict(icon=io.BytesIO(f.read()))
-#                )
-#                assert status == 621
+            with open(INVALID_MAXMIMUM_LENGTH_ICON_PATH, 'rb') as f:
+                when(
+                    'The maxmimum length of icon is invalid',
+                    multipart=dict(icon=io.BytesIO(f.read()))
+                )
+                assert status == 621
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
