@@ -83,13 +83,9 @@ class TestApplication(LocalApplicationTestCase):
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'
 
-        self.logout()
-
-        with self.given(
+            when(
             'An unauthorized member trying to define application',
-            '/apiv1/applications',
-            'DEFINE',
-            form=dict(title=title, redirectUri=redirect_uri)
-        ):
+                authorization=None
+            )
             assert status == 401
 

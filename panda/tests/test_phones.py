@@ -61,13 +61,13 @@ class TestPhone(LocalApplicationTestCase):
             when('Trying to pass with unauthorized member', authorization=None)
             assert status == 401
 
-        self.login('user2@example.com', password='123456')
-        with self.given(
-            'The member has a phone number',
-            '/apiv1/phonenumberactivationtokens',
-            'CREATE',
-            form=dict(phoneNumber='+989351234567')
-        ):
+            self.logout()
+            self.login('user2@example.com', password='123456')
+            when(
+                'The member has a phone number',
+                form=dict(phoneNumber='+989351234567'),
+                authorization=self._authentication_token
+            )
             assert status == '615 Member Has The Phone Number'
 
     def test_bind_phone_number(self):
