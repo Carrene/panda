@@ -103,6 +103,11 @@ class Member(DeclarativeBase):
         'avatar',
         Avatar.as_mutable(JSON),
         nullable=True,
+        protected=False,
+        json='avatar',
+        not_none=False,
+        label='Avatar',
+        required=False,
     )
     _password = Field(
         'password',
@@ -126,10 +131,12 @@ class Member(DeclarativeBase):
         protected=True
     )
 
-    def _get_avatar(self):
+    @property
+    def avatar(self):
         return self._avatar.locate() if self._avatar else None
 
-    def _set_avatar(self, value):
+    @avatar.setter
+    def avatar(self, value):
         if value is not None:
             try:
                 self._avatar = Avatar.create_from(value)
@@ -148,12 +155,6 @@ class Member(DeclarativeBase):
 
         else:
             self._avatar = None
-
-    avatar = synonym(
-        '_avatar',
-        descriptor=property(_get_avatar, _set_avatar),
-        info=dict(json='avatar'),
-    )
 
     def _hash_password(cls, password):
         salt = sha256()
@@ -207,7 +208,9 @@ class Member(DeclarativeBase):
 
     def to_dict(self):
         if not isinstance(context.identity, AccessToken):
-            return super().to_dict()
+            result = super().to_dict()
+            result['avatar'] = self.avatar
+            return result
 
         member = dict.fromkeys(SCOPES.keys(), None)
         member['id'] = self.id

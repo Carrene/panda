@@ -2,6 +2,7 @@ import io
 from os.path import dirname, abspath, join
 
 from bddrest.authoring import status, response, Update, Remove, when
+from nanohttp import settings
 
 from panda.models import Member
 from panda.tests.helpers import LocalApplicationTestCase
@@ -81,7 +82,9 @@ class TestMember(LocalApplicationTestCase):
                     'Updating the avatar of member',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert response.json['avatar'] is not None
+                assert response.json['avatar'].startswith(
+                    settings.storage.base_url
+                )
 
             with open(INVALID_MAXIMUM_SIZE_AVATAR_PATH, 'rb') as f:
                 when(
