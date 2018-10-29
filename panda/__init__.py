@@ -8,7 +8,7 @@ from .controllers.root import Root
 from .cli.email import EmailLauncher
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1nightly'
 
 
 class Panda(Application):
