@@ -3,6 +3,7 @@ import os
 from os.path import dirname, abspath, join
 
 from bddrest.authoring import when, status, response, given
+from nanohttp import settings
 
 from panda.models import Member, Application
 from panda.tests.helpers import LocalApplicationTestCase
@@ -121,7 +122,9 @@ class TestApplication(LocalApplicationTestCase):
                     'Updating the icon of application',
                     multipart=dict(icon=io.BytesIO(f.read()))
                 )
-                assert response.json['icon'] is not None
+                assert response.json['icon'].startswith(
+                    settings.storage.base_url
+                )
 
             with open(INVALID_MAXIMUM_SIZE_ICON_PATH, 'rb') as f:
                 when(

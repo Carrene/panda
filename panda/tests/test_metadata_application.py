@@ -31,3 +31,8 @@ class TestApplication(LocalApplicationTestCase):
             assert fields['redirectUri']['minLength'] is not None
             assert fields['redirectUri']['maxLength'] is not None
 
+            assert fields['icon']['protected'] is not None
+            assert fields['icon']['not_none'] is not None
+            assert fields['icon']['label'] is not None
+            assert fields['icon']['required'] is not None
+
