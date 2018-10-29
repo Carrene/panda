@@ -79,6 +79,11 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         'icon',
         Icon.as_mutable(JSON),
         nullable=True,
+        not_none=False,
+        required=False,
+        label='Icon',
+        protected=False,
+        json='icon',
     )
 
     owner = relationship(
@@ -124,10 +129,12 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
     def safe_owner_id(self):
         return self.owner_id if self.am_i_owner() else None
 
-    def _get_icon(self):
+    @property
+    def icon(self):
         return self._icon.locate() if self._icon else None
 
-    def _set_icon(self, value):
+    @icon.setter
+    def icon(self, value):
         if value is not None:
             try:
                 self._icon = Icon.create_from(value)
@@ -146,10 +153,4 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
 
         else:
             self._icon = None
-
-    icon = synonym(
-        '_icon',
-        descriptor=property(_get_icon, _set_icon),
-        info=dict(protected=False, json='icon'),
-    )
 
