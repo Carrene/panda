@@ -1,9 +1,25 @@
+import io
 import os
+from os.path import dirname, abspath, join
 
 from bddrest.authoring import when, status, response, given
+from nanohttp import settings
 
 from panda.models import Member, Application
 from panda.tests.helpers import LocalApplicationTestCase
+
+
+TEST_DIR = abspath(dirname(__file__))
+STUFF_DIR = join(TEST_DIR, 'stuff')
+VALID_ICON_PATH = join(STUFF_DIR, 'icon-150x150.jpg')
+INVALID_FORMAT_ICON_PATH = join(STUFF_DIR, 'test.pdf')
+INVALID_MAXIMUM_SIZE_ICON_PATH = join(STUFF_DIR, 'icon-550x550.jpg')
+INVALID_MINIMUM_SIZE_ICON_PATH = join(STUFF_DIR, 'icon-50x50.jpg')
+INVALID_RATIO_ICON_PATH = join(STUFF_DIR, 'icon-150x100.jpg')
+INVALID_MAXMIMUM_LENGTH_ICON_PATH = join(
+    STUFF_DIR,
+    'icon-maximum-length.jpg'
+)
 
 
 class TestApplication(LocalApplicationTestCase):
@@ -49,7 +65,7 @@ class TestApplication(LocalApplicationTestCase):
             f'Updating the application',
             f'/apiv1/applications/id:{self.application1.id}',
             f'UPDATE',
-            form=dict(title=title, redirectUri=redirectUri)
+            multipart=dict(title=title, redirectUri=redirectUri)
         ):
             assert status == 200
             assert response.json['id'] == self.application1.id
@@ -58,25 +74,25 @@ class TestApplication(LocalApplicationTestCase):
 
             when(
                 'Trying to pass with the balnk redirect URI and without title',
-                form=given - 'title' | dict(redirectUri='')
+                multipart=given - 'title' | dict(redirectUri='')
             )
             assert status == '706 Redirect URI Is Blank'
 
             when(
                 'Redirect URI contains only spaces and without title',
-                form=given - 'title' | dict(redirectUri=' ')
+                multipart=given - 'title' | dict(redirectUri=' ')
             )
             assert status == '706 Redirect URI Is Blank'
 
             when(
                 'Trying to pass with the blank title and without redirect URI',
-                form=given - 'redirectUri' | dict(title='')
+                multipart=given - 'redirectUri' | dict(title='')
             )
             assert status == '712 Title Is Blank'
 
             when(
                 'Title contains only spaces and without redirect URI',
-                form=given - 'redirectUri' | dict(title=' ')
+                multipart=given - 'redirectUri' | dict(title=' ')
             )
             assert status == '712 Title Is Blank'
 
@@ -98,8 +114,52 @@ class TestApplication(LocalApplicationTestCase):
             )
             assert status == 404
 
-            when('Trying to pass with empty form', form={})
+            when('Trying to pass with empty form', multipart={})
             assert status == 400
+
+            with open(VALID_ICON_PATH, 'rb') as f:
+                when(
+                    'Updating the icon of application',
+                    multipart=dict(icon=io.BytesIO(f.read()))
+                )
+                assert response.json['icon'].startswith(
+                    settings.storage.base_url
+                )
+
+            with open(INVALID_MAXIMUM_SIZE_ICON_PATH, 'rb') as f:
+                when(
+                    'The icon size is exceeded the maximum size',
+                    multipart=dict(icon=io.BytesIO(f.read()))
+                )
+                assert status == 618
+
+            with open(INVALID_MINIMUM_SIZE_ICON_PATH, 'rb') as f:
+                when(
+                    'The icon size is less than minimum size',
+                    multipart=dict(icon=io.BytesIO(f.read()))
+                )
+                assert status == 618
+
+            with open(INVALID_RATIO_ICON_PATH, 'rb') as f:
+                when(
+                    'Aspect ratio of the icon is invalid',
+                    multipart=dict(icon=io.BytesIO(f.read()))
+                )
+                assert status == 619
+
+            with open(INVALID_FORMAT_ICON_PATH, 'rb') as f:
+                when(
+                    'Format of the icon is invalid',
+                    multipart=dict(icon=io.BytesIO(f.read()))
+                )
+                assert status == 620
+
+            with open(INVALID_MAXMIMUM_LENGTH_ICON_PATH, 'rb') as f:
+                when(
+                    'The maxmimum length of icon is invalid',
+                    multipart=dict(icon=io.BytesIO(f.read()))
+                )
+                assert status == 621
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401

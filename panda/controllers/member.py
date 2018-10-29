@@ -2,6 +2,7 @@ from nanohttp import json, context, HTTPStatus, HTTPNotFound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
+from sqlalchemy_media import store_manager, StoreManager
 
 from ..models import Member
 from ..tokens import RegisterationToken
@@ -44,6 +45,7 @@ class MemberController(ModelRestController):
         )
         return member
 
+    @store_manager(DBSession)
     @authorize
     @json
     @Member.expose
@@ -63,12 +65,17 @@ class MemberController(ModelRestController):
 
         return member
 
+    @store_manager(DBSession)
     @authorize
     @member_validator
-    @json(form_whitelist=(
-        ['name'],
-        '717 Invalid Field, Only The Name Parameter Is Accepted'
-    ))
+    @json(
+        form_whitelist=(
+            ['name', 'avatar'],
+            '717 Invalid Field, Only The Name And Avatar Parameters Are ' \
+            'Accepted'
+        ),
+        prevent_empty_form=True
+    )
     @Member.expose
     @commit
     def update(self):

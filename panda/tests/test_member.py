@@ -1,56 +1,70 @@
+import io
 import os
 import time
+from os.path import dirname, abspath, join
 
 from bddrest.authoring import status, response, when
 from nanohttp import settings
+from sqlalchemy_media import StoreManager
 
 from panda.models import Member, Application
 from panda.oauth.tokens import AccessToken
 from panda.tests.helpers import LocalApplicationTestCase
 
 
+TEST_DIR = abspath(dirname(__file__))
+AVATAR_PATH = join(TEST_DIR, 'stuff/avatar-225x225.jpg')
+
+
 class TestMember(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
+        with open(AVATAR_PATH, 'rb') as f:
+            avatar = io.BytesIO(f.read())
+
         session = cls.create_session()
-        admin = Member(
-            email='admin@example.com',
-            title='admin_title',
-            password='123abcABC',
-            role='admin'
-        )
-        session.add(admin)
+        with StoreManager(session):
+            admin = Member(
+                email='admin@example.com',
+                title='admin_title',
+                password='123abcABC',
+                role='admin'
+            )
+            session.add(admin)
 
-        owner = Member(
-            email='owner@example.com',
-            title='owner_title',
-            password='123abcABC',
-            role='member'
-        )
-        cls.member = Member(
-            email='member@example.com',
-            title='member_title',
-            password='123abcABC',
-            role='member'
-        )
-        cls.application1 = Application(
-            title='oauth',
-            redirect_uri='http://example1.com/oauth2',
-            secret=os.urandom(32),
-            owner=owner,
-            members=[cls.member]
-        )
-        session.add(cls.application1)
+            owner = Member(
+                email='owner@example.com',
+                title='owner_title',
+                password='123abcABC',
+                role='member'
+            )
+            cls.member = Member(
+                email='member@example.com',
+                title='member_title',
+                password='123abcABC',
+                role='member',
+                phone='+9891234567',
+                name='full name',
+                avatar=avatar,
+            )
+            cls.application1 = Application(
+                title='oauth',
+                redirect_uri='http://example1.com/oauth2',
+                secret=os.urandom(32),
+                owner=owner,
+                members=[cls.member]
+            )
+            session.add(cls.application1)
 
-        cls.application2 = Application(
-            title='oauth',
-            redirect_uri='http://example2.com/oauth2',
-            secret=os.urandom(32),
-            owner=owner
-        )
-        session.add(cls.application2)
-        session.commit()
+            cls.application2 = Application(
+                title='oauth',
+                redirect_uri='http://example2.com/oauth2',
+                secret=os.urandom(32),
+                owner=owner
+            )
+            session.add(cls.application2)
+            session.commit()
 
     def test_get_member_by_me(self):
         access_token_payload = dict(
@@ -69,6 +83,10 @@ class TestMember(LocalApplicationTestCase):
             assert status == 200
             assert response.json['title'] == self.member.title
             assert response.json['id'] == self.member.id
+            assert response.json['email'] is None
+            assert response.json['name'] is None
+            assert response.json['avatar'] is None
+            assert response.json['phone'] is None
 
             when('Trying to pass without authorization headers', headers={})
             assert status == 401
@@ -79,14 +97,21 @@ class TestMember(LocalApplicationTestCase):
             )
             assert status == '610 Malformed Access Token'
 
-            access_token_payload['scopes'] = ['title', 'email']
+            access_token_payload['scopes'] = [
+                'name',
+                'email',
+                'avatar',
+                'phone',
+            ]
             access_token = AccessToken(access_token_payload).dump().decode()
             when(
                 'Trying to pass with multi scope',
                 headers={'authorization': f'oauth2-accesstoken {access_token}'}
             )
-            assert response.json['title'] == self.member.title
+            assert response.json['name'] == self.member.name
             assert response.json['email'] == self.member.email
+            assert response.json['avatar'] is not None
+            assert response.json['phone'] == self.member.phone
             assert response.json['id'] == self.member.id
 
             settings.access_token.max_age = 0.1
