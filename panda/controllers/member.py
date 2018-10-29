@@ -45,6 +45,7 @@ class MemberController(ModelRestController):
         )
         return member
 
+    @store_manager(DBSession)
     @authorize
     @json
     @Member.expose
