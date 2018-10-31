@@ -63,3 +63,8 @@ class TestMember(LocalApplicationTestCase):
             assert fields['phone']['minLength'] is not None
             assert fields['phone']['maxLength'] is not None
 
+            assert fields['avatar']['protected'] is not None
+            assert fields['avatar']['not_none'] is not None
+            assert fields['avatar']['label'] is not None
+            assert fields['avatar']['required'] is not None
+

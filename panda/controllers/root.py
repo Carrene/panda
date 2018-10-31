@@ -1,4 +1,6 @@
-from nanohttp import Controller, json
+from os.path import abspath, dirname, join
+
+from nanohttp import Controller, json, Static, settings
 from restfulpy.controllers import RootController
 
 import panda
@@ -12,6 +14,10 @@ from .member import MemberController
 from .passwords import PasswordController, ResetPasswordTokenController
 from .phones import PhoneNumberActivationTokenController, PhoneNumberController
 from .token import TokenController
+
+
+here = abspath(dirname(__file__))
+avatar_storage = abspath(join(here, '../..', 'data/assets'))
 
 
 class ApiV1(Controller):
@@ -38,4 +44,5 @@ class ApiV1(Controller):
 
 class Root(RootController):
     apiv1 = ApiV1()
+    avatar = Static(avatar_storage)
 

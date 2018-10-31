@@ -1,17 +1,45 @@
 import os
 from hashlib import sha256
 
-from nanohttp import context, settings
+from nanohttp import context, settings, HTTPStatus
 from restfulpy.orm import DeclarativeBase, Field, DBSession, relationship
 from restfulpy.principal import JwtPrincipal, JwtRefreshToken
-from sqlalchemy import Unicode, Integer
+from sqlalchemy import Unicode, Integer, JSON
 from sqlalchemy.orm import synonym
+from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
+    MagicAnalyzer, ContentTypeValidator
+from sqlalchemy_media.constants import KB
+from sqlalchemy_media.exceptions import DimensionValidationError, \
+    AspectRatioValidationError, MaximumLengthIsReachedError, \
+    ContentTypeValidationError
 
 from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
     derivate_seed
 from ..oauth.scopes import SCOPES
 from ..oauth.tokens import AccessToken
 from .messaging import OTPSMS
+
+
+class Avatar(Image):
+    __pre_processors__ = [
+        MagicAnalyzer(),
+        ContentTypeValidator([
+            'image/jpeg',
+            'image/png',
+        ]),
+        ImageAnalyzer(),
+        ImageValidator(
+            minimum=(200, 200),
+            maximum=(300, 300),
+            min_aspect_ratio=1,
+            max_aspect_ratio=1,
+            content_types=['image/jpeg', 'image/png']
+        ),
+    ]
+
+    __max_length__ = 50 * KB
+    __min_length__ = 1 * KB
+    __prefix__ = 'avatar'
 
 
 class Member(DeclarativeBase):
@@ -71,6 +99,16 @@ class Member(DeclarativeBase):
         example='+9891234567',
     )
     role = Field(Unicode(100))
+    _avatar = Field(
+        'avatar',
+        Avatar.as_mutable(JSON),
+        nullable=True,
+        protected=False,
+        json='avatar',
+        not_none=False,
+        label='Avatar',
+        required=False,
+    )
     _password = Field(
         'password',
         Unicode(128),
@@ -92,6 +130,31 @@ class Member(DeclarativeBase):
         back_populates='owner',
         protected=True
     )
+
+    @property
+    def avatar(self):
+        return self._avatar.locate() if self._avatar else None
+
+    @avatar.setter
+    def avatar(self, value):
+        if value is not None:
+            try:
+                self._avatar = Avatar.create_from(value)
+
+            except DimensionValidationError as e:
+                raise HTTPStatus(f'618 {e}')
+
+            except AspectRatioValidationError as e:
+                raise HTTPStatus(f'619 {e}')
+
+            except ContentTypeValidationError as e:
+                raise HTTPStatus(f'620 {e}')
+
+            except MaximumLengthIsReachedError as e:
+                raise HTTPStatus(f'621 {e}')
+
+        else:
+            self._avatar = None
 
     def _hash_password(cls, password):
         salt = sha256()
@@ -145,7 +208,9 @@ class Member(DeclarativeBase):
 
     def to_dict(self):
         if not isinstance(context.identity, AccessToken):
-            return super().to_dict()
+            result = super().to_dict()
+            result['avatar'] = self.avatar
+            return result
 
         member = dict.fromkeys(SCOPES.keys(), None)
         member['id'] = self.id
