@@ -44,5 +44,5 @@ class ApiV1(Controller):
 
 class Root(RootController):
     apiv1 = ApiV1()
-    avatar = Static(avatar_storage)
+    assets = Static(avatar_storage)
 
