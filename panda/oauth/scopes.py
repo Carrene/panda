@@ -6,6 +6,7 @@ def get_title(member):
 def get_email(member):
     return member.email
 
+
 def get_name(member):
     return member.name
 
