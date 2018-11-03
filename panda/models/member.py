@@ -11,10 +11,6 @@ from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
 from sqlalchemy_media.constants import KB
 from sqlalchemy_media.exceptions import DimensionValidationError, \
     AspectRatioValidationError, MaximumLengthIsReachedError, \
-    ContentTypeValidationError, ImageProcessor
-from sqlalchemy_media.constants import KB
-from sqlalchemy_media.exceptions import DimensionValidationError, \
-    AspectRatioValidationError, MaximumLengthIsReachedError, \
     ContentTypeValidationError
 
 from ..cryptohelpers import OCRASuite, TimeBasedChallengeResponse,\
@@ -152,9 +148,6 @@ class Member(DeclarativeBase):
                 raise HTTPStatus(f'619 {e}')
 
             except ContentTypeValidationError as e:
-                raise HTTPStatus(f'620 {e}')
-
-            except AnalyzeError as e:
                 raise HTTPStatus(f'620 {e}')
 
             except MaximumLengthIsReachedError as e:
