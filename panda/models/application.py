@@ -4,7 +4,6 @@ from nanohttp import context, HTTPStatus
 from restfulpy.orm import DeclarativeBase, OrderingMixin, PaginationMixin, \
     FilteringMixin, Field, relationship
 from sqlalchemy import Unicode, Integer, LargeBinary, ForeignKey, JSON
-from sqlalchemy.orm import synonym
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
     MagicAnalyzer, ContentTypeValidator
 from sqlalchemy_media.constants import KB
