@@ -76,6 +76,7 @@ class Member(DeclarativeBase):
     name = Field(
         Unicode(20),
         nullable=True,
+        not_none=False,
         python_type=str,
         min_length=3,
         max_length=20,
@@ -88,6 +89,7 @@ class Member(DeclarativeBase):
     phone = Field(
         Unicode(16),
         nullable=True,
+        not_none=False,
         unique=True,
         pattern=r'^[+]{0,1}[\d+]{7,15}$',
         python_type=str,
