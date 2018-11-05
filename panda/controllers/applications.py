@@ -31,7 +31,7 @@ class ApplicationController(ModelRestController):
         application = Application(
             title=title,
             redirect_uri=redirect_uri,
-            owner_id=context.identity.id
+            owner_id=context.identity.reference_id
         )
         application.secret = hashlib.pbkdf2_hmac(
             'sha256',
@@ -50,13 +50,13 @@ class ApplicationController(ModelRestController):
     def get(self, id):
         try:
             id = int(id)
-        except(ValueError, TypeError):
+        except (ValueError, TypeError):
             raise HTTPNotFound()
 
         application = DBSession.query(Application) \
             .filter(
                 Application.id == id,
-                Application.owner_id == context.identity.id
+                Application.owner_id == context.identity.reference_id
             ) \
             .one_or_none()
 
@@ -77,7 +77,7 @@ class ApplicationController(ModelRestController):
     def logout(self, id):
         try:
             id = int(id)
-        except(ValueError, TypeError):
+        except (ValueError, TypeError):
             raise HTTPNotFound()
 
         application = DBSession.query(Application).get(id)
@@ -87,7 +87,7 @@ class ApplicationController(ModelRestController):
         application_member = DBSession.query(ApplicationMember) \
             .filter(
                 ApplicationMember.application_id == id,
-                ApplicationMember.member_id == context.identity.id
+                ApplicationMember.member_id == context.identity.reference_id
             ) \
             .one_or_none()
 
@@ -113,14 +113,14 @@ class ApplicationController(ModelRestController):
     def update(self, id):
         try:
             id = int(id)
-        except(ValueError, TypeError):
+        except (ValueError, TypeError):
             raise HTTPNotFound()
 
         application = DBSession.query(Application).get(id)
         if application is None:
             raise HTTPNotFound()
 
-        if application.owner_id != context.identity.id:
+        if application.owner_id != context.identity.reference_id:
             raise HTTPNotFound()
 
         application.update_from_request()
@@ -133,11 +133,12 @@ class ApplicationController(ModelRestController):
     def revoke(self, id):
         try:
             id = int(id)
-        except(ValueError, TypeError):
+        except (ValueError, TypeError):
             raise HTTPNotFound()
 
         application = DBSession.query(Application).get(id)
-        if application is None or application.owner_id != context.identity.id:
+        if application is None \
+                or application.owner_id != context.identity.reference_id:
             raise HTTPNotFound()
 
         application.members.clear()
@@ -150,12 +151,12 @@ class ApplicationController(ModelRestController):
     def delete(self, id):
         try:
             id = int(id)
-        except(ValueError, TypeError):
+        except (ValueError, TypeError):
             raise HTTPNotFound()
 
         application = DBSession.query(Application).get(id)
         if application is None or \
-                application.owner_id != context.identity.id:
+                application.owner_id != context.identity.reference_id:
             raise HTTPNotFound()
 
         DBSession.delete(application)
@@ -170,7 +171,7 @@ class MyApplicationController(ModelRestController):
     @Application.expose
     def list(self):
         return DBSession.query(Application) \
-            .filter(Application.owner_id == context.identity.id)
+            .filter(Application.owner_id == context.identity.reference_id)
 
 
 class AuthorizedApplicationController(ModelRestController):
@@ -181,6 +182,8 @@ class AuthorizedApplicationController(ModelRestController):
     @Application.expose
     def list(self):
         application = DBSession.query(Application) \
-            .filter(ApplicationMember.member_id == context.identity.id)
+            .filter(
+                ApplicationMember.member_id == context.identity.reference_id
+            )
         return application
 

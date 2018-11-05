@@ -39,10 +39,7 @@ class MemberController(ModelRestController):
         DBSession.add(member)
         DBSession.flush()
         principal = member.create_jwt_principal()
-        context.response_headers.add_header(
-            'X-New-JWT-Token',
-            principal.dump().decode('utf-8')
-        )
+        context.application.__authenticator__.setup_response_headers(principal)
         return member
 
     @store_manager(DBSession)
@@ -53,7 +50,7 @@ class MemberController(ModelRestController):
         id = context.identity.id if id == 'me' else id
         try:
             id = int(id)
-        except(ValueError, TypeError):
+        except (ValueError, TypeError):
             raise HTTPNotFound()
 
         member = DBSession.query(Member).get(id)
@@ -79,7 +76,8 @@ class MemberController(ModelRestController):
     @Member.expose
     @commit
     def update(self):
-        member = DBSession.query(Member).get(context.identity.id)
+        member = DBSession.query(Member).get(context.identity.reference_id)
         member.update_from_request()
+        context.application.__authenticator__.invalidate_member(member.id)
         return member
 

@@ -26,10 +26,10 @@ class PhoneNumberActivationTokenController(RestController):
         if member is not None:
             raise HTTPStatus('616 Phone Number Already Exists')
 
-        DBSession.add(Member.create_otp(phone, context.identity.id))
+        DBSession.add(Member.create_otp(phone, context.identity.reference_id))
         token = PhoneNumberActivationToken(dict(
             phoneNumber=phone,
-            memberId=context.identity.id
+            memberId=context.identity.reference_id
         ))
         return dict(activationToken=token.dump())
 
@@ -55,7 +55,7 @@ class PhoneNumberController(RestController):
         if result is False:
             raise HTTPStatus('617 Activation Code Is Not Valid')
 
-        if context.identity.id != activation_token_principal.member_id:
+        if context.identity.reference_id != activation_token_principal.member_id:
             raise HTTPForbidden()
 
         member = DBSession.query(Member) \
