@@ -44,7 +44,6 @@ class TestMember(LocalApplicationTestCase):
             'UPDATE',
             multipart=dict(name='username')
         ):
-            import pudb; pudb.set_trace()  # XXX BREAKPOINT
             assert status == 200
             assert response.json['id'] == self.member.id
             assert response.json['name'] == 'username'
