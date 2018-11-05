@@ -20,18 +20,12 @@ Setting up development Environment on Linux
 
     $ pip install cython
 
-#### oath.cy
-
-    $ cd /path/to/workspace
-    $ git clone git@github.com:Carrene/oath.cy.git
-    $ cd oath.cy
-    $ pip install -e .
-
 #### Panda
     
     $ cd /path/to/workspace
     $ git clone git@github.com:Carrene/panda.git
     $ cd panda
+    $ pip install -r requirements.txt
     $ pip install -e .
  
 ### For development
@@ -96,7 +90,7 @@ Or, you can add `--drop` to drop the previously created database: **TAKE CARE AB
 - Using python builtin http server
 
 ```bash
-$ owl [-c path/to/config.yml] serve
+$ panda [-c path/to/config.yml] serve
 ```    
 
 - Gunicorn

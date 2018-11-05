@@ -1,6 +1,8 @@
-from nanohttp import HTTPStatus, context, HTTPForbidden
+from cas import CASPrincipal
+from nanohttp import HTTPStatus, HTTPForbidden
 from restfulpy.authentication import StatefulAuthenticator
 from restfulpy.orm import DBSession
+from sqlalchemy_media import store_manager
 
 from .models import Member, ApplicationMember
 from .oauth.tokens import AccessToken
@@ -17,6 +19,7 @@ class Authenticator(StatefulAuthenticator):
 
         return member
 
+    @store_manager(DBSession)
     def create_principal(self, member_id=None, session_id=None):
         member = self.safe_member_lookup(Member.id == member_id)
         return member.create_jwt_principal()
@@ -36,7 +39,7 @@ class Authenticator(StatefulAuthenticator):
 
     def verify_token(self, encoded_token):
         if not encoded_token.startswith('oauth2-accesstoken'):
-            return super().verify_token(encoded_token)
+            return CASPrincipal.load(encoded_token)
 
         access_token = AccessToken.load(encoded_token.split(' ')[1])
         if not DBSession.query(ApplicationMember) \

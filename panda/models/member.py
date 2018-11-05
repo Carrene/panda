@@ -1,9 +1,11 @@
 import os
+import uuid
 from hashlib import sha256
 
+from cas import CASPrincipal
 from nanohttp import context, settings, HTTPStatus
 from restfulpy.orm import DeclarativeBase, Field, DBSession, relationship
-from restfulpy.principal import JwtPrincipal, JwtRefreshToken
+from restfulpy.principal import JwtRefreshToken
 from sqlalchemy import Unicode, Integer, JSON
 from sqlalchemy.orm import synonym
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
@@ -186,11 +188,15 @@ class Member(DeclarativeBase):
     )
 
     def create_jwt_principal(self):
-        return JwtPrincipal({
+        return CASPrincipal({
             'id': self.id,
+            'referenceId': self.id,
             'email': self.email,
-            'name': self.title,
-            'roles': [self.role]
+            'name': self.name,
+            'title': self.title,
+            'avatar': self.avatar,
+            'roles': [self.role],
+            'sessionId': str(uuid.uuid4()),
         })
 
     def create_refresh_principal(self):
