@@ -88,3 +88,16 @@ member_validator = validate(
     ),
 )
 
+
+organization_validator = validate(
+    name=dict(
+        required='718 Name Not In Form',
+        min_length=(1,'719 At least 1 Character is Valid For Name'),
+        max_length=(40,'720 At Most 40 Characters Are Valid For Name'),
+        pattern=(
+            ORGANIZATION_NAME_PATTERN,
+            '721 Invalid Organization Name Format'
+        )
+    )
+)
+
