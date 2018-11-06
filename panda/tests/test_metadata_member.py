@@ -16,6 +16,7 @@ class TestMember(LocalApplicationTestCase):
             assert status == 200
 
             assert fields['email']['pattern'] is not None
+            assert fields['email']['pattern_description'] is not None
             assert fields['email']['not_none'] is not None
             assert fields['email']['required'] is not None
             assert fields['email']['label'] is not None
@@ -26,6 +27,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['email']['maxLength'] is not None
 
             assert fields['title']['pattern'] is not None
+            assert fields['title']['pattern_description'] is not None
             assert fields['title']['not_none'] is not None
             assert fields['title']['required'] is not None
             assert fields['title']['label'] is not None
@@ -36,6 +38,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['title']['maxLength'] is not None
 
             assert fields['password']['pattern'] is not None
+            assert fields['password']['pattern_description'] is not None
             assert fields['password']['not_none'] is not None
             assert fields['password']['required'] is not None
             assert fields['password']['label'] is not None
@@ -46,6 +49,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['password']['maxLength'] is not None
 
             assert fields['name']['pattern'] is not None
+            assert fields['name']['pattern_description'] is not None
             assert fields['name']['required'] is not None
             assert fields['name']['label'] is not None
             assert fields['name']['name'] is not None
@@ -56,6 +60,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['name']['not_none'] is not None
 
             assert fields['phone']['pattern'] is not None
+            assert fields['phone']['pattern_description'] is not None
             assert fields['phone']['required'] is not None
             assert fields['phone']['label'] is not None
             assert fields['phone']['name'] is not None
