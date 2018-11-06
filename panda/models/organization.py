@@ -3,7 +3,7 @@ from sqlalchemy import Unicode, Integer
 
 
 class Organization(DeclarativeBase):
-    __tablename__ = 'member'
+    __tablename__ = 'organization'
 
     id = Field(Integer, primary_key=True)
     name = Field(
@@ -13,6 +13,7 @@ class Organization(DeclarativeBase):
         min_length=1,
         max_length=40,
         pattern=r'^([0-9a-zA-Z]+-?[0-9a-zA-Z]*)*[^-]$',
+        pattern_description='Lorem ipsum dolor sit amet',
         python_type=str,
         not_none=True,
         required=True,
