@@ -1,4 +1,4 @@
-from nanohttp import context, json, HTTPStatus, validate, HTTPForbidden
+from nanohttp import context, json, HTTPStatus
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import commit, DBSession
@@ -16,9 +16,17 @@ class OrganizationController(ModelRestController):
     @Organization.expose
     @commit
     def create(self):
-        current_member = Member.current()
+        organization = DBSession.query(Organization). \
+            filter(Organization.name == context.form.get('name')) \
+            .one_or_none()
+        if organization is not None:
+            raise HTTPStatus('622 Organization Name Is Already Taken')
+
+        member = Member.current()
         organization = Organization(
-            name = context.form.get('name')
+            name=context.form.get('name'),
+            members=[member],
         )
-        return dict(organization)
+        DBSession.add(organization)
+        return organization
 

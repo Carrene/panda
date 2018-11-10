@@ -1,5 +1,31 @@
-from restfulpy.orm import DeclarativeBase, Field
-from sqlalchemy import Unicode, Integer
+from restfulpy.orm import DeclarativeBase, Field, relationship
+from sqlalchemy import Unicode, Integer, ForeignKey, Enum
+
+
+roles = [
+    'owner',
+    'member',
+]
+
+
+class OrganizationMember(DeclarativeBase):
+    __tablename__ = 'organization_member'
+
+    member_id = Field(Integer, ForeignKey('member.id'), primary_key=True)
+    organization_id = Field(
+        Integer,
+        ForeignKey('organization.id'),
+        primary_key=True
+    )
+    role = Field(
+        Enum(*roles, name='roles'),
+        python_type=str,
+        label='role',
+        watermark='Choose a roles',
+        not_none=True,
+        required=True,
+        default='owner'
+    )
 
 
 class Organization(DeclarativeBase):
@@ -20,5 +46,13 @@ class Organization(DeclarativeBase):
         watermark='Enter your organization name',
         example='netalic',
         label='Name',
+    )
+
+    members = relationship(
+        'Member',
+        secondary='organization_member',
+        lazy='selectin',
+        back_populates='organizations',
+        protected=True
     )
 

@@ -140,6 +140,14 @@ class Member(DeclarativeBase):
         protected=True
     )
 
+    organizations = relationship(
+        'Organization',
+        back_populates='members',
+        secondary='organization_member',
+        protected=True
+    )
+
+
     @property
     def avatar(self):
         return self._avatar.locate() if self._avatar else None
