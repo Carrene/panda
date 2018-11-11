@@ -59,7 +59,7 @@ class TestMember(LocalApplicationTestCase):
 
             when(
                 'Trying to pass using id is alphabetical',
-                url_parameters=dict(id='a')
+                url_parameters=dict(id='not-integer')
             )
             assert status == 404
 
