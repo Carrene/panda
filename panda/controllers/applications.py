@@ -102,8 +102,8 @@ class ApplicationController(ModelRestController):
     @json(
         form_whitelist=(
             ['title', 'redirectUri', 'icon'],
-            '717 Invalid Field, Only The Title, Redirect Uri And Icon ' \
-            'Parameters Are Accepted'
+            '717 Invalid field, only the title, redirectUri and icon ' \
+            'parameters are accepted'
         ),
         prevent_empty_form=True
     )
