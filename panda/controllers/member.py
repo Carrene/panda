@@ -75,8 +75,19 @@ class MemberController(ModelRestController):
     )
     @Member.expose
     @commit
-    def update(self):
-        member = DBSession.query(Member).get(context.identity.reference_id)
+    def update(self, id):
+        try:
+            id = int(id)
+        except (ValueError, TypeError):
+            raise HTTPNotFound()
+
+        member = DBSession.query(Member).get(id)
+        if member is None:
+            raise HTTPNotFound()
+
+        if member.id != context.identity.reference_id:
+            raise HTTPNotFound()
+
         member.update_from_request()
         context.application.__authenticator__.invalidate_member(member.id)
         return member
