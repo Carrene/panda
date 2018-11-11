@@ -74,8 +74,8 @@ class TestMember(LocalApplicationTestCase):
                 'Trying to pass with redundant parameters in form',
                 multipart=Update(title='title')
             )
-            assert status == '717 Invalid Field, Only The Name And Avatar ' \
-                'Parameters Are Accepted'
+            assert status == '717 Invalid field, only the name and avatar ' \
+                'parameters are accepted'
 
             with open(VALID_AVATAR_PATH, 'rb') as f:
                 when(
