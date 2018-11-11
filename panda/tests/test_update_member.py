@@ -26,28 +26,54 @@ class TestMember(LocalApplicationTestCase):
     @classmethod
     def mockup(cls):
         session = cls.create_session()
-        cls.member = Member(
+        cls.member1 = Member(
             email='user1@example.com',
-            title='member_title',
+            title='member1_title',
             password='123456',
             role='member'
         )
-        session.add(cls.member)
+        session.add(cls.member1)
+
+        cls.member2 = Member(
+            email='user2@example.com',
+            title='member2_title',
+            password='123456',
+            role='member'
+        )
+        session.add(cls.member2)
         session.commit()
 
     def test_update_member(self):
-        self.login(email=self.member.email, password='123456')
+        self.login(email=self.member1.email, password='123456')
 
         with self.given(
-            'Updating profile of member',
-            '/apiv1/members',
-            'UPDATE',
+            f'Updating profile of member',
+            f'/apiv1/members/id:{self.member1.id}',
+            f'UPDATE',
             multipart=dict(name='username')
         ):
             assert status == 200
-            assert response.json['id'] == self.member.id
+            assert response.json['id'] == self.member1.id
             assert response.json['name'] == 'username'
             assert response.json['avatar'] is None
+
+            when(
+                'Trying to pass using id is alphabetical',
+                url_parameters=dict(id='not-integer')
+            )
+            assert status == 404
+
+            when(
+                'Trying to pass with wrong member id',
+                url_parameters=dict(id=self.member2.id)
+            )
+            assert status == 404
+
+            when(
+                'The member not exist with this id',
+                url_parameters=dict(id=10)
+            )
+            assert status == 404
 
             when(
                 'Trying to pass without name parameter',
