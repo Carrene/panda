@@ -15,44 +15,50 @@ class TestApplication(LocalApplicationTestCase):
             password='123abcABC',
             role='member'
         )
-        session.add(member)
 
         organization = Organization(
-            name='organization-name',
+            title='organization-title',
             members=[member],
         )
         session.add(organization)
         session.commit()
 
     def test_create_organization(self):
-        name = 'My-organization'
+        title = 'My-organization'
         self.login(email='already.added@example.com', password='123abcABC')
 
         with self.given(
             'The organization has successfully created',
             '/apiv1/organizations',
             'CREATE',
-            form=dict(name=name)
+            form=dict(title=title)
         ):
             assert status == 200
-            assert response.json['name'] == name
+            assert response.json['title'] == title
+            assert response.json['icon'] is None
+            assert response.json['url'] is None
+            assert response.json['domain'] is None
+            assert response.json['url'] is None
 
             when(
-                'The organization name is exist',
-                form=dict(name='organization-name')
+                'The organization title is exist',
+                form=dict(title='organization-title')
             )
-            assert status == '622 Organization Name Is Already Taken'
+            assert status == '622 Organization Title Is Already Taken'
 
-            when('The name format is invalid', form=dict(name='my organ'))
-            assert status == 721
+            when('The title format is invalid', form=dict(title='my organ'))
+            assert status == 705
 
-            when('The length name is too long', form=dict(name=(40 + 1) * 'a'))
+            when(
+                'The length of title is too long',
+                form=dict(title=(40 + 1) * 'a')
+            )
             assert status == 720
 
-            when('The name not in form', form=given - 'name' + dict(a='a'))
+            when('The title not in form', form=given - 'title' + dict(a='a'))
             assert status == 718
 
-            when('Trying to pass with empty form', form=Remove('name'))
+            when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'
 
             when('Trying with an unauthorized member', authorization=None)
