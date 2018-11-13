@@ -11,6 +11,8 @@ USER_TITLE_PATTERN = re.compile(r'^[a-zA-Z][\w]{5,19}$')
 USER_PASSWORD_PATTERN = re.compile(r'(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
 PHONE_PATTERN = re.compile(r'^[+]{0,1}[\d+]{7,15}$')
 NAME_PATTERN = re.compile(r'^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$')
+ORGANIZATION_TITLE_PATTERN = \
+    re.compile(r'^([0-9a-zA-Z]+-?[0-9a-zA-Z]*)*[\da-zA-Z]$')
 
 
 def application_title_value_validation(title, container, field):
@@ -85,6 +87,16 @@ phone_number_validator = validate(
 member_validator = validate(
     name=dict(
         pattern=(NAME_PATTERN, '716 Invalid Name Format')
+    ),
+)
+
+
+organization_title_validator = validate(
+    title=dict(
+        required='718 Title Not In Form',
+        min_length=(1,'719 At Least 1 Character Is Needed For Title'),
+        max_length=(40,'720 At Most 40 Characters Are Valid For Title'),
+        pattern=(ORGANIZATION_TITLE_PATTERN, '705 Invalid Title Format'),
     ),
 )
 
