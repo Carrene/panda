@@ -4,13 +4,13 @@ from nanohttp import validate, HTTPStatus, context
 
 
 USER_EMAIL_PATTERN = \
-    re.compile('(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
-USER_TITLE_PATTERN = re.compile('^[a-zA-Z][\w]{5,19}$')
+    re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
+USER_TITLE_PATTERN = re.compile(r'^[a-zA-Z][\w]{5,19}$')
 
 # Password be to have numbers, uppercase, and lowercase
-USER_PASSWORD_PATTERN = re.compile('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
-PHONE_PATTERN = re.compile('^[+]{0,1}[\d+]{7,15}$')
-NAME_PATTERN = re.compile('^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$')
+USER_PASSWORD_PATTERN = re.compile(r'(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
+PHONE_PATTERN = re.compile(r'^[+]{0,1}[\d+]{7,15}$')
+NAME_PATTERN = re.compile(r'^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$')
 
 
 def application_title_value_validation(title, container, field):
@@ -38,7 +38,7 @@ email_validator = validate(
 
 title_validator = validate(
     title=dict(
-        required='705 Invalid Title Format',
+        required='718 Title Not In Form',
         pattern=(USER_TITLE_PATTERN, '705 Invalid Title Format')
     )
 )
@@ -46,7 +46,7 @@ title_validator = validate(
 
 password_validator = validate(
     password=dict(
-        required='702 Invalid Password Length',
+        required='728 Password Not In Form',
         min_length=(6,'702 Invalid Password Length'),
         max_length=(20,'702 Invalid Password Length'),
         pattern=(USER_PASSWORD_PATTERN, '703 Password Not Complex Enough')

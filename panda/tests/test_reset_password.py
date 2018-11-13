@@ -116,7 +116,7 @@ class TestResetPassword(LocalApplicationTestCase):
             assert status == '702 Invalid Password Length'
 
             when('Request without password parameter', form=Remove('password'))
-            assert status == '702 Invalid Password Length'
+            assert status == '728 Password Not In Form'
 
             when(
                 'The token has been damaged',

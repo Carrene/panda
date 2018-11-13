@@ -68,5 +68,5 @@ class TestAvailabilities(LocalApplicationTestCase):
             assert status == '604 Title Is Already Registered'
 
             when('Request without title parametes', form=Remove('title'))
-            assert status == '705 Invalid Title Format'
+            assert status == '718 Title Not In Form'
 

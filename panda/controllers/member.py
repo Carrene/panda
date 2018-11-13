@@ -1,4 +1,4 @@
-from nanohttp import json, context, HTTPStatus, HTTPNotFound
+from nanohttp import json, context, HTTPStatus, HTTPNotFound, validate
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
@@ -13,6 +13,11 @@ class MemberController(ModelRestController):
     __model__ = Member
 
     @json(prevent_empty_form=True)
+    @validate(
+        ownershipToken=dict(
+            required='727 Token Not In Form',
+        )
+    )
     @title_validator
     @password_validator
     @Member.expose

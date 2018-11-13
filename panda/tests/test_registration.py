@@ -1,6 +1,6 @@
 import time
 
-from bddrest.authoring import response, Update, when, status
+from bddrest.authoring import response, Update, when, status, Remove
 from nanohttp import settings
 
 from panda.models import Member
@@ -81,4 +81,16 @@ class TestRegisteration(LocalApplicationTestCase):
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'
+
+            when(
+                'Trying to pass without ownership token',
+                form=Remove('ownershipToken')
+            )
+            assert status == '727 Token Not In Form'
+
+            when('Trying to pass without title', form=Remove('title'))
+            assert status == '718 Title Not In Form'
+
+            when('Trying to pass without password', form=Remove('password'))
+            assert status == '728 Password Not In Form'
 
