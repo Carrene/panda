@@ -1,5 +1,6 @@
 from nanohttp import HTTPStatus
-from restfulpy.orm import DeclarativeBase, Field, relationship
+from restfulpy.orm import DeclarativeBase, Field, relationship, \
+    ModifiedMixin, TimestampMixin
 from sqlalchemy import Unicode, Integer, ForeignKey, Enum, JSON
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
     MagicAnalyzer, ContentTypeValidator
@@ -57,7 +58,7 @@ class Icon(Image):
     __prefix__ = 'icon'
 
 
-class Organization(DeclarativeBase):
+class Organization(ModifiedMixin, TimestampMixin, DeclarativeBase):
     __tablename__ = 'organization'
 
     id = Field(Integer, primary_key=True)
