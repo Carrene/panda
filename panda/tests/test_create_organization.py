@@ -1,4 +1,4 @@
-from bddrest.authoring import when, status, response, Remove, given
+from bddrest.authoring import when, status, response, given
 
 from panda.models import Member, Organization
 from panda.tests.helpers import LocalApplicationTestCase

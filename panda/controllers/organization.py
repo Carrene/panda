@@ -17,7 +17,7 @@ class OrganizationController(ModelRestController):
     @commit
     def create(self):
         organization = DBSession.query(Organization) \
-            .filter(Organization.title== context.form.get('title')) \
+            .filter(Organization.title == context.form.get('title')) \
             .one_or_none()
         if organization is not None:
             raise HTTPStatus('622 Organization Title Is Already Taken')

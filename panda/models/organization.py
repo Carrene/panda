@@ -1,3 +1,4 @@
+from nanohttp import HTTPStatus
 from restfulpy.orm import DeclarativeBase, Field, relationship
 from sqlalchemy import Unicode, Integer, ForeignKey, Enum, JSON
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
@@ -79,7 +80,7 @@ class Organization(DeclarativeBase):
 
     url = Field(
         Unicode(50),
-        pattern=r'^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)' \
+        pattern=r'^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)'
         r'?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$',
         pattern_description='Lorem ipsum dolor sit amet',
         min_length=1,
@@ -95,7 +96,7 @@ class Organization(DeclarativeBase):
 
     domain = Field(
         Unicode(50),
-        pattern=r'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}' \
+        pattern=r'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}'
         r'(:[0-9]{1,5})?(\/.*)?$',
         pattern_description='Lorem ipsum dolor sit amet',
         min_length=1,

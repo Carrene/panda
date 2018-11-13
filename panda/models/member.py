@@ -144,7 +144,7 @@ class Member(DeclarativeBase):
         'Organization',
         back_populates='members',
         secondary='organization_member',
-        protected=True
+        protected=True,
     )
 
 
