@@ -5,7 +5,7 @@ from nanohttp import settings
 from restfulpy.application import Application
 from sqlalchemy_media import StoreManager, FileSystemStore
 
-from . import basedata
+from . import basedata, mockup
 from .authentication import Authenticator
 from .cli.email import EmailLauncher
 from .controllers.root import Root
@@ -96,6 +96,9 @@ class Panda(Application):
 
     def insert_basedata(self, *args):
         basedata.insert()
+
+    def insert_mockup(self, *args):
+        mockup.insert()
 
     def register_cli_launchers(self, subparsers):
         EmailLauncher.register(subparsers)
