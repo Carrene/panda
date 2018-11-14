@@ -155,3 +155,8 @@ class Organization(ModifiedMixin, TimestampMixin, DeclarativeBase):
         else:
             self._icon = None
 
+    def to_dict(self):
+        organization = super().to_dict()
+        organization['icon'] = self.icon
+        return organization
+
