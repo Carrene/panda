@@ -81,8 +81,8 @@ class Organization(ModifiedMixin, TimestampMixin, DeclarativeBase):
 
     url = Field(
         Unicode(50),
-        pattern=r'^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www.)' \
-        r'+[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\.*)?$',
+        pattern=r'^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www.)+'
+            r'[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\.*)?$',
         pattern_description='Lorem ipsum dolor sit amet',
         min_length=1,
         max_length=50,
@@ -97,8 +97,8 @@ class Organization(ModifiedMixin, TimestampMixin, DeclarativeBase):
 
     domain = Field(
         Unicode(50),
-        pattern=r'^[^www.][a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]' \
-        r'{2,5}(:[0-9]{1,5})?$',
+        pattern=r'^[^www.][a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]'
+            r'{2,5}(:[0-9]{1,5})?$',
         pattern_description='Lorem ipsum dolor sit amet',
         min_length=1,
         max_length=50,
