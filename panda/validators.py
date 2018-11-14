@@ -15,7 +15,7 @@ ORGANIZATION_TITLE_PATTERN = \
     re.compile(r'^([0-9a-zA-Z]+-?[0-9a-zA-Z]*)*[\da-zA-Z]$')
 URL_PATTERN = re.compile(
     r'^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www.)+[a-z0-9]' \
-    r'+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$'
+    r'+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\.*)?$'
 )
 DOMAIN_PATTERN = re.compile(
     r'^[^www.][a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?$'

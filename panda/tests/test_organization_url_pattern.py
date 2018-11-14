@@ -15,7 +15,7 @@ def test_organization_url_pattern():
     assert not pattern.match('example.com')
     assert not pattern.match('http://.')
     assert not pattern.match('https://.com')
-    assert pattern.match('www.example.com/a')
-    assert pattern.match('http://www.example.com/a')
+    assert not pattern.match('www.example.com/a')
+    assert not pattern.match('http://www.example.com/a')
     assert not pattern.match('')
 
