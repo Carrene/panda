@@ -23,12 +23,12 @@ class ResetPasswordEmail(Email):
     template_filename = 'reset_password_email.mako'
 
 
-class JoinOrganizationEmail(Email):
+class InviteOrganizationEmail(Email):
     __mapper_args__ = {
-        'polymorphic_identity': 'join_organization_email'
+        'polymorphic_identity': 'invite_organization_email'
     }
 
-    template_filename = 'join_organization_email.mako'
+    template_filename = 'invite_organization_email.mako'
 
 
 class SMS(RestfulpyTask):  # pragma: no cover

@@ -85,11 +85,11 @@ class Panda(Application):
       file_system_dir: %(root_path)s/data/assets
       base_url: http://localhost:8080/assets
 
-    join_organization:
+    invite_organization:
       secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
       max_age: 2592000  # seconds
       algorithm: HS256
-      callback_url: <callback url>
+      callback_url: http://localhost:8080
    '''
 
     def __init__(self, application_name='panda', root=Root()):

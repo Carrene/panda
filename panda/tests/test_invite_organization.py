@@ -2,9 +2,9 @@ from bddrest.authoring import when, status, response, Update, Remove
 from restfulpy.messaging import create_messenger
 
 from panda.models import Member, Organization, OrganizationMember, \
-    JoinOrganizationEmail
+    InviteOrganizationEmail
 from panda.tests.helpers import LocalApplicationTestCase
-from panda.tokens import JoinOrganizationToken
+from panda.tokens import InviteOrganizationToken
 
 
 class TestApplication(LocalApplicationTestCase):
@@ -58,7 +58,7 @@ class TestApplication(LocalApplicationTestCase):
         self.login(email=self.member1.email, password='123456')
 
         with self.given(
-            f'The organization has successfully created',
+            f'Inviting to the organization has successfully created',
             f'/apiv1/organizations/id: {self.organization.id}',
             f'INVITE',
             form=dict(email=self.member3.email, role='member')
@@ -66,10 +66,10 @@ class TestApplication(LocalApplicationTestCase):
             assert status == 200
             assert response.json['title'] == self.organization.title
 
-            task = JoinOrganizationEmail.pop()
+            task = InviteOrganizationEmail.pop()
             task.do_(None)
             assert messenger.last_message['to'] == self.member3.email
-            token = JoinOrganizationToken.load(
+            token = InviteOrganizationToken.load(
                 messenger.last_message['body']['token']
             )
             assert token.role == 'member'

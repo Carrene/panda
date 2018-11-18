@@ -7,8 +7,8 @@ from sqlalchemy import exists, and_
 from sqlalchemy_media import store_manager
 
 from ..models import Member, Organization, OrganizationMember, \
-    JoinOrganizationEmail
-from ..tokens import JoinOrganizationToken
+    InviteOrganizationEmail
+from ..tokens import InviteOrganizationToken
 from ..validators import organization_create_validator, \
     organization_title_validator, organization_domain_validator, \
     organization_url_validator, email_validator, organization_role_validator
@@ -118,7 +118,7 @@ class OrganizationController(ModelRestController):
         if is_already_join:
             raise HTTPStatus('623 Already In This Organization')
 
-        token = JoinOrganizationToken(dict(
+        token = InviteOrganizationToken(dict(
             email=email,
             organization_id=id,
             member_id=member.id,
@@ -126,12 +126,12 @@ class OrganizationController(ModelRestController):
             role=context.form.get('role'),
         ))
         DBSession.add(
-            JoinOrganizationEmail(
+            InviteOrganizationEmail(
                 to=email,
                 subject='Invite to organization',
                 body={
                     'token': token.dump(),
-                    'callback_url': settings.join_organization.callback_url
+                    'callback_url': settings.invite_organization.callback_url
                 }
             )
         )
