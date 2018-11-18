@@ -82,7 +82,7 @@ class Panda(Application):
         max_age: 86400
 
     storage:
-      file_system_dir: %(root_path)s/data/assets
+      local_directory: %(root_path)s/data/assets
       base_url: http://localhost:8080/assets
 
     organization_invitation:
@@ -115,7 +115,7 @@ class Panda(Application):
             'fs',
             functools.partial(
                 FileSystemStore,
-                settings.storage.file_system_dir,
+                settings.storage.local_directory,
                 base_url=settings.storage.base_url,
             ),
             default=True
