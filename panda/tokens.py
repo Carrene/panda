@@ -66,3 +66,41 @@ class PhoneNumberActivationToken(BaseJwtPrincipal):
     def member_id(self):
         return self.payload.get('memberId')
 
+
+class JoinOrganizationToken(BaseJwtPrincipal):
+
+    @classmethod
+    def load(cls, token):
+        try:
+            return super().load(token)
+
+        except itsdangerous.SignatureExpired:
+            raise HTTPStatus('609 Token Expired')
+
+        except itsdangerous.BadSignature:
+            raise HTTPStatus('611 Malformed Token')
+
+    @classmethod
+    def get_config(cls):
+        return settings.join_organization
+
+    @property
+    def email(self):
+        return self.payload.get('email')
+
+    @property
+    def organization_id(self):
+        return self.payload.get('organization_id')
+
+    @property
+    def member_id(self):
+        return self.payload.get('member_id')
+
+    @property
+    def owner_id(self):
+        return self.payload.get('owner_id')
+
+    @property
+    def role(self):
+        return self.payload.get('role')
+
