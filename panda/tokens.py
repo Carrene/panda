@@ -67,7 +67,7 @@ class PhoneNumberActivationToken(BaseJwtPrincipal):
         return self.payload.get('memberId')
 
 
-class InviteOrganizationToken(BaseJwtPrincipal):
+class OrganizationInvitationToken(BaseJwtPrincipal):
 
     @classmethod
     def load(cls, token):
@@ -82,7 +82,7 @@ class InviteOrganizationToken(BaseJwtPrincipal):
 
     @classmethod
     def get_config(cls):
-        return settings.invite_organization
+        return settings.organization_invitation
 
     @property
     def email(self):

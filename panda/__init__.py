@@ -85,7 +85,7 @@ class Panda(Application):
       file_system_dir: %(root_path)s/data/assets
       base_url: http://localhost:8080/assets
 
-    invite_organization:
+    organization_invitation:
       secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
       max_age: 2592000  # seconds
       algorithm: HS256

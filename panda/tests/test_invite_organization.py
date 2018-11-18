@@ -2,9 +2,9 @@ from bddrest.authoring import when, status, response, Update, Remove
 from restfulpy.messaging import create_messenger
 
 from panda.models import Member, Organization, OrganizationMember, \
-    InviteOrganizationEmail
+   OrganizationInvitationEmail
 from panda.tests.helpers import LocalApplicationTestCase
-from panda.tokens import InviteOrganizationToken
+from panda.tokens import OrganizationInvitationToken
 
 
 class TestApplication(LocalApplicationTestCase):
@@ -66,10 +66,10 @@ class TestApplication(LocalApplicationTestCase):
             assert status == 200
             assert response.json['title'] == self.organization.title
 
-            task = InviteOrganizationEmail.pop()
+            task = OrganizationInvitationEmail.pop()
             task.do_(None)
             assert messenger.last_message['to'] == self.member3.email
-            token = InviteOrganizationToken.load(
+            token = OrganizationInvitationToken.load(
                 messenger.last_message['body']['token']
             )
             assert token.role == 'member'

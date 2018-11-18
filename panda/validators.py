@@ -39,7 +39,7 @@ def application_redirect_uri_value_validation(redirectUri, container, field):
     return redirectUri
 
 
-def organization_role_value_validation(role, container, field):
+def organization_value_of_role_validator(role, container, field):
     if context.form.get('role') not in roles:
         raise HTTPStatus('724 Invalid Role Value')
 
@@ -144,7 +144,7 @@ organization_url_validator = validate(
 organization_role_validator= validate(
     role=dict(
         required='723 Role Not In Form',
-        callback=organization_role_value_validation,
+        callback=organization_value_of_role_validator,
     ),
 )
 

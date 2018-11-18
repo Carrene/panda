@@ -7,8 +7,8 @@ from sqlalchemy import exists, and_
 from sqlalchemy_media import store_manager
 
 from ..models import Member, Organization, OrganizationMember, \
-    InviteOrganizationEmail
-from ..tokens import InviteOrganizationToken
+   OrganizationInvitationEmail
+from ..tokens import OrganizationInvitationToken
 from ..validators import organization_create_validator, \
     organization_title_validator, organization_domain_validator, \
     organization_url_validator, email_validator, organization_role_validator
@@ -102,8 +102,8 @@ class OrganizationController(ModelRestController):
         if member is None:
             raise HTTPNotFound()
 
-        organization_member = DBSession.query(OrganizationMember). \
-            filter(
+        organization_member = DBSession.query(OrganizationMember) \
+            .filter(
                 OrganizationMember.organization_id == id,
                 OrganizationMember.member_id == context.identity.reference_id
             ) \
@@ -111,14 +111,14 @@ class OrganizationController(ModelRestController):
         if organization_member is None or organization_member.role != 'owner':
             raise HTTPForbidden()
 
-        is_already_join = DBSession.query(exists().where(and_(
+        is_member_in_organization = DBSession.query(exists().where(and_(
             OrganizationMember.organization_id == id,
             OrganizationMember.member_id == member.id
         ))).scalar()
-        if is_already_join:
+        if is_member_in_organization:
             raise HTTPStatus('623 Already In This Organization')
 
-        token = InviteOrganizationToken(dict(
+        token = OrganizationInvitationToken(dict(
             email=email,
             organizationId=id,
             memberId=member.id,
@@ -126,12 +126,12 @@ class OrganizationController(ModelRestController):
             role=context.form.get('role'),
         ))
         DBSession.add(
-            InviteOrganizationEmail(
+            OrganizationInvitationEmail(
                 to=email,
                 subject='Invite to organization',
                 body={
                     'token': token.dump(),
-                    'callback_url': settings.invite_organization.callback_url
+                    'callback_url': settings.organization_invitation.callback_url
                 }
             )
         )
