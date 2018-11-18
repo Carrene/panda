@@ -1,5 +1,5 @@
 from nanohttp import settings
-from restfulpy.messaging import Email, create_messenger
+from restfulpy.messaging import Email
 from restfulpy.orm import Field
 from restfulpy.taskqueue import RestfulpyTask
 from restfulpy.utils import construct_class_by_name
@@ -21,6 +21,14 @@ class ResetPasswordEmail(Email):
     }
 
     template_filename = 'reset_password_email.mako'
+
+
+class OrganizationInvitationEmail(Email):
+    __mapper_args__ = {
+        'polymorphic_identity': 'organization_invitation_email'
+    }
+
+    template_filename = 'organization_invitation_email.mako'
 
 
 class SMS(RestfulpyTask):  # pragma: no cover

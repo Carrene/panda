@@ -2,6 +2,8 @@ import re
 
 from nanohttp import validate, HTTPStatus, context
 
+from .models.organization import roles
+
 
 USER_EMAIL_PATTERN = \
     re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
@@ -37,6 +39,14 @@ def application_redirect_uri_value_validation(redirectUri, container, field):
     return redirectUri
 
 
+def organization_value_of_role_validator(role, container, field):
+    if context.form.get('role') not in roles:
+        raise HTTPStatus('724 Invalid Role Value')
+
+    return role
+
+
+# FIXME Using relevant the exception message
 email_validator = validate(
     email=dict(
         required='701 Invalid Email Format',
@@ -127,6 +137,14 @@ organization_domain_validator = validate(
 organization_url_validator = validate(
     url=dict(
         pattern=(URL_PATTERN, '725 Invalid URL Format'),
+    ),
+)
+
+
+organization_role_validator= validate(
+    role=dict(
+        required='723 Role Not In Form',
+        callback=organization_value_of_role_validator,
     ),
 )
 
