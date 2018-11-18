@@ -90,15 +90,15 @@ class InviteOrganizationToken(BaseJwtPrincipal):
 
     @property
     def organization_id(self):
-        return self.payload.get('organization_id')
+        return self.payload.get('organizationId')
 
     @property
     def member_id(self):
-        return self.payload.get('member_id')
+        return self.payload.get('memberId')
 
     @property
     def owner_id(self):
-        return self.payload.get('owner_id')
+        return self.payload.get('ownerId')
 
     @property
     def role(self):

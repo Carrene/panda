@@ -120,9 +120,9 @@ class OrganizationController(ModelRestController):
 
         token = InviteOrganizationToken(dict(
             email=email,
-            organization_id=id,
-            member_id=member.id,
-            owner_id=context.identity.reference_id,
+            organizationId=id,
+            memberId=member.id,
+            ownerId=context.identity.reference_id,
             role=context.form.get('role'),
         ))
         DBSession.add(
