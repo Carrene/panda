@@ -1,5 +1,5 @@
 from nanohttp import settings
-from restfulpy.messaging import Email, create_messenger
+from restfulpy.messaging import Email
 from restfulpy.orm import Field
 from restfulpy.taskqueue import RestfulpyTask
 from restfulpy.utils import construct_class_by_name
