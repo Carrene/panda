@@ -26,14 +26,13 @@ class Panda(Application):
       secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
       max_age: 3600  # seconds
       algorithm: HS256
-      callback_url: http://nc.carrene.com/reset_password
-      # url: http://localhost:8080/reset_password
+      callback_url: http://localhost:8083
 
     registeration:
       secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
       max_age: 86400  # seconds
       algorithm: HS256
-      callback_url: http://nightly.cas.carrene.com/signup
+      callback_url: http://localhost:8083
 
     messaging:
       default_messenger: restfulpy.messaging.SmtpProvider
@@ -89,7 +88,7 @@ class Panda(Application):
       secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
       max_age: 2592000  # seconds
       algorithm: HS256
-      callback_url: http://localhost:8080
+      callback_url: http://localhost:8083
    '''
 
     def __init__(self, application_name='panda', root=Root()):

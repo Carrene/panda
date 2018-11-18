@@ -1,6 +1,8 @@
 import itsdangerous
-from nanohttp import settings, HTTPStatus
+from nanohttp import settings
 from restfulpy.principal import BaseJwtPrincipal
+
+from .exceptions import HTTPTokenExpired, HTTPMalformedToken
 
 
 class RegisterationToken(BaseJwtPrincipal):
@@ -9,10 +11,12 @@ class RegisterationToken(BaseJwtPrincipal):
     def load(cls, token):
         try:
             return super().load(token)
+
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus('609 Token Expired')
+            raise HTTPTokenExpired()
+
         except itsdangerous.BadSignature:
-            raise HTTPStatus('611 Malformed Token')
+            raise HTTPMalformedToken()
 
     @classmethod
     def get_config(cls):
@@ -29,10 +33,12 @@ class ResetPasswordToken(BaseJwtPrincipal):
     def load(cls, token):
         try:
             return super().load(token)
+
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus('609 Token Expired')
+            raise HTTPTokenExpired()
+
         except itsdangerous.BadSignature:
-            raise HTTPStatus('611 Malformed Token')
+            raise HTTPMalformedToken()
 
     @classmethod
     def get_config(cls):
@@ -49,10 +55,12 @@ class PhoneNumberActivationToken(BaseJwtPrincipal):
     def load(cls, token):
         try:
             return super().load(token)
+
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus('609 Token Expired')
+            raise HTTPTokenExpired()
+
         except itsdangerous.BadSignature:
-            raise HTTPStatus('611 Malformed Token')
+            raise HTTPMalformedToken()
 
     @classmethod
     def get_config(cls):
@@ -75,10 +83,10 @@ class OrganizationInvitationToken(BaseJwtPrincipal):
             return super().load(token)
 
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus('609 Token Expired')
+            raise HTTPTokenExpired()
 
         except itsdangerous.BadSignature:
-            raise HTTPStatus('611 Malformed Token')
+            raise HTTPMalformedToken()
 
     @classmethod
     def get_config(cls):

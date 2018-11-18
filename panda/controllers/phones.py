@@ -3,6 +3,8 @@ from nanohttp import context, json, RestController, HTTPStatus, validate, \
 from restfulpy.authorization import authorize
 from restfulpy.orm import commit, DBSession
 
+from ..exceptions import HTTPPhoneNumberAlreadyExists, \
+    HTTPActivationCodeNotValid
 from ..models import Member
 from ..tokens import PhoneNumberActivationToken
 from ..validators import phone_number_validator
@@ -24,7 +26,7 @@ class PhoneNumberActivationTokenController(RestController):
             .filter(Member.phone == phone) \
             .one_or_none()
         if member is not None:
-            raise HTTPStatus('616 Phone Number Already Exists')
+            raise HTTPPhoneNumberAlreadyExists()
 
         DBSession.add(Member.create_otp(phone, context.identity.reference_id))
         token = PhoneNumberActivationToken(dict(
@@ -53,7 +55,7 @@ class PhoneNumberController(RestController):
             context.form.get('activationCode')
         )
         if result is False:
-            raise HTTPStatus('617 Activation Code Is Not Valid')
+            raise HTTPActivationCodeNotValid()
 
         if context.identity.reference_id != activation_token_principal.member_id:
             raise HTTPForbidden()
@@ -62,7 +64,7 @@ class PhoneNumberController(RestController):
             .filter(Member.phone == activation_token_principal.phone_number) \
             .one_or_none()
         if member is not None:
-            raise HTTPStatus('616 Phone Number Already Exists')
+            raise HTTPPhoneNumberAlreadyExists()
 
         current_member = Member.current()
         if current_member.phone is not None:

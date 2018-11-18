@@ -1,11 +1,12 @@
-from nanohttp import context, json, HTTPStatus, HTTPNotFound, HTTPForbidden, \
-    settings
+from nanohttp import context, json, HTTPNotFound, HTTPForbidden, settings
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import commit, DBSession
 from sqlalchemy import exists, and_
 from sqlalchemy_media import store_manager
 
+from ..exceptions import HTTPOrganizationTitleAlreadyTaken, \
+    HTTPAlreadyInThisOrganization
 from ..models import Member, Organization, OrganizationMember, \
    OrganizationInvitationEmail
 from ..tokens import OrganizationInvitationToken
@@ -27,7 +28,7 @@ class OrganizationController(ModelRestController):
             .filter(Organization.title == context.form.get('title')) \
             .one_or_none()
         if organization is not None:
-            raise HTTPStatus('622 Organization Title Is Already Taken')
+            raise HTTPOrganizationTitleAlreadyTaken()
 
         member = Member.current()
         organization = Organization(
@@ -73,7 +74,7 @@ class OrganizationController(ModelRestController):
                 .query(exists().where(Organization.title == title)) \
                 .scalar()
             if is_title_already_exist:
-                raise HTTPStatus('622 Organization Title Is Already Taken')
+                raise HTTPOrganizationTitleAlreadyTaken()
 
         organization.update_from_request()
         return organization
@@ -116,7 +117,7 @@ class OrganizationController(ModelRestController):
             OrganizationMember.member_id == member.id
         ))).scalar()
         if is_member_in_organization:
-            raise HTTPStatus('623 Already In This Organization')
+            raise HTTPAlreadyInThisOrganization()
 
         token = OrganizationInvitationToken(dict(
             email=email,

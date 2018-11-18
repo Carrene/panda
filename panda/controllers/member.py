@@ -1,9 +1,11 @@
-from nanohttp import json, context, HTTPStatus, HTTPNotFound, validate
+from nanohttp import json, context, HTTPNotFound, validate
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 from sqlalchemy_media import store_manager
 
+from ..exceptions import HTTPEmailAddressAlreadyRegistered, \
+    HTTPTitleAlreadyRegistered
 from ..models import Member
 from ..tokens import RegisterationToken
 from ..validators import title_validator, password_validator, member_validator
@@ -30,10 +32,10 @@ class MemberController(ModelRestController):
         email = regiteration_token_principal.email
 
         if DBSession.query(Member.title).filter(Member.title == title).count():
-            raise HTTPStatus('604 Title Is Already Registered')
+            raise HTTPTitleAlreadyRegistered()
 
         if DBSession.query(Member.email).filter(Member.email == email).count():
-            raise HTTPStatus('601 Email Address Is Already Registered')
+            raise HTTPEmailAddressAlreadyRegistered()
 
         member = Member(
             email=email,
