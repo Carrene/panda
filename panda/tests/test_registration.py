@@ -5,7 +5,7 @@ from nanohttp import settings
 
 from panda.models import Member
 from panda.tests.helpers import LocalApplicationTestCase
-from panda.tokens import RegisterationToken
+from panda.tokens import RegistrationToken
 
 
 class TestRegisteration(LocalApplicationTestCase):
@@ -26,7 +26,7 @@ class TestRegisteration(LocalApplicationTestCase):
         email = 'user@example.com'
         title = 'nickname'
         password = '123abdABD'
-        registeration_token = RegisterationToken(dict(email=email)).dump()
+        registration_token = RegistrationToken(dict(email=email)).dump()
 
         with self.given(
             'Register a member',
@@ -35,7 +35,7 @@ class TestRegisteration(LocalApplicationTestCase):
             form=dict(
                 title=title,
                 password=password,
-                ownershipToken=registeration_token
+                ownershipToken=registration_token
             )
         ):
             assert status == 200
@@ -70,12 +70,12 @@ class TestRegisteration(LocalApplicationTestCase):
             )
             assert status == '611 Malformed Token'
 
-            settings.registeration.max_age = 0.3
-            registeration_token = RegisterationToken(dict(email=email)).dump()
+            settings.registration.max_age = 0.3
+            registration_token = RegistrationToken(dict(email=email)).dump()
             time.sleep(1)
             when(
                 'The token is expired',
-                form=Update(ownershipToken=registeration_token)
+                form=Update(ownershipToken=registration_token)
             )
             assert status == '609 Token Expired'
 

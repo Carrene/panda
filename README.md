@@ -25,14 +25,9 @@ Setting up development Environment on Linux
     $ cd /path/to/workspace
     $ git clone git@github.com:Carrene/panda.git
     $ cd panda
-    $ pip install -r requirements.txt
+    $ pip install -r requirements-dev.txt
     $ pip install -e .
  
-### For development
-    
-    $ cd path/to/panda
-    $ pip install -r requirements-dev.txt
-
 ### Enabling the bash auto completion for panda
 
     $ panda autocompletion install   
@@ -63,7 +58,7 @@ smtp:
 
 #### Remove old abd create a new database **TAKE CARE ABOUT USING THAT**
 
-    $ panda db create --drop --mockup
+    $ panda db create --drop --basedata --mockup
 
 And or
 

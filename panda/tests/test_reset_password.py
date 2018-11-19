@@ -75,7 +75,7 @@ class TestResetPassword(LocalApplicationTestCase):
                 'Request without email parametes',
                 form=given - 'email' + dict(a='a')
             )
-            assert status == '701 Invalid Email Format'
+            assert status == '722 Email Not In Form'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

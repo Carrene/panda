@@ -106,7 +106,7 @@ class TestApplication(LocalApplicationTestCase):
                 'Trying to pass without email parameter in form',
                 form=Remove('email')
             )
-            assert status == '701 Invalid Email Format'
+            assert status == '722 Email Not In Form'
 
             when(
                 'The role format is invalid',

@@ -5,16 +5,16 @@ from nanohttp import validate, HTTPStatus, context
 from .models.organization import roles
 
 
-USER_EMAIL_PATTERN = \
-    re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
 USER_TITLE_PATTERN = re.compile(r'^[a-zA-Z][\w]{5,19}$')
-
-# Password be to have numbers, uppercase, and lowercase
 USER_PASSWORD_PATTERN = re.compile(r'(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
 PHONE_PATTERN = re.compile(r'^[+]{0,1}[\d+]{7,15}$')
 NAME_PATTERN = re.compile(r'^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$')
-ORGANIZATION_TITLE_PATTERN = \
-    re.compile(r'^([0-9a-zA-Z]+-?[0-9a-zA-Z]*)*[\da-zA-Z]$')
+USER_EMAIL_PATTERN = re.compile(
+    r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
+)
+ORGANIZATION_TITLE_PATTERN = re.compile(
+    r'^([0-9a-zA-Z]+-?[0-9a-zA-Z]*)*[\da-zA-Z]$'
+)
 URL_PATTERN = re.compile(
     r'^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www.)+[a-z0-9]'
     r'+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\.*)?$'
@@ -46,10 +46,9 @@ def organization_value_of_role_validator(role, container, field):
     return role
 
 
-# FIXME Using relevant the exception message
 email_validator = validate(
     email=dict(
-        required='701 Invalid Email Format',
+        required='722 Email Not In Form',
         pattern=(USER_EMAIL_PATTERN, '701 Invalid Email Format')
     )
 )

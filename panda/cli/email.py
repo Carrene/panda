@@ -2,7 +2,7 @@ from nanohttp import settings
 from restfulpy.cli import Launcher, RequireSubCommand
 
 from ..models import RegisterEmail
-from ..tokens import RegisterationToken
+from ..tokens import RegistrationToken
 
 
 class SendEmailLauncher(Launcher):  # pragma: no cover
@@ -19,14 +19,14 @@ class SendEmailLauncher(Launcher):  # pragma: no cover
         return parser
 
     def launch(self):
-        token = RegisterationToken(dict(email=self.args.email))
+        token = RegistrationToken(dict(email=self.args.email))
         email = RegisterEmail(
                 to=self.args.email,
                 subject='Register your CAS account',
                 body={
-                    'registeration_token': token.dump(),
-                    'registeration_callback_url':
-                    settings.registeration.callback_url
+                    'registration_token': token.dump(),
+                    'registration_callback_url':
+                        settings.registeration.callback_url
                 }
         )
         email.to = self.args.email

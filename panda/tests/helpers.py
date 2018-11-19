@@ -4,7 +4,7 @@ from restfulpy.testing import ApplicableTestCase
 from restfulpy.orm.metadata import FieldInfo
 
 from panda import Panda, cryptohelpers
-from panda.models import Application, Member
+from panda.models import Application, Member, Organization
 
 
 HERE = path.abspath(path.dirname(__file__))
@@ -18,6 +18,7 @@ scopes=FieldInfo(type_=str, required=True, not_none=True).to_json()
 state=FieldInfo(type_=str, required=False, not_none=False).to_json()
 redirect_uri=FieldInfo(type_=str, required=False, not_none=False).to_json()
 email=FieldInfo(type_=str, required=True, not_none=True).to_json()
+title=FieldInfo(type_=str, required=True, not_none=True).to_json()
 password=FieldInfo(type_=str, required=True, not_none=True).to_json()
 activation_code=FieldInfo(type_=str, required=True, not_none=True).to_json()
 activation_token=FieldInfo(type_=str, required=True, not_none=True).to_json()
@@ -25,6 +26,7 @@ new_password=FieldInfo(type_=str, required=True, not_none=True).to_json()
 password=FieldInfo(type_=str, required=True, not_none=True).to_json()
 current_password=FieldInfo(type_=str, required=True, not_none=True).to_json()
 phone_number=FieldInfo(type_=str, required=True, not_none=True).to_json()
+role=FieldInfo(type_=str, required=True, not_none=True).to_json()
 reset_password_token=FieldInfo(type_=str, required=True, not_none=True) \
     .to_json()
 
@@ -32,6 +34,7 @@ reset_password_token=FieldInfo(type_=str, required=True, not_none=True) \
 application_fields = Application.json_metadata()['fields']
 reset_password_tokens_fields = dict(email=email)
 email_fields = dict(email=email)
+title_fields = dict(title=title)
 tokens_fields = dict(email=email, password=password)
 access_token_fields = dict(
     code=code,
@@ -55,6 +58,11 @@ password_fields = dict(
     password=password,
     resetPasswordToken=reset_password_token
 )
+organization_fields = dict(
+    email=email,
+    role=role,
+    title=title,
+)
 
 
 class LocalApplicationTestCase(ApplicableTestCase):
@@ -71,6 +79,9 @@ class LocalApplicationTestCase(ApplicableTestCase):
         r'^/apiv1/emails.*': email_fields,
         r'^/apiv1/tokens.*': tokens_fields,
         r'^/apiv1/phonenumber.*': phone_number_fields,
+        r'^/apiv1/availabilities/email.*': email_fields,
+        r'^/apiv1/availabilities/nickname.*': title_fields,
+        r'^/apiv1/organizations.*': organization_fields,
     }
 
     def login(self, email, password, url='/apiv1/tokens', verb='CREATE'):

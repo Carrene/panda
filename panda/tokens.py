@@ -5,7 +5,7 @@ from restfulpy.principal import BaseJwtPrincipal
 from .exceptions import HTTPTokenExpired, HTTPMalformedToken
 
 
-class RegisterationToken(BaseJwtPrincipal):
+class RegistrationToken(BaseJwtPrincipal):
 
     @classmethod
     def load(cls, token):
@@ -20,7 +20,7 @@ class RegisterationToken(BaseJwtPrincipal):
 
     @classmethod
     def get_config(cls):
-        return settings.registeration
+        return settings.registration
 
     @property
     def email(self):

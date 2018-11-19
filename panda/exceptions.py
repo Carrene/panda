@@ -9,8 +9,12 @@ class HTTPMalformedToken(HTTPKnownStatus):
     status = '611 Malformed Token'
 
 
-class HTTPBlankTitle(HTTPKnownStatus):
-    status = '712 Title Is Blank'
+class HTTPMalformedAccessToken(HTTPKnownStatus):
+    status = '610 Malformed Access Token'
+
+
+class HTTPMalformedAuthorizationCode(HTTPKnownStatus):
+    status = '607 Malformed Authorization Code'
 
 
 class HTTPInvalidTitleFormat(HTTPKnownStatus):
@@ -25,32 +29,12 @@ class HTTPInvalidRoleValue(HTTPKnownStatus):
     status = 'Invalid Role Value'
 
 
-class HTTPInvalidEmailFormat(HTTPKnownStatus):
-    status = '701 Invalid Email Format'
-
-
-class HTTPTitleNotInForm(HTTPKnownStatus):
-    status = '718 Title Not In Form'
-
-
-class HTTPPasswordNotInForm(HTTPKnownStatus):
-    status =  '728 Password Not In Form'
-
-
-class HTTPInvalidPasswordLength(HTTPKnownStatus):
-    status = '702 Invalid Password Length'
-
-
 class HTTPPasswordNotComplexEnough(HTTPKnownStatus):
     status = '703 Password Not Complex Enough'
 
 
 class HTTPInvalidPhoneNumber(HTTPKnownStatus):
     status = '713 Invalid Phone Number'
-
-
-class HTTPInvalidNameFormat(HTTPKnownStatus):
-    status = '716 Invalid Name Format'
 
 
 class HTTPEmailAddressAlreadyRegistered(HTTPKnownStatus):
@@ -85,7 +69,18 @@ class HTTPIncorrectEmailOrPassword(HTTPKnownStatus):
     status = '603 Incorrect Email Or Password'
 
 
+class HTTPSecondPhoneNumber(HTTPKnownStatus):
+    status = '615 Member Has The Phone Number'
 
 
+class HTTPMalformedSecret(HTTPKnownStatus):
+    status = '608 Malformed Secret'
 
+
+class HTTPUnRecognizedApplication(HTTPKnownStatus):
+    status = '605 We Don\'t Recognize This Application'
+
+
+class HTTPInvalidScope(HTTPKnownStatus):
+    status = '606 Invalid Scope'
 

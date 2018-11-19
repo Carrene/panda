@@ -40,7 +40,14 @@ class OrganizationController(ModelRestController):
 
     @authorize
     @store_manager(DBSession)
-    @json(prevent_empty_form=True)
+    @json(
+        form_whitelist=(
+            ['title', 'url', 'domain', 'icon'],
+            '717 Invalid field, only the title, url, domain and icon ' \
+            'parameters are accepted'
+        ),
+        prevent_empty_form=True,
+    )
     @organization_title_validator
     @organization_url_validator
     @organization_domain_validator
