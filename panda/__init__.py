@@ -35,7 +35,7 @@ class Panda(Application):
       callback_url: http://localhost:8083
 
     messaging:
-      default_messenger: restfulpy.messaging.SmtpProvider
+      default_messenger: restfulpy.messaging.ConsoleMessenger
       template_dirs:
         - %(root_path)s/panda/email_templates
 
