@@ -4,7 +4,7 @@ from restfulpy.messaging import create_messenger
 
 from panda.models import RegisterEmail, Member
 from panda.tests.helpers import LocalApplicationTestCase
-from panda.tokens import RegisterationToken
+from panda.tokens import RegistrationToken
 
 
 class TestEmail(LocalApplicationTestCase):
@@ -12,6 +12,7 @@ class TestEmail(LocalApplicationTestCase):
       messaging:
         default_messenger: restfulpy.mockup.MockupMessenger
     '''
+
     @classmethod
     def mockup(cls):
         member = Member(
@@ -43,12 +44,12 @@ class TestEmail(LocalApplicationTestCase):
             task.do_(None)
 
             assert messenger.last_message['to'] == email
-            token = messenger.last_message['body']['registeration_token']
-            registration_token = RegisterationToken.load(token)
+            token = messenger.last_message['body']['registration_token']
+            registration_token = RegistrationToken.load(token)
             assert registration_token.payload['email'] == email
             assert registration_token.payload['a'] == '1'
-            assert settings.registeration.callback_url == \
-                messenger.last_message['body']['registeration_callback_url']
+            assert settings.registration.callback_url == \
+                messenger.last_message['body']['registration_callback_url']
             assert messenger.last_message['subject'] == \
                 'Register your CAS account'
 
@@ -77,7 +78,7 @@ class TestEmail(LocalApplicationTestCase):
                 'Request without email parametes',
                 form=given - 'email' + dict(a='a')
             )
-            assert status == '701 Invalid Email Format'
+            assert status == '722 Email Not In Form'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

@@ -48,7 +48,7 @@ class TestAvailabilities(LocalApplicationTestCase):
             assert status == '601 Email Address Is Already Registered'
 
             when('Request without email parametes', form=Remove('email'))
-            assert status == '701 Invalid Email Format'
+            assert status == '722 Email Not In Form'
 
     def test_title_availabilities(self):
         title = 'nickname_example'

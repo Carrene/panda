@@ -26,17 +26,16 @@ class Panda(Application):
       secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
       max_age: 3600  # seconds
       algorithm: HS256
-      callback_url: http://nc.carrene.com/reset_password
-      # url: http://localhost:8080/reset_password
+      callback_url: http://localhost:8083
 
-    registeration:
+    registration:
       secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
       max_age: 86400  # seconds
       algorithm: HS256
-      callback_url: http://nightly.cas.carrene.com/signup
+      callback_url: http://localhost:8083
 
     messaging:
-      default_messenger: restfulpy.messaging.SmtpProvider
+      default_messenger: restfulpy.messaging.ConsoleMessenger
       template_dirs:
         - %(root_path)s/panda/email_templates
 
@@ -82,14 +81,14 @@ class Panda(Application):
         max_age: 86400
 
     storage:
-      file_system_dir: %(root_path)s/data/assets
-      base_url: http://localhost:8080/assets
+      local_directory: %(root_path)s/data/assets
+      base_url: http://localhost:8083/assets
 
     organization_invitation:
       secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
       max_age: 2592000  # seconds
       algorithm: HS256
-      callback_url: http://localhost:8080
+      callback_url: http://localhost:8083
    '''
 
     def __init__(self, application_name='panda', root=Root()):
@@ -115,7 +114,7 @@ class Panda(Application):
             'fs',
             functools.partial(
                 FileSystemStore,
-                settings.storage.file_system_dir,
+                settings.storage.local_directory,
                 base_url=settings.storage.base_url,
             ),
             default=True

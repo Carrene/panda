@@ -1,12 +1,13 @@
 import hashlib
 
-from nanohttp import json, context, HTTPStatus, HTTPNotFound
+from nanohttp import json, context, HTTPNotFound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
 from sqlalchemy_media import store_manager
 
 from .. import cryptohelpers
+from ..exceptions import HTTPInvalidTitleFormat, HTTPBlankRedirectURI
 from ..models import Application, ApplicationMember
 from ..validators import application_validator
 
@@ -23,10 +24,10 @@ class ApplicationController(ModelRestController):
         redirect_uri = context.form.get('redirectUri')
 
         if not title or title.isspace():
-            raise HTTPStatus('705 Invalid Title Format')
+            raise HTTPInvalidTitleFormat()
 
         if not redirect_uri or redirect_uri.isspace():
-            raise HTTPStatus('706 Redirect URI Is Blank')
+            raise HTTPBlankRedirectURI()
 
         application = Application(
             title=title,

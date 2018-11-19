@@ -2,6 +2,9 @@ import itsdangerous
 from nanohttp import settings, HTTPStatus
 from restfulpy.principal import BaseJwtPrincipal
 
+from ..exceptions import HTTPTokenExpired, HTTPMalformedAccessToken, \
+    HTTPMalformedAuthorizationCode
+
 
 class AuthorizationCode(BaseJwtPrincipal):
 
@@ -9,10 +12,12 @@ class AuthorizationCode(BaseJwtPrincipal):
     def load(cls, token):
         try:
             return super().load(token)
+
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus('609 Token Expired')
+            raise HTTPTokenExpired()
+
         except itsdangerous.BadSignature:
-            raise HTTPStatus('607 Malformed Authorization Code')
+            raise HTTPMalformedAuthorizationCode()
 
     @classmethod
     def get_config(cls):
@@ -45,10 +50,12 @@ class AccessToken(BaseJwtPrincipal):
     def load(cls, token):
         try:
             return super().load(token)
+
         except itsdangerous.SignatureExpired:
-            raise HTTPStatus('609 Token Expired')
+            raise HTTPTokenExpired()
+
         except itsdangerous.BadSignature:
-            raise HTTPStatus('610 Malformed Access Token')
+            raise HTTPMalformedAccessToken()
 
     @classmethod
     def get_config(cls):

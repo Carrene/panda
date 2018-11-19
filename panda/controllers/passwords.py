@@ -1,8 +1,9 @@
-from nanohttp import json, context, HTTPStatus, settings
+from nanohttp import json, context, settings
 from restfulpy.authorization import authorize
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
 
+from ..exceptions import HTTPInvalidCurrentPassword
 from ..models import Member, ResetPasswordEmail
 from ..tokens import ResetPasswordToken
 from ..validators import password_validator, new_password_validator, \
@@ -35,7 +36,7 @@ class PasswordController(RestController):
 
         if current_password is None or \
                 not member.validate_password(current_password):
-            raise HTTPStatus('602 Invalid Current Password')
+            raise HTTPInvalidCurrentPassword()
 
         member.password = new_password
         return {}
@@ -62,7 +63,7 @@ class ResetPasswordTokenController(RestController):
                 body={
                     'reset_password_token': token.dump(),
                     'reset_password_callback_url':
-                    settings.reset_password.callback_url
+                        settings.reset_password.callback_url
                 }
             )
         )

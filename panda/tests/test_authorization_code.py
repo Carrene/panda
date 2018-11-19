@@ -102,7 +102,7 @@ class TestAuthorizationCode(LocalApplicationTestCase):
                 'Trying to pass without clint_id parameter',
                 query=Remove('applicationId')
             )
-            assert status == '605 We Don\'t Recognize This Application'
+            assert status == '729 Application Id Not In Query'
 
             # Related to the scope tests
             when(

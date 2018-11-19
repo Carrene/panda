@@ -1,8 +1,9 @@
-from nanohttp import json, context, HTTPStatus, validate
+from nanohttp import json, context, validate
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
 from .. import AccessToken, AuthorizationCode
+from ...exceptions import HTTPUnRecognizedApplication, HTTPMalformedSecret
 from ...models import Application, ApplicationMember
 
 
@@ -21,10 +22,10 @@ class AccessTokenController(RestController):
             .filter(Application.id == context.form.get('applicationId')) \
             .one_or_none()
         if not application:
-            raise HTTPStatus('605 We Don\'t Recognize This Application')
+            raise HTTPUnRecognizedApplication()
 
         if not application.validate_secret(context.form.get('secret')):
-            raise HTTPStatus('608 Malformed Secret')
+            raise HTTPMalformedSecret()
 
         application_member = DBSession.query(ApplicationMember) \
             .filter(
@@ -39,7 +40,7 @@ class AccessTokenController(RestController):
                 member_id=authorization_code.member_id
             )
             DBSession.add(application_member)
-            DBSession.commit()
+            DBSession.flush()
 
         access_token_payload = dict(
             applicationId=application.id,

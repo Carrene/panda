@@ -6,6 +6,7 @@ from restfulpy.orm import DBSession
 from .. import AuthorizationCode
 from ...models import Application
 from ..scopes import SCOPES
+from ...exceptions import HTTPUnRecognizedApplication, HTTPInvalidScope
 
 
 class AuthorizationCodeController(RestController):
@@ -14,7 +15,8 @@ class AuthorizationCodeController(RestController):
     @authorize
     @validate(
         applicationId=dict(
-            required='605 We Don\'t Recognize This Application'
+            type_=(str, '605 We Don\'t Recognize This Application'),
+            required='729 Application Id Not In Query',
         ),
         scopes=dict(required='606 Invalid Scope')
     )
@@ -24,13 +26,13 @@ class AuthorizationCodeController(RestController):
 
         for s in scopes:
             if s not in SCOPES:
-                raise HTTPStatus('606 Invalid Scope')
+                raise HTTPInvalidScope()
 
         application = DBSession.query(Application) \
             .filter(Application.id == context.query.get('applicationId')) \
             .one_or_none()
         if not application:
-            raise HTTPStatus('605 We Don\'t Recognize This Application')
+            raise HTTPUnRecognizedApplication()
 
         redirect_uri = context.query.get('redirectUri')\
             if context.query.get('redirectUri') else application.redirect_uri

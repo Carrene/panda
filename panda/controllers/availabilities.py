@@ -1,7 +1,9 @@
-from nanohttp import json, context, HTTPStatus, HTTPNotFound
+from nanohttp import json, context, HTTPNotFound
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession
 
+from ..exceptions import HTTPEmailAddressAlreadyRegistered, \
+    HTTPTitleAlreadyRegistered
 from ..models import Member
 from ..validators import email_validator, title_validator
 
@@ -20,12 +22,12 @@ class AvailabilityController(RestController):
     @email_validator
     def email_validation(self, email):
         if DBSession.query(Member.email).filter(Member.email == email).count():
-            raise HTTPStatus('601 Email Address Is Already Registered')
+            raise HTTPEmailAddressAlreadyRegistered()
         return {}
 
     @title_validator
     def title_validation(self, title):
         if DBSession.query(Member.title).filter(Member.title == title).count():
-            raise HTTPStatus('604 Title Is Already Registered')
+            raise HTTPTitleAlreadyRegistered()
         return {}
 

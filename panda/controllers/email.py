@@ -1,9 +1,10 @@
-from nanohttp import json, context, settings, HTTPStatus
+from nanohttp import json, context, settings
 from restfulpy.controllers import RestController
 from restfulpy.orm import DBSession, commit
 
+from ..exceptions import HTTPEmailAddressAlreadyRegistered
 from ..models import Member, RegisterEmail
-from ..tokens import RegisterationToken
+from ..tokens import RegistrationToken
 from ..validators import email_validator
 
 
@@ -16,19 +17,19 @@ class EmailController(RestController):
         email = context.form.get('email')
 
         if DBSession.query(Member.email).filter(Member.email == email).count():
-            raise HTTPStatus('601 Email Address Is Already Registered')
+            raise HTTPEmailAddressAlreadyRegistered()
 
         payload = context.query
         payload['email'] = email
-        token = RegisterationToken(payload)
+        token = RegistrationToken(payload)
         DBSession.add(
             RegisterEmail(
                 to=email,
                 subject='Register your CAS account',
                 body={
-                    'registeration_token': token.dump(),
-                    'registeration_callback_url':
-                    settings.registeration.callback_url
+                    'registration_token': token.dump(),
+                    'registration_callback_url':
+                         settings.registration.callback_url
                 }
             )
         )
