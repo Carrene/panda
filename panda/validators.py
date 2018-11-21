@@ -140,10 +140,17 @@ organization_url_validator = validate(
 )
 
 
-organization_role_validator= validate(
+organization_role_validator = validate(
     role=dict(
         required='723 Role Not In Form',
         callback=organization_value_of_role_validator,
     ),
+)
+
+
+token_validator = validate(
+    token=dict(
+        required='727 Token Not In Form',
+    )
 )
 
