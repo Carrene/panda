@@ -151,6 +151,6 @@ organization_role_validator = validate(
 token_validator = validate(
     token=dict(
         required='727 Token Not In Form',
-    )
+    ),
 )
 
