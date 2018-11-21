@@ -157,10 +157,13 @@ class OrganizationController(ModelRestController):
         if organization is None:
             raise HTTPNotFound()
 
-        is_member_in_organization = DBSession.query(exists().where(and_(
-            OrganizationMember.organization_id == token.organization_id,
-            OrganizationMember.member_id == token.member_id
-        ))).scalar()
+        is_member_in_organization = DBSession.query(
+            exists() \
+            .where(
+                OrganizationMember.organization_id == token.organization_id
+            ) \
+            .where(OrganizationMember.member_id == token.member_id)
+        ).scalar()
         if is_member_in_organization:
             raise HTTPAlreadyInThisOrganization()
 

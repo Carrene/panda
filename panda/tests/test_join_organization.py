@@ -3,7 +3,7 @@ import time
 from bddrest.authoring import when, status, response, Update, given
 from nanohttp import settings
 
-from panda.models import Member, Organization, OrganizationMember
+from panda.models import Member, Organization
 from panda.tests.helpers import LocalApplicationTestCase
 from panda.tokens import OrganizationInvitationToken
 
@@ -12,7 +12,7 @@ class TestApplication(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
-        cls.session = cls.create_session(expire_on_commit=True)
+        session = cls.create_session(expire_on_commit=True)
         cls.member1 = Member(
             email='user1@example.com',
             title='user1',
@@ -25,14 +25,14 @@ class TestApplication(LocalApplicationTestCase):
             password='123456',
             role='member'
         )
-        cls.session.add(cls.member2)
+        session.add(cls.member2)
 
         cls.organization = Organization(
             title='organization-title',
             members=[cls.member1],
         )
-        cls.session.add(cls.organization)
-        cls.session.commit()
+        session.add(cls.organization)
+        session.commit()
 
     def test_join_organization(self):
         self.login(email=self.member2.email, password='123456')
@@ -53,14 +53,6 @@ class TestApplication(LocalApplicationTestCase):
         ):
             assert status == 200
             assert response.json['title'] == self.organization.title
-
-            organization_member = self.session.query(OrganizationMember) \
-                .filter(
-                    OrganizationMember.organization_id == self.organization.id,
-                    OrganizationMember.member_id == self.member2.id
-                ) \
-                .one_or_none()
-            assert organization_member.role == 'member'
 
             when('Trying again for join to the organization')
             assert status == '623 Already In This Organization'
