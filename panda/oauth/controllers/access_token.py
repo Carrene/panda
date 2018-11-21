@@ -1,6 +1,6 @@
 from nanohttp import json, context, validate
 from restfulpy.controllers import RestController
-from restfulpy.orm import DBSession
+from restfulpy.orm import DBSession, commit
 
 from .. import AccessToken, AuthorizationCode
 from ...exceptions import HTTPUnRecognizedApplication, HTTPMalformedSecret
@@ -15,6 +15,7 @@ class AccessTokenController(RestController):
         secret=dict(required='710 Secret Not In Form'),
         code=dict(required='709 Code Not In Form')
     )
+    @commit
     def create(self):
         authorization_code = AuthorizationCode.load(context.form.get('code'))
 
@@ -40,7 +41,6 @@ class AccessTokenController(RestController):
                 member_id=authorization_code.member_id
             )
             DBSession.add(application_member)
-            DBSession.flush()
 
         access_token_payload = dict(
             applicationId=application.id,
