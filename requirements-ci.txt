@@ -1,5 +1,4 @@
 -r requirements-private.txt
-git+https://github.com/Carrene/restfulpy@master
 coverage
 coveralls
 pytest-cov
