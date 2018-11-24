@@ -154,3 +154,10 @@ token_validator = validate(
     ),
 )
 
+
+reset_password_token_validator = validate(
+    resetPasswordToken=dict(
+        required='730 Reset Password Token Not In Form',
+    ),
+)
+

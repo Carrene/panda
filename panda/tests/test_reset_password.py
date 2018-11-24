@@ -119,6 +119,12 @@ class TestResetPassword(LocalApplicationTestCase):
             assert status == '728 Password Not In Form'
 
             when(
+                'Trying to pass without reset password token in request',
+                form=Remove('resetPasswordToken')
+            )
+            assert status == '730 Reset Password Token Not In Form'
+
+            when(
                 'The token has been damaged',
                 form=Update(resetPasswordToken='token')
             )

@@ -7,20 +7,20 @@ from ..exceptions import HTTPInvalidCurrentPassword
 from ..models import Member, ResetPasswordEmail
 from ..tokens import ResetPasswordToken
 from ..validators import password_validator, new_password_validator, \
-    email_validator
+    email_validator, reset_password_token_validator
 
 
 class PasswordController(RestController):
 
     @json(prevent_empty_form=True)
     @password_validator
+    @reset_password_token_validator
     @commit
     def reset(self):
-        reset_password_principal = \
-            ResetPasswordToken.load(context.form.get('resetPasswordToken'))
+        token = ResetPasswordToken.load(context.form.get('resetPasswordToken'))
 
         member = DBSession.query(Member) \
-            .filter(Member.email == reset_password_principal.email) \
+            .filter(Member.email == token.email) \
             .one()
         member.password = context.form.get('password')
         return {}
