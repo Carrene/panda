@@ -8,14 +8,14 @@ from sqlalchemy_media import store_manager
 from ..exceptions import HTTPOrganizationTitleAlreadyTaken, \
     HTTPAlreadyInThisOrganization
 from ..models import Member, Organization, OrganizationMember, \
-   OrganizationInvitationEmail, AbstractOrganizationMember
+   OrganizationInvitationEmail, AbstractMamad
 from ..tokens import OrganizationInvitationToken
 from ..validators import token_validator, organization_create_validator, \
     organization_title_validator, organization_domain_validator, \
     organization_url_validator, email_validator, organization_role_validator
 
 
-OrganizationMember = AbstractOrganizationMember.create_mapped_class()
+Mamad, q = AbstractMamad.create_mapped_class()
 
 
 class OrganizationController(ModelRestController):
@@ -193,5 +193,6 @@ class OrganizationMemberController(ModelRestController):
     @json
     def list(self):
         import pudb; pudb.set_trace()  # XXX BREAKPOINT
-        query = DBSession.query(OrganizationMember).all()
+        query = DBSession.query(Mamad)
+        result = query.all()
         return query

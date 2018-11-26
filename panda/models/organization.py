@@ -19,11 +19,11 @@ roles = [
 class OrganizationMember(DeclarativeBase):
     __tablename__ = 'organization_member'
 
-    member_id = Field(Integer, ForeignKey('member.id'), primary_key=True)
+    id = Field(Integer, primary_key=True)
+    member_id = Field(Integer, ForeignKey('member.id'))
     organization_id = Field(
         Integer,
-        ForeignKey('organization.id'),
-        primary_key=True
+        ForeignKey('organization.id')
     )
     role = Field(
         Enum(*roles, name='roles'),
