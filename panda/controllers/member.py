@@ -54,7 +54,7 @@ class MemberController(ModelRestController):
     @json
     @Member.expose
     def get(self, id):
-        id = context.identity.id if id == 'me' else id
+        id = context.identity.reference_id if id == 'me' else id
         try:
             id = int(id)
         except (ValueError, TypeError):
