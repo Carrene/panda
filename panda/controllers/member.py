@@ -64,7 +64,7 @@ class MemberController(ModelRestController):
         if not member:
             raise HTTPNotFound()
 
-        if member.id != context.identity.id:
+        if member.id != context.identity.reference_id:
             context.identity.assert_roles('admin')
 
         return member
