@@ -54,7 +54,7 @@ class MemberController(ModelRestController):
     @json
     @Member.expose
     def get(self, id):
-        id = context.identity.id if id == 'me' else id
+        id = context.identity.reference_id if id == 'me' else id
         try:
             id = int(id)
         except (ValueError, TypeError):
@@ -64,7 +64,7 @@ class MemberController(ModelRestController):
         if not member:
             raise HTTPNotFound()
 
-        if member.id != context.identity.id:
+        if member.id != context.identity.reference_id:
             context.identity.assert_roles('admin')
 
         return member

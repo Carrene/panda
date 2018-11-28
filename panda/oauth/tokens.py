@@ -78,6 +78,10 @@ class AccessToken(BaseJwtPrincipal):
         return self.payload.get('memberId')
 
     @property
+    def reference_id(self):
+        return self.payload.get('memberId')
+
+    @property
     def session_id(self):
         return self.payload.get('sessionId')
 
