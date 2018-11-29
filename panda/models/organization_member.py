@@ -44,18 +44,8 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin, \
 
         query = select([
             Organization.id,
-            func.array_agg(func.json_build_object(
-                'id',
-                owner_cte.c.id,
-                'title',
-                owner_cte.c.title,
-            )).label('owners'),
-            func.array_agg(func.json_build_object(
-                'id',
-                member_cte.c.id,
-                'title',
-                member_cte.c.title
-            )).label('members'),
+            func.array_agg(func.json_build_object('id', owner_cte.c.id, 'title', owner_cte.c.title)).label('owners'),
+            func.array_agg(func.json_build_object('id', member_cte.c.id, 'title', member_cte.c.title)).label('members'),
         ]).select_from(Organization.__table__.outerjoin(
             member_cte,
             member_cte.c.organization_id == Organization.id
@@ -73,7 +63,6 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin, \
         return OrganizationMemberView
 
     def to_dict(self):
-        import pudb; pudb.set_trace()  # XXX BREAKPOINT
         view = super().to_dict()
         view['members'] = [x for x in view['members'] if x['id'] != None]
         view['owners'] = [x for x in view['owners'] if x['id'] != None]
