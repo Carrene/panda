@@ -19,11 +19,11 @@ roles = [
 class OrganizationMember(DeclarativeBase):
     __tablename__ = 'organization_member'
 
-    id = Field(Integer, primary_key=True)
-    member_id = Field(Integer, ForeignKey('member.id'))
+    member_id = Field(Integer, ForeignKey('member.id'), primary_key=True)
     organization_id = Field(
         Integer,
-        ForeignKey('organization.id')
+        ForeignKey('organization.id'),
+        primary_key=True
     )
     role = Field(
         Enum(*roles, name='roles'),
@@ -126,8 +126,20 @@ class Organization(ModifiedMixin, TimestampMixin, DeclarativeBase):
         secondary='organization_member',
         lazy='selectin',
         back_populates='organizations',
-        protected=True
+        protected=False,
+#        primaryjoin='and_(Organization.id == OrganizationMember.organization_id'
+#            ', OrganizationMember.role == "member")'
     )
+
+#    owners = relationship(
+#        'Member',
+#        secondary='organization_member',
+#        lazy='selectin',
+#        back_populates='organizations',
+#        protected=True,
+#        primaryjoin='and_(Organization.id == OrganizationMember.organization_id'
+#            ', OrganizationMember.role == "owner")'
+#    )
 
     @property
     def icon(self):

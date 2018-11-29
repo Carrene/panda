@@ -71,5 +71,7 @@ class TestApplication(LocalApplicationTestCase):
             '/apiv1/organizationmembers',
             'LIST',
         ):
+            import pudb; pudb.set_trace()  # XXX BREAKPOINT
             assert status == 200
+            a = response.json
 
