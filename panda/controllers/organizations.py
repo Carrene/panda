@@ -7,15 +7,11 @@ from sqlalchemy_media import store_manager
 
 from ..exceptions import HTTPOrganizationTitleAlreadyTaken, \
     HTTPAlreadyInThisOrganization
-from ..models import Member, Organization, OrganizationMember, \
-   OrganizationInvitationEmail, AbstractOrganizationMemberView
+from ..models import Member, Organization, OrganizationMember, OrganizationInvitationEmail
 from ..tokens import OrganizationInvitationToken
 from ..validators import token_validator, organization_create_validator, \
     organization_title_validator, organization_domain_validator, \
     organization_url_validator, email_validator, organization_role_validator
-
-
-OrganizationMemberView = AbstractOrganizationMemberView.create_mapped_class()
 
 
 class OrganizationController(ModelRestController):
@@ -186,15 +182,19 @@ class OrganizationController(ModelRestController):
         return organization
 
 
-class OrganizationMemberController(ModelRestController):
-    __model__ = OrganizationMemberView
+class MyOrganizationController(ModelRestController):
+    __model__ = Organization
 
     @authorize
     @store_manager(DBSession)
     @json(prevent_form=True)
-    @OrganizationMemberView.expose
+    @Organization.expose
     @commit
     def list(self):
-        query = DBSession.query(OrganizationMemberView)
+        query = DBSession.query(Organization) \
+            .join(
+                OrganizationMember,
+                OrganizationMember.member_id == context.identity.reference_id
+            )
         return query
 

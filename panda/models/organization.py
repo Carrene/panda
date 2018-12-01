@@ -1,6 +1,7 @@
 from nanohttp import HTTPStatus
 from restfulpy.orm import DeclarativeBase, Field, relationship, \
-    ModifiedMixin, TimestampMixin
+    ModifiedMixin, TimestampMixin, FilteringMixin, OrderingMixin, \
+    PaginationMixin
 from sqlalchemy import Unicode, Integer, ForeignKey, Enum, JSON
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
     MagicAnalyzer, ContentTypeValidator
@@ -57,7 +58,8 @@ class Icon(Image):
     __prefix__ = 'icon'
 
 
-class Organization(ModifiedMixin, TimestampMixin, DeclarativeBase):
+class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
+                   ModifiedMixin, TimestampMixin, DeclarativeBase):
     __tablename__ = 'organization'
 
     id = Field(Integer, primary_key=True)
@@ -126,20 +128,8 @@ class Organization(ModifiedMixin, TimestampMixin, DeclarativeBase):
         secondary='organization_member',
         lazy='selectin',
         back_populates='organizations',
-        protected=False,
-#        primaryjoin='and_(Organization.id == OrganizationMember.organization_id'
-#            ', OrganizationMember.role == "member")'
+        protected=True,
     )
-
-#    owners = relationship(
-#        'Member',
-#        secondary='organization_member',
-#        lazy='selectin',
-#        back_populates='organizations',
-#        protected=True,
-#        primaryjoin='and_(Organization.id == OrganizationMember.organization_id'
-#            ', OrganizationMember.role == "owner")'
-#    )
 
     @property
     def icon(self):
