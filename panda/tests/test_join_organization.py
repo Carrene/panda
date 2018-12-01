@@ -3,7 +3,7 @@ import time
 from bddrest.authoring import when, status, response, Update, given
 from nanohttp import settings
 
-from panda.models import Member, Organization
+from panda.models import Member, Organization, OrganizationMember
 from panda.tests.helpers import LocalApplicationTestCase
 from panda.tokens import OrganizationInvitationToken
 
@@ -19,6 +19,8 @@ class TestApplication(LocalApplicationTestCase):
             password='123456',
             role='member'
         )
+        session.add(cls.member1)
+
         cls.member2 = Member(
             email='user2@example.com',
             title='user2',
@@ -29,9 +31,16 @@ class TestApplication(LocalApplicationTestCase):
 
         cls.organization = Organization(
             title='organization-title',
-            members=[cls.member1],
         )
         session.add(cls.organization)
+        session.flush()
+
+        organization_member = OrganizationMember(
+            organization_id=cls.organization.id,
+            member_id=cls.member1.id,
+            role='owner'
+        )
+        session.add(organization_member)
         session.commit()
 
     def test_join_organization(self):

@@ -22,6 +22,8 @@ class TestApplication(LocalApplicationTestCase):
             password='123456',
             role='member'
         )
+        session.add(cls.member1)
+
         cls.member2 = Member(
             email='user2@example.com',
             title='user2',
@@ -40,17 +42,23 @@ class TestApplication(LocalApplicationTestCase):
 
         cls.organization = Organization(
             title='organization-title',
-            members=[cls.member1],
         )
         session.add(cls.organization)
         session.flush()
 
-        organization_member = OrganizationMember(
+        organization_member1 = OrganizationMember(
+            organization_id=cls.organization.id,
+            member_id=cls.member1.id,
+            role='owner'
+        )
+        session.add(organization_member1)
+
+        organization_member2 = OrganizationMember(
             organization_id=cls.organization.id,
             member_id=cls.member2.id,
             role='member'
         )
-        session.add(organization_member)
+        session.add(organization_member2)
         session.commit()
 
     def test_invite_organization(self):

@@ -33,9 +33,16 @@ class OrganizationController(ModelRestController):
         member = Member.current()
         organization = Organization(
             title=context.form.get('title'),
-            members=[member],
         )
         DBSession.add(organization)
+        DBSession.flush()
+
+        organization_member = OrganizationMember(
+            organization_id=organization.id,
+            member_id=member.id,
+            role='owner',
+        )
+        DBSession.add(organization_member)
         return organization
 
     @authorize
