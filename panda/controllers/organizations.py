@@ -190,7 +190,6 @@ class OrganizationController(ModelRestController):
         except (ValueError, TypeError):
             raise HTTPNotFound()
 
-        organization_cte = 1
         organization = DBSession.query(Organization) \
            .filter(Organization.id == id) \
            .join(
