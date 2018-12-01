@@ -1,6 +1,6 @@
 from bddrest.authoring import when, status, response, given
 
-from panda.models import Member, Organization
+from panda.models import Member, Organization, OrganizationMember
 from panda.tests.helpers import LocalApplicationTestCase
 
 
@@ -15,12 +15,20 @@ class TestApplication(LocalApplicationTestCase):
             password='123abcABC',
             role='member'
         )
+        session.add(member)
 
         organization = Organization(
             title='organization-title',
-            members=[member],
         )
         session.add(organization)
+        session.flush()
+
+        organization_member = OrganizationMember(
+            organization_id=organization.id,
+            member_id=member.id,
+            role='owner',
+        )
+        session.add(organization_member)
         session.commit()
 
     def test_create_organization(self):

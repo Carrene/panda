@@ -32,6 +32,7 @@ class TestOrganization(LocalApplicationTestCase):
             password='123456',
             role='member'
         )
+        session.add(member1)
 
         cls.member2 = Member(
             email='user2@example.com',
@@ -51,23 +52,36 @@ class TestOrganization(LocalApplicationTestCase):
 
         cls.organization1 = Organization(
             title='organization1',
-            members=[member1],
         )
         session.add(cls.organization1)
         session.flush()
 
+        organization_member1 = OrganizationMember(
+            organization_id=cls.organization1.id,
+            member_id=member1.id,
+            role='owner',
+        )
+        session.add(organization_member1)
+
         organization2 = Organization(
             title='organization2',
-            members=[member1],
         )
         session.add(organization2)
+        session.flush()
 
-        organization_member = OrganizationMember(
+        organization_member2 = OrganizationMember(
+            organization_id=organization2.id,
+            member_id=member1.id,
+            role='owner',
+        )
+        session.add(organization_member2)
+
+        organization_member3 = OrganizationMember(
             member_id=cls.member2.id,
             organization_id=cls.organization1.id,
             role='member',
         )
-        session.add(organization_member)
+        session.add(organization_member3)
         session.commit()
 
     def test_update_organization(self):

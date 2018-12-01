@@ -32,7 +32,6 @@ class OrganizationMember(DeclarativeBase):
         watermark='Choose a roles',
         not_none=True,
         required=True,
-        default='owner'
     )
 
 
