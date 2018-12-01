@@ -181,6 +181,29 @@ class OrganizationController(ModelRestController):
         DBSession.add(organization_member)
         return organization
 
+    @authorize
+    @store_manager(DBSession)
+    @json(prevent_form='707 Form Not Allowed')
+    def get(self, id):
+        try:
+            id = int(id)
+        except (ValueError, TypeError):
+            raise HTTPNotFound()
+
+        organization_cte = 1
+        organization = DBSession.query(Organization) \
+           .filter(Organization.id == id) \
+           .join(
+               OrganizationMember,
+               OrganizationMember.member_id == context.identity.reference_id
+           ) \
+           .one_or_none()
+
+        if organization is None:
+            raise HTTPNotFound()
+
+        return organization
+
 
 class MyOrganizationController(ModelRestController):
     __model__ = Organization
