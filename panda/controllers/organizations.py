@@ -7,8 +7,7 @@ from sqlalchemy_media import store_manager
 
 from ..exceptions import HTTPOrganizationTitleAlreadyTaken, \
     HTTPAlreadyInThisOrganization
-from ..models import Member, Organization, OrganizationMember, \
-   OrganizationInvitationEmail
+from ..models import Member, Organization, OrganizationMember, OrganizationInvitationEmail
 from ..tokens import OrganizationInvitationToken
 from ..validators import token_validator, organization_create_validator, \
     organization_title_validator, organization_domain_validator, \
@@ -181,4 +180,21 @@ class OrganizationController(ModelRestController):
         )
         DBSession.add(organization_member)
         return organization
+
+
+class MyOrganizationController(ModelRestController):
+    __model__ = Organization
+
+    @authorize
+    @store_manager(DBSession)
+    @json(prevent_form=True)
+    @Organization.expose
+    @commit
+    def list(self):
+        query = DBSession.query(Organization) \
+            .join(
+                OrganizationMember,
+                OrganizationMember.member_id == context.identity.reference_id
+            )
+        return query
 
