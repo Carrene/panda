@@ -17,12 +17,11 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin, \
     @classmethod
     def create_mapped_class(cls):
 
-        query = select([Organization]).select_from(Organization)
         owner_cte = select([
             Member.id,
             Member.title,
             OrganizationMember.organization_id,
-        ]).select_from(Member.__table__.outerjoin(
+        ]).select_from(Member.__table__.join(
             OrganizationMember,
             and_(
                 OrganizationMember.member_id == Member.id,
@@ -34,7 +33,7 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin, \
             Member.id,
             Member.title,
             OrganizationMember.organization_id,
-        ]).select_from(Member.__table__.outerjoin(
+        ]).select_from(Member.__table__.join(
             OrganizationMember,
             and_(
                 OrganizationMember.member_id == Member.id,
@@ -49,12 +48,10 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin, \
         ]).select_from(Organization.__table__.outerjoin(
             member_cte,
             member_cte.c.organization_id == Organization.id
-        ).join(
+        ).outerjoin(
             owner_cte,
             owner_cte.c.organization_id == Organization.id
-        )).group_by(
-            Organization.id
-        )
+        )).group_by(Organization.id)
 
         class OrganizationMemberView(cls):
             pass

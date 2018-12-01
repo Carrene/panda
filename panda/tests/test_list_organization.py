@@ -9,62 +9,83 @@ class TestApplication(LocalApplicationTestCase):
     @classmethod
     def mockup(cls):
         session = cls.create_session()
-        member = Member(
-            email='already.added@example.com',
-            title='username',
-            password='123abcABC',
+        owner1 = Member(
+            email='owner1@example.com',
+            title='owner1',
+            password='123456',
             role='member'
         )
-        session.add(member)
+        session.add(owner1)
+
+        owner2 = Member(
+            email='owner2@example.com',
+            title='owner2',
+            password='123456',
+            role='member'
+        )
+        session.add(owner2)
 
         member1 = Member(
-            email='already1.added@example.com',
-            title='username1',
-            password='123abcABC',
+            email='member1@example.com',
+            title='member1',
+            password='123456',
             role='member'
         )
         session.add(member1)
 
-        organization = Organization(
-            title='organization-title',
-            members=[member, member1],
+        member2 = Member(
+            email='member2@example.com',
+            title='member2',
+            password='123456',
+            role='member'
         )
-        session.add(organization)
+        session.add(member2)
 
         organization1 = Organization(
-            title='organization-title1',
-            members=[member],
+            title='organization-title-1',
+            members=[owner1, owner2],
         )
         session.add(organization1)
+
+        organization2 = Organization(
+            title='organization-title-2',
+            members=[owner1],
+        )
+        session.add(organization2)
         session.flush()
 
         organization_member1 = OrganizationMember(
             member_id = member1.id,
-            organization_id = organization1.id,
+            organization_id = organization2.id,
             role = 'member',
         )
         session.add(organization_member1)
 
-        organization2 = Organization(
-            title='organization-title2',
-            members=[member, member1],
-        )
-        session.add(organization2)
-
         organization3 = Organization(
-            title='organization-title3',
-            members=[member, member1],
+            title='organization-title-3',
+            members=[owner1, owner2],
         )
         session.add(organization3)
-        organization4 = Organization(
-            title='organization-title4',
-            members=[member],
+        session.flush()
+
+        organization_member2 = OrganizationMember(
+            member_id = member1.id,
+            organization_id = organization3.id,
+            role = 'member',
         )
-        session.add(organization4)
+        session.add(organization_member2)
+
+        organization_member3 = OrganizationMember(
+            member_id = member2.id,
+            organization_id = organization3.id,
+            role = 'member',
+        )
+        session.add(organization_member3)
+
         session.commit()
 
     def test_list_organization(self):
-        self.login(email='already.added@example.com', password='123abcABC')
+        self.login(email='owner1@example.com', password='123456')
 
         with self.given(
             'List of organization',
