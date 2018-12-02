@@ -32,9 +32,9 @@ class TestApplication(LocalApplicationTestCase):
         session.flush()
 
         organization_member1 = OrganizationMember(
-            member_id = owner1.id,
-            organization_id = cls.organization1.id,
-            role = 'owner',
+            member_id=owner1.id,
+            organization_id=cls.organization1.id,
+            role='owner',
         )
         session.add(organization_member1)
         session.commit()
@@ -44,7 +44,7 @@ class TestApplication(LocalApplicationTestCase):
 
         with self.given(
             f'Get one of my organization using id',
-            f'/apiv1/organizations/id:{self.organization1.id}',
+            f'/apiv1/organizations/id: {self.organization1.id}',
             f'GET',
         ):
             assert status == 200
