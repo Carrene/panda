@@ -133,7 +133,7 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
         protected=True,
     )
 
-    count_of_members = column_property(
+    members_count = column_property(
         select([func.count(OrganizationMember.member_id)])
         .select_from(OrganizationMember)
         .where(OrganizationMember.organization_id == id)
@@ -168,18 +168,21 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
     def to_dict(self):
         organization = super().to_dict()
         organization['icon'] = self.icon
-        organization['members'] = self.count_of_members
-        del organization['countOfMembers']
         return organization
 
     @classmethod
     def iter_metadata_fields(cls):
         yield from super().iter_metadata_fields()
         yield MetadataField(
-            'members',
-            'members',
-            label='Members',
+            'membersCount',
+            'membersCount',
+            label='Members count',
             required=False,
-            readonly=True
+            readonly=True,
+            protected=False,
+            type_=int,
+            watermark='',
+            example='10',
+            message='',
         )
 

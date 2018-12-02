@@ -53,7 +53,8 @@ class TestMember(LocalApplicationTestCase):
             assert fields['icon']['label'] is not None
             assert fields['icon']['required'] is not None
 
-            assert fields['members']['protected'] is not None
-            assert fields['members']['label'] is not None
-            assert fields['members']['required'] is not None
-
+            impCt pudb; pudb.set_trace()  # XXX BREAKPOINT
+            assert fields['membersCount']['protected'] is not None
+            assert fields['membersCount']['label'] is not None
+            assert fields['membersCount']['required'] is not None
+            assert fields['domain']['example'] is not None

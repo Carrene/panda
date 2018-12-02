@@ -203,10 +203,6 @@ class OrganizationController(ModelRestController):
 
         return organization
 
-
-class MyOrganizationController(ModelRestController):
-    __model__ = Organization
-
     @authorize
     @store_manager(DBSession)
     @json(prevent_form=True)

@@ -88,7 +88,7 @@ class TestApplication(LocalApplicationTestCase):
 
         with self.given(
             'List of organization',
-            '/apiv1/myorganizations',
+            '/apiv1/organizations',
             'LIST',
         ):
             assert status == 200
