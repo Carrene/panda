@@ -16,7 +16,7 @@ class TestMember(LocalApplicationTestCase):
             assert status == 200
 
             assert fields['title']['pattern'] is not None
-            assert fields['title']['pattern_description'] is not None
+            assert fields['title']['patternDescription'] is not None
             assert fields['title']['required'] is not None
             assert fields['title']['label'] is not None
             assert fields['title']['name'] is not None
@@ -24,10 +24,10 @@ class TestMember(LocalApplicationTestCase):
             assert fields['title']['watermark'] is not None
             assert fields['title']['minLength'] is not None
             assert fields['title']['maxLength'] is not None
-            assert fields['title']['not_none'] is not None
+            assert fields['title']['notNone'] is not None
 
             assert fields['url']['pattern'] is not None
-            assert fields['url']['pattern_description'] is not None
+            assert fields['url']['patternDescription'] is not None
             assert fields['url']['required'] is not None
             assert fields['url']['label'] is not None
             assert fields['url']['name'] is not None
@@ -35,10 +35,10 @@ class TestMember(LocalApplicationTestCase):
             assert fields['url']['watermark'] is not None
             assert fields['url']['minLength'] is not None
             assert fields['url']['maxLength'] is not None
-            assert fields['url']['not_none'] is not None
+            assert fields['url']['notNone'] is not None
 
             assert fields['domain']['pattern'] is not None
-            assert fields['domain']['pattern_description'] is not None
+            assert fields['domain']['patternDescription'] is not None
             assert fields['domain']['required'] is not None
             assert fields['domain']['label'] is not None
             assert fields['domain']['name'] is not None
@@ -46,10 +46,10 @@ class TestMember(LocalApplicationTestCase):
             assert fields['domain']['watermark'] is not None
             assert fields['domain']['minLength'] is not None
             assert fields['domain']['maxLength'] is not None
-            assert fields['domain']['not_none'] is not None
+            assert fields['domain']['notNone'] is not None
 
             assert fields['icon']['protected'] is not None
-            assert fields['icon']['not_none'] is not None
+            assert fields['icon']['notNone'] is not None
             assert fields['icon']['label'] is not None
             assert fields['icon']['required'] is not None
 
