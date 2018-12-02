@@ -43,7 +43,7 @@ class TestApplication(LocalApplicationTestCase):
         ):
             assert status == 200
             assert response.json['title'] == title
-            assert response.json['icon'] is None
+            assert response.json['logo'] is None
             assert response.json['url'] is None
             assert response.json['domain'] is None
             assert response.json['createdAt'] is not None
