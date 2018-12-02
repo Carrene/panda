@@ -5,6 +5,7 @@ from restfulpy.orm import commit, DBSession
 from sqlalchemy import exists, and_
 from sqlalchemy_media import store_manager
 
+from sqlalchemy import Integer, Unicode, select, and_, FLOAT, or_, ARRAY, func
 from ..exceptions import HTTPOrganizationTitleAlreadyTaken, \
     HTTPAlreadyInThisOrganization
 from ..models import Member, Organization, OrganizationMember, \
@@ -20,6 +21,29 @@ OrganizationMemberView = AbstractOrganizationMemberView.create_mapped_class()
 
 class OrganizationController(ModelRestController):
     __model__ = Organization
+
+    def __call__(self, *remaining_paths):
+        if len(remaining_paths) > 1 and remaining_paths[1] == 'members':
+            organization = self.get_organization(remaining_paths[0])
+            return OrganizationMemberController()(
+                remaining_paths[0],
+                *remaining_paths[2:]
+            )
+
+        return super().__call__(*remaining_paths)
+
+    def get_organization(self, id):
+        try:
+            id = int(id)
+
+        except (ValueError, TypeError):
+            raise HTTPNotFound()
+
+        organization = DBSession.query(Organization).get(id)
+        if organization is None:
+            raise HTTPNotFound()
+
+        return organization
 
     @authorize
     @json(prevent_empty_form=True)
@@ -222,19 +246,15 @@ class OrganizationController(ModelRestController):
 
 
 class OrganizationMemberController(ModelRestController):
+    __model__ = OrganizationMemberView
 
     @authorize
     @store_manager(DBSession)
     @json(prevent_form=True)
-    @Organization.expose
+    @OrganizationMemberView.expose
     @commit
     def list(self, id):
-        import pudb; pudb.set_trace()  # XXX BREAKPOINT
-        query = DBSession.query(OrganizationMemberView).all()
-#        members_cte = DBSession.query(
-#            OrganizationMember.role.label('organization_role'),
-#            Organization
-#        ).filter(Organization.id == id).all()
-        import pudb; pudb.set_trace()  # XXX BREAKPOINT
-        return members_cte
+        query = DBSession.query(OrganizationMemberView) \
+            .filter(OrganizationMemberView.organization_id == id)
+        return query
 

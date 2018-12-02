@@ -1,50 +1,41 @@
 from restfulpy.orm import Field, PaginationMixin, FilteringMixin, \
     OrderingMixin, BaseModel, ModifiedMixin, TimestampMixin, relationship, \
-    DBSession
+    DBSession, MetadataField
 from sqlalchemy import Integer, Unicode, select, and_, FLOAT, or_, ARRAY, func
 from sqlalchemy.orm import mapper
+from sqlalchemy.inspection import inspect
+from restfulpy.utils import to_camel_case
 
 from . import Organization, OrganizationMember, Member
 
 
-class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin, \
+class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin,
                                      FilteringMixin, BaseModel):
     __abstract__ = True
     __table_args__ = {'autoload': True}
 
-    id = Field('id', Integer, primary_key=True )
+    id = Field(Integer, primary_key=True)
+    email = Field(Unicode(100))
+    title = Field(Unicode(100))
+    name = Field(Unicode(20))
+    phone = Field(Unicode(16))
+    role = Field(Unicode(100))
+    avatar = Field(Unicode)
+    password = Field(Unicode(128))
+    organization_role = Field(Unicode)
+    organization_id = Field(Integer)
 
     @classmethod
     def create_mapped_class(cls):
 
-        owner_cte = select([
-            Member.id,
-            Member.title,
-            OrganizationMember.organization_id,
-        ]).select_from(Member.__table__.join(
-            OrganizationMember,
-            and_(
-                OrganizationMember.member_id == Member.id,
-                OrganizationMember.role == 'owner'
-            )
-        )).cte()
-
-        member_cte = select([
-            Member.id,
-            Member.title,
-            OrganizationMember.organization_id,
-        ]).select_from(Member.__table__.join(
-            OrganizationMember,
-            and_(
-                OrganizationMember.member_id == Member.id,
-                OrganizationMember.role == 'member'
-            )
-        )).cte()
-
         query = select([
-            func.array_agg(owner_cte.c.title).label('owners'),
-            func.array_agg(member_cte.c.title).label('members'),
-        ])
+            Member,
+            OrganizationMember.role.label('organization_role'),
+            OrganizationMember.organization_id,
+        ]).select_from(Member.__table__.join(
+            OrganizationMember,
+            OrganizationMember.member_id == Member.id
+        )).cte()
 
         class OrganizationMemberView(cls):
             pass
@@ -52,9 +43,37 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin, \
         mapper(OrganizationMemberView, query.alias())
         return OrganizationMemberView
 
+
     def to_dict(self):
         view = super().to_dict()
-#        view['members'] = [x for x in view['members'] if x['id'] != None]
-#        view['owners'] = [x for x in view['owners'] if x['id'] != None]
+        view['organizationRole'] = self.organization_role
         return view
+
+    @classmethod
+    def iter_columns(cls, relationships=True, synonyms=True, composites=True,
+                     use_inspection=False, hybrids=True):
+
+        for c in Member.iter_columns(
+            relationships=relationships,
+            synonyms=synonyms,
+            composites=composites,
+            use_inspection=use_inspection
+        ):
+
+            column = getattr(cls, c.key, None)
+            if hasattr(c, 'info'):
+                column.info.update(c.info)
+
+            yield column
+
+    @classmethod
+    def iter_metadata_fields(cls):
+        yield from super().iter_metadata_fields()
+        yield MetadataField(
+            'organization_role',
+            'organization_role',
+            label='Organization Role',
+            example='owner',
+            type_=str,
+        )
 
