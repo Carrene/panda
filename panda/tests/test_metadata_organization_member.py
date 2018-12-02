@@ -8,12 +8,13 @@ class TestMember(LocalApplicationTestCase):
     def test_metadata(self):
         with self.given(
             'Test metadata verb',
-            '/apiv1/organizations/members',
+            '/apiv1/organizations/1/members',
             'METADATA'
         ):
+            assert status == 200
+
             fields = response.json['fields']
 
-            assert status == 200
             assert fields['email']['pattern'] is not None
             assert fields['email']['pattern_description'] is not None
             assert fields['email']['not_none'] is not None

@@ -73,7 +73,12 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin,
             'organization_role',
             'organization_role',
             label='Organization Role',
-            example='owner',
+            example='lorem ipsum',
+            watermark='lorem ipsum',
+            message='lorem ipsum',
             type_=str,
+            required=Talse,
+            nullable=True,
+            not_none=False,
         )
 
