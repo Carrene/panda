@@ -2,7 +2,9 @@ from nanohttp import HTTPStatus
 from restfulpy.orm import DeclarativeBase, Field, relationship, \
     ModifiedMixin, TimestampMixin, FilteringMixin, OrderingMixin, \
     PaginationMixin
-from sqlalchemy import Unicode, Integer, ForeignKey, Enum, JSON
+from restfulpy.orm.metadata import MetadataField
+from sqlalchemy import Unicode, Integer, ForeignKey, Enum, JSON, select, func
+from sqlalchemy.orm import column_property
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
     MagicAnalyzer, ContentTypeValidator
 from sqlalchemy_media.constants import KB
@@ -131,6 +133,13 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
         protected=True,
     )
 
+    count_of_members = column_property(
+        select([func.count(OrganizationMember.member_id)])
+        .select_from(OrganizationMember)
+        .where(OrganizationMember.organization_id == id)
+        .correlate_except(OrganizationMember)
+    )
+
     @property
     def icon(self):
         return self._icon.locate() if self._icon else None
@@ -159,5 +168,18 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
     def to_dict(self):
         organization = super().to_dict()
         organization['icon'] = self.icon
+        organization['members'] = self.count_of_members
+        del organization['countOfMembers']
         return organization
+
+    @classmethod
+    def iter_metadata_fields(cls):
+        yield from super().iter_metadata_fields()
+        yield MetadataField(
+            'members',
+            'members',
+            label='Members',
+            required=False,
+            readonly=True
+        )
 
