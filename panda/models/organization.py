@@ -134,9 +134,9 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
     )
 
     count_of_members = column_property(
-        select([func.count(OrganizationMember.member_id)]) \
-        .select_from(OrganizationMember) \
-        .where(OrganizationMember.organization_id == id) \
+        select([func.count(OrganizationMember.member_id)])
+        .select_from(OrganizationMember)
+        .where(OrganizationMember.organization_id == id)
         .correlate_except(OrganizationMember)
     )
 
