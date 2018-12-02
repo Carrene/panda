@@ -48,8 +48,8 @@ class OrganizationController(ModelRestController):
     @store_manager(DBSession)
     @json(
         form_whitelist=(
-            ['title', 'url', 'domain', 'icon'],
-            '717 Invalid field, only the title, url, domain and icon ' \
+            ['title', 'url', 'domain', 'logo'],
+            '717 Invalid field, only the title, url, domain and logo ' \
             'parameters are accepted'
         ),
         prevent_empty_form=True,

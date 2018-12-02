@@ -48,13 +48,16 @@ class TestMember(LocalApplicationTestCase):
             assert fields['domain']['maxLength'] is not None
             assert fields['domain']['notNone'] is not None
 
-            assert fields['icon']['protected'] is not None
-            assert fields['icon']['notNone'] is not None
-            assert fields['icon']['label'] is not None
-            assert fields['icon']['required'] is not None
+            assert fields['logo']['protected'] is not None
+            assert fields['logo']['notNone'] is not None
+            assert fields['logo']['label'] is not None
+            assert fields['logo']['required'] is not None
 
-            impCt pudb; pudb.set_trace()  # XXX BREAKPOINT
             assert fields['membersCount']['protected'] is not None
             assert fields['membersCount']['label'] is not None
             assert fields['membersCount']['required'] is not None
-            assert fields['domain']['example'] is not None
+            assert fields['membersCount']['example'] is not None
+            assert fields['membersCount']['watermark'] is not None
+            assert fields['membersCount']['message'] is not None
+            assert fields['membersCount']['type'] is not None
+

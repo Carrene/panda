@@ -38,7 +38,7 @@ class OrganizationMember(DeclarativeBase):
     )
 
 
-class Icon(Image):
+class Logo(Image):
     __pre_processors__ = [
         MagicAnalyzer(),
         ContentTypeValidator([
@@ -57,7 +57,7 @@ class Icon(Image):
 
     __max_length__ = 50 * KB
     __min_length__ = 1 * KB
-    __prefix__ = 'icon'
+    __prefix__ = 'logo'
 
 
 class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
@@ -114,15 +114,15 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
         label='Domain',
     )
 
-    _icon = Field(
-        'icon',
-        Icon.as_mutable(JSON),
+    _logo = Field(
+        'logo',
+        Logo.as_mutable(JSON),
         nullable=True,
         not_none=False,
         required=False,
         label='Icon',
         protected=False,
-        json='icon',
+        json='logo',
     )
 
     members = relationship(
@@ -141,14 +141,14 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
     )
 
     @property
-    def icon(self):
-        return self._icon.locate() if self._icon else None
+    def logo(self):
+        return self._logo.locate() if self._logo else None
 
-    @icon.setter
-    def icon(self, value):
+    @logo.setter
+    def logo(self, value):
         if value is not None:
             try:
-                self._icon = Icon.create_from(value)
+                self._logo = Logo.create_from(value)
 
             except DimensionValidationError as e:
                 raise HTTPStatus(f'618 {e}')
@@ -163,11 +163,11 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
                 raise HTTPStatus(f'621 {e}')
 
         else:
-            self._icon = None
+            self._logo = None
 
     def to_dict(self):
         organization = super().to_dict()
-        organization['icon'] = self.icon
+        organization['logo'] = self.logo
         return organization
 
     @classmethod

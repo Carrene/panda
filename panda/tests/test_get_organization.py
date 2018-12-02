@@ -47,7 +47,6 @@ class TestApplication(LocalApplicationTestCase):
             f'/apiv1/organizations/id: {self.organization1.id}',
             f'GET',
         ):
-            import pudb; pudb.set_trace()  # XXX BREAKPOINT
             assert status == 200
             assert response.json['id'] == self.organization1.id
 

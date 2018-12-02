@@ -10,14 +10,14 @@ from panda.tests.helpers import LocalApplicationTestCase
 
 TEST_DIR = abspath(dirname(__file__))
 STUFF_DIR = join(TEST_DIR, 'stuff')
-VALID_ICON_PATH = join(STUFF_DIR, 'icon-150x150.jpg')
-INVALID_FORMAT_ICON_PATH = join(STUFF_DIR, 'test.pdf')
-INVALID_MAXIMUM_SIZE_ICON_PATH = join(STUFF_DIR, 'icon-550x550.jpg')
-INVALID_MINIMUM_SIZE_ICON_PATH = join(STUFF_DIR, 'icon-50x50.jpg')
-INVALID_RATIO_ICON_PATH = join(STUFF_DIR, 'icon-150x100.jpg')
-INVALID_MAXMIMUM_LENGTH_ICON_PATH = join(
+VALID_LOGO_PATH = join(STUFF_DIR, 'logo-150x150.jpg')
+INVALID_FORMAT_LOGO_PATH = join(STUFF_DIR, 'test.pdf')
+INVALID_MAXIMUM_SIZE_LOGO_PATH = join(STUFF_DIR, 'logo-550x550.jpg')
+INVALID_MINIMUM_SIZE_LOGO_PATH = join(STUFF_DIR, 'logo-50x50.jpg')
+INVALID_RATIO_LOGO_PATH = join(STUFF_DIR, 'logo-150x100.jpg')
+INVALID_MAXMIMUM_LENGTH_LOGO_PATH = join(
     STUFF_DIR,
-    'icon-maximum-length.jpg'
+    'logo-maximum-length.jpg'
 )
 
 
@@ -102,7 +102,7 @@ class TestOrganization(LocalApplicationTestCase):
         ):
             assert status == 200
             assert response.json['title'] == title
-            assert response.json['icon'] is None
+            assert response.json['logo'] is None
             assert response.json['url'] == url
             assert response.json['domain'] == domain
 
@@ -139,47 +139,47 @@ class TestOrganization(LocalApplicationTestCase):
             when('Trying to pass with empty multipart', multipart={})
             assert status == '400 Empty Form'
 
-            with open(VALID_ICON_PATH, 'rb') as f:
+            with open(VALID_LOGO_PATH, 'rb') as f:
                 when(
-                    'Updating the icon of organization',
-                    multipart=dict(icon=io.BytesIO(f.read()))
+                    'Updating the logo of organization',
+                    multipart=dict(logo=io.BytesIO(f.read()))
                 )
-                assert response.json['icon'].startswith(
+                assert response.json['logo'].startswith(
                     settings.storage.base_url
                 )
 
-            with open(INVALID_MAXIMUM_SIZE_ICON_PATH, 'rb') as f:
+            with open(INVALID_MAXIMUM_SIZE_LOGO_PATH, 'rb') as f:
                 when(
-                    'The icon size is exceeded the maximum size',
-                    multipart=dict(icon=io.BytesIO(f.read()))
+                    'The logo size is exceeded the maximum size',
+                    multipart=dict(logo=io.BytesIO(f.read()))
                 )
                 assert status == 618
 
-            with open(INVALID_MINIMUM_SIZE_ICON_PATH, 'rb') as f:
+            with open(INVALID_MINIMUM_SIZE_LOGO_PATH, 'rb') as f:
                 when(
-                    'The icon size is less than minimum size',
-                    multipart=dict(icon=io.BytesIO(f.read()))
+                    'The logo size is less than minimum size',
+                    multipart=dict(logo=io.BytesIO(f.read()))
                 )
                 assert status == 618
 
-            with open(INVALID_RATIO_ICON_PATH, 'rb') as f:
+            with open(INVALID_RATIO_LOGO_PATH, 'rb') as f:
                 when(
-                    'Aspect ratio of the icon is invalid',
-                    multipart=dict(icon=io.BytesIO(f.read()))
+                    'Aspect ratio of the logo is invalid',
+                    multipart=dict(logo=io.BytesIO(f.read()))
                 )
                 assert status == 619
 
-            with open(INVALID_FORMAT_ICON_PATH, 'rb') as f:
+            with open(INVALID_FORMAT_LOGO_PATH, 'rb') as f:
                 when(
-                    'Format of the icon is invalid',
-                    multipart=dict(icon=io.BytesIO(f.read()))
+                    'Format of the logo is invalid',
+                    multipart=dict(logo=io.BytesIO(f.read()))
                 )
                 assert status == 620
 
-            with open(INVALID_MAXMIMUM_LENGTH_ICON_PATH, 'rb') as f:
+            with open(INVALID_MAXMIMUM_LENGTH_LOGO_PATH, 'rb') as f:
                 when(
-                    'The maxmimum length of icon is invalid',
-                    multipart=dict(icon=io.BytesIO(f.read()))
+                    'The maxmimum length of logo is invalid',
+                    multipart=dict(logo=io.BytesIO(f.read()))
                 )
                 assert status == 621
 
