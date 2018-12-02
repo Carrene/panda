@@ -58,11 +58,12 @@ password_fields = dict(
     password=password,
     resetPasswordToken=reset_password_token
 )
-organization_fields = dict(
+organization_fields = Organization.json_metadata()['fields']
+organization_fields.update(dict(
     email=email,
     role=role,
     title=title,
-)
+))
 
 
 class LocalApplicationTestCase(ApplicableTestCase):
