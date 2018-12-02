@@ -5,7 +5,6 @@ from restfulpy.orm import commit, DBSession
 from sqlalchemy import exists, and_
 from sqlalchemy_media import store_manager
 
-from sqlalchemy import Integer, Unicode, select, and_, FLOAT, or_, ARRAY, func
 from ..exceptions import HTTPOrganizationTitleAlreadyTaken, \
     HTTPAlreadyInThisOrganization
 from ..models import Member, Organization, OrganizationMember, \

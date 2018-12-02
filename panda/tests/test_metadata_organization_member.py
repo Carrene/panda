@@ -8,7 +8,7 @@ class TestMember(LocalApplicationTestCase):
     def test_metadata(self):
         with self.given(
             'Test metadata verb',
-            '/apiv1/organizationmembers',
+            '/apiv1/organizations/members',
             'METADATA'
         ):
             fields = response.json['fields']
