@@ -36,6 +36,6 @@ def insert(): # pragma: no cover
         f'  Title: {application.title}\n'
         f'  Secret: {secret}\n'
         f'  Redirect uri: {application.redirect_uri}\n'
-        f'  Owner of application is User 1\n'
+        f'  Owner of application is admin\n'
     )
 
