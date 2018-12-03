@@ -1,7 +1,9 @@
 import time
 
 from bddrest.authoring import when, status, response, Update, given
-from nanohttp import settings
+from cas import CASPrincipal
+from nanohttp import settings, context
+from nanohttp.contexts import Context
 
 from panda.models import Member, Organization, OrganizationMember
 from panda.tests.helpers import LocalApplicationTestCase
@@ -45,13 +47,16 @@ class TestApplication(LocalApplicationTestCase):
 
     def test_join_organization(self):
         self.login(email=self.member2.email, password='123456')
-        payload = dict(
-            email=self.member2.email,
-            organizationId=self.organization.id,
-            memberId=self.member2.id,
-            ownerId=self.member1.id,
-            role='member',
-        )
+        identity = CASPrincipal.load(self._authentication_token)
+        with Context(dict()):
+            context.identity = identity
+            payload = dict(
+                email=self.member2.email,
+                organizationId=self.organization.id,
+                memberId=self.member2.id,
+                ownerId=self.member1.id,
+                role='member',
+            )
         token = OrganizationInvitationToken(payload)
 
         with self.given(

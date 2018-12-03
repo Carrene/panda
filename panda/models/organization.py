@@ -1,9 +1,10 @@
-from nanohttp import HTTPStatus
+from nanohttp import HTTPStatus, context
 from restfulpy.orm import DeclarativeBase, Field, relationship, \
     ModifiedMixin, TimestampMixin, FilteringMixin, OrderingMixin, \
     PaginationMixin
 from restfulpy.orm.metadata import MetadataField
-from sqlalchemy import Unicode, Integer, ForeignKey, Enum, JSON, select, func
+from sqlalchemy import Unicode, Integer, ForeignKey, Enum, JSON, func, and_, \
+    select, bindparam
 from sqlalchemy.orm import column_property
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
     MagicAnalyzer, ContentTypeValidator
@@ -140,6 +141,19 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
         .correlate_except(OrganizationMember)
     )
 
+    role = column_property(
+        select([OrganizationMember.role])
+        .select_from(OrganizationMember)
+        .where(and_(
+            OrganizationMember.member_id == bindparam(
+                'member_id',
+                callable_=lambda: context.identity.reference_id,
+            ),
+            OrganizationMember.organization_id == id
+        ))
+        .correlate_except(OrganizationMember)
+    )
+
     @property
     def logo(self):
         return self._logo.locate() if self._logo else None
@@ -181,8 +195,21 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
             readonly=True,
             protected=False,
             type_=int,
-            watermark='',
+            watermark='lorem ipsum',
             example='10',
-            message='',
+            message='lorem ipsum',
+        )
+
+        yield MetadataField(
+            'role',
+            'role',
+            label='Role',
+            required=False,
+            readonly=True,
+            protected=False,
+            type_=str,
+            watermark='lorem ipsum',
+            example='owner',
+            message='lorem ipsum',
         )
 
