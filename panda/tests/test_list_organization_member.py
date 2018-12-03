@@ -32,16 +32,16 @@ class TestApplication(LocalApplicationTestCase):
         session.flush()
 
         organization_member1 = OrganizationMember(
-            member_id = owner1.id,
-            organization_id = cls.organization1.id,
-            role = 'owner',
+            member_id=owner1.id,
+            organization_id=cls.organization1.id,
+            role='owner',
         )
         session.add(organization_member1)
 
         organization_member2 = OrganizationMember(
-            member_id = member1.id,
-            organization_id = cls.organization1.id,
-            role = 'member',
+            member_id=member1.id,
+            organization_id=cls.organization1.id,
+            role='member',
         )
         session.add(organization_member2)
         session.commit()
@@ -51,7 +51,8 @@ class TestApplication(LocalApplicationTestCase):
 
         with self.given(
             f'List of organization',
-            f'/apiv1/organizations/id: {self.organization1.id}/members',
+            f'/apiv1/organizations/id: {self.organization1.id}/'
+                'organizationmembers',
             f'LIST',
         ):
             assert status == 200

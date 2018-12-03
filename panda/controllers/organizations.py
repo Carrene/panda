@@ -1,4 +1,4 @@
-from nanohttp import context, json, HTTPNotFound, HTTPForbidden, settings
+from nanohttp import context, json, HTTPNotFound, HTTPForbidden, settings, HTTPUnauthorized
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import commit, DBSession
@@ -22,27 +22,29 @@ class OrganizationController(ModelRestController):
     __model__ = Organization
 
     def __call__(self, *remaining_paths):
-        if len(remaining_paths) > 1 and remaining_paths[1] == 'members':
-            organization = self.get_organization(remaining_paths[0])
-            return OrganizationMemberController()(
-                remaining_paths[0],
-                *remaining_paths[2:]
-            )
+        if len(remaining_paths) > 1 and remaining_paths[1] == 'organizationmembers':
+            if not context.identity:
+                raise HTTPUnauthorized()
+
+            try:
+                id = int(remaining_paths[0])
+            except (ValueError, TypeError):
+                raise HTTPNotFound()
+
+            organization = DBSession.query(Organization) \
+               .filter(Organization.id == id) \
+               .join(
+                   OrganizationMember,
+                   OrganizationMember.member_id == context.identity.reference_id
+               ) \
+               .one_or_none()
+
+            if organization is None:
+                raise HTTPNotFound()
+
+            return OrganizationMemberController(organization=organization)(*remaining_paths[2:])
 
         return super().__call__(*remaining_paths)
-
-    def get_organization(self, id):
-        try:
-            id = int(id)
-
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
-
-        organization = DBSession.query(Organization).get(id)
-        if organization is None:
-            raise HTTPNotFound()
-
-        return organization
 
     @authorize
     @json(prevent_empty_form=True)
@@ -247,13 +249,16 @@ class OrganizationController(ModelRestController):
 class OrganizationMemberController(ModelRestController):
     __model__ = OrganizationMemberView
 
+    def __init__(self, organization=None):
+        self.organization = organization
+
     @authorize
     @store_manager(DBSession)
     @json(prevent_form=True)
     @OrganizationMemberView.expose
     @commit
-    def list(self, id):
+    def list(self):
         query = DBSession.query(OrganizationMemberView) \
-            .filter(OrganizationMemberView.organization_id == id)
+            .filter(OrganizationMemberView.organization_id == self.organization.id)
         return query
 

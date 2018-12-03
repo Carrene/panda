@@ -11,9 +11,9 @@ class TestMember(LocalApplicationTestCase):
             '/apiv1/organizations',
             'METADATA'
         ):
-            fields = response.json['fields']
-
             assert status == 200
+
+            fields = response.json['fields']
 
             assert fields['title']['pattern'] is not None
             assert fields['title']['patternDescription'] is not None

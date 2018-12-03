@@ -70,15 +70,14 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin,
     def iter_metadata_fields(cls):
         yield from super().iter_metadata_fields()
         yield MetadataField(
-            'organization_role',
-            'organization_role',
+            name='organization_role',
+            key='organization_role',
             label='Organization Role',
             example='lorem ipsum',
             watermark='lorem ipsum',
             message='lorem ipsum',
             type_=str,
-            required=Talse,
-            nullable=True,
+            required=False,
             not_none=False,
         )
 

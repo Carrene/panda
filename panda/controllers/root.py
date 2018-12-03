@@ -14,7 +14,7 @@ from .member import MemberController
 from .passwords import PasswordController, ResetPasswordTokenController
 from .phones import PhoneNumberActivationTokenController, PhoneNumberController
 from .token import TokenController
-from .organizations import OrganizationController
+from .organizations import OrganizationController, OrganizationMemberController
 
 
 here = abspath(dirname(__file__))
@@ -36,6 +36,7 @@ class ApiV1(Controller):
     phonenumberactivationtokens = PhoneNumberActivationTokenController()
     phonenumbers = PhoneNumberController()
     organizations = OrganizationController()
+    organizationmembers = OrganizationMemberController()
 
     @json
     def version(self):
