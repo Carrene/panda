@@ -31,12 +31,12 @@ class TestApplication(LocalApplicationTestCase):
         session.add(cls.organization1)
         session.flush()
 
-        organization_member1 = OrganizationMember(
+        cls.organization_member1 = OrganizationMember(
             member_id=owner1.id,
             organization_id=cls.organization1.id,
             role='owner',
         )
-        session.add(organization_member1)
+        session.add(cls.organization_member1)
         session.commit()
 
     def test_get_organization(self):
@@ -49,6 +49,9 @@ class TestApplication(LocalApplicationTestCase):
         ):
             assert status == 200
             assert response.json['id'] == self.organization1.id
+            assert response.json['title'] == self.organization1.title
+            assert response.json['role'] == self.organization_member1.role
+            assert response.json['membersCount'] == 1
 
             when('Trying to pass with wrong id', url_parameters=dict(id=0))
             assert status == 404
