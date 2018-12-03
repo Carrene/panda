@@ -188,8 +188,8 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
     def iter_metadata_fields(cls):
         yield from super().iter_metadata_fields()
         yield MetadataField(
-            'membersCount',
-            'membersCount',
+            name='membersCount',
+            key='membersCount',
             label='Members count',
             required=False,
             readonly=True,
@@ -201,8 +201,8 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
         )
 
         yield MetadataField(
-            'role',
-            'role',
+            name='role',
+            key='role',
             label='Role',
             required=False,
             readonly=True,
