@@ -1,4 +1,5 @@
-from nanohttp import context, json, HTTPNotFound, HTTPForbidden, settings, HTTPUnauthorized
+from nanohttp import context, json, HTTPNotFound, HTTPForbidden, settings, \
+    HTTPUnauthorized
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import commit, DBSession
@@ -22,12 +23,14 @@ class OrganizationController(ModelRestController):
     __model__ = Organization
 
     def __call__(self, *remaining_paths):
-        if len(remaining_paths) > 1 and remaining_paths[1] == 'organizationmembers':
+        if len(remaining_paths) > 1 \
+                and remaining_paths[1] == 'organizationmembers':
             if not context.identity:
                 raise HTTPUnauthorized()
 
             try:
                 id = int(remaining_paths[0])
+
             except (ValueError, TypeError):
                 raise HTTPNotFound()
 
@@ -42,7 +45,8 @@ class OrganizationController(ModelRestController):
             if organization is None:
                 raise HTTPNotFound()
 
-            return OrganizationMemberController(organization=organization)(*remaining_paths[2:])
+            return OrganizationMemberController(organization=organization) \
+                (*remaining_paths[2:])
 
         return super().__call__(*remaining_paths)
 
@@ -259,6 +263,8 @@ class OrganizationMemberController(ModelRestController):
     @commit
     def list(self):
         query = DBSession.query(OrganizationMemberView) \
-            .filter(OrganizationMemberView.organization_id == self.organization.id)
+            .filter(
+                OrganizationMemberView.organization_id == self.organization.id
+            )
         return query
 

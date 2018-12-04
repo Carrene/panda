@@ -1,12 +1,9 @@
 from restfulpy.orm import Field, PaginationMixin, FilteringMixin, \
-    OrderingMixin, BaseModel, ModifiedMixin, TimestampMixin, relationship, \
-    DBSession, MetadataField
-from sqlalchemy import Integer, Unicode, select, and_, FLOAT, or_, ARRAY, func
+    OrderingMixin, BaseModel, MetadataField
+from sqlalchemy import Integer, Unicode, select
 from sqlalchemy.orm import mapper
-from sqlalchemy.inspection import inspect
-from restfulpy.utils import to_camel_case
 
-from . import Organization, OrganizationMember, Member
+from . import OrganizationMember, Member
 
 
 class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin,
@@ -43,11 +40,10 @@ class AbstractOrganizationMemberView(PaginationMixin, OrderingMixin,
         mapper(OrganizationMemberView, query.alias())
         return OrganizationMemberView
 
-
     def to_dict(self):
-        view = super().to_dict()
-        view['organizationRole'] = self.organization_role
-        return view
+        organization_member = super().to_dict()
+        organization_member['organizationRole'] = self.organization_role
+        return organization_member
 
     @classmethod
     def iter_columns(cls, relationships=True, synonyms=True, composites=True,

@@ -4,7 +4,7 @@ from panda.models import Member, Organization, OrganizationMember
 from panda.tests.helpers import LocalApplicationTestCase
 
 
-class TestApplication(LocalApplicationTestCase):
+class TestOrganization(LocalApplicationTestCase):
 
     @classmethod
     def mockup(cls):
