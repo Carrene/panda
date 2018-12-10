@@ -32,54 +32,28 @@ def insert(): # pragma: no cover
         phone='+989361234567',
     )
     DBSession.add(member3)
+    DBSession.commit()
 
-    admin = DBSession.query(Member).filter(Member.title == 'admin').one()
-    class Identity:
-        reference_id = admin.id
-
-    with Context(dict()):
-        context.identity = Identity
-
-        organization = Organization(
-            title='Carrene',
-        )
-        DBSession.add(organization)
-        DBSession.flush()
-
-        organization_member = OrganizationMember(
-            member_id=admin.id,
-            organization_id=organization.id,
-            role='owner'
-        )
-        DBSession.add(organization_member)
-        DBSession.commit()
-
-        print('Members have been created.')
-        print(
-            f'  Title: {member1.title}\n'
-            f'  Email: {member1.email}\n'
-            f'  Password: 123456\n'
-            f'  Role: {member1.role}\n'
-            f'  Phone: {member1.phone}\n'
-        )
-        print(
-            f'  Title: {member2.title}\n'
-            f'  Email: {member2.email}\n'
-            f'  Password: 123456\n'
-            f'  Role: {member2.role}\n'
-            f'  Phone: {member2.phone}\n'
-        )
-        print(
-            f'  Title: {member3.title}\n'
-            f'  Email: {member3.email}\n'
-            f'  Password: 123456\n'
-            f'  Role: {member3.role}\n'
-            f'  Phone: {member3.phone}\n'
-        )
-
-        print('Organization has been created.')
-        print(
-            f'  Title: {organization.title}\n'
-            f'  Owner of organization is admin\n'
-        )
+    print('Members have been created.')
+    print(
+        f'  Title: {member1.title}\n'
+        f'  Email: {member1.email}\n'
+        f'  Password: 123456\n'
+        f'  Role: {member1.role}\n'
+        f'  Phone: {member1.phone}\n'
+    )
+    print(
+        f'  Title: {member2.title}\n'
+        f'  Email: {member2.email}\n'
+        f'  Password: 123456\n'
+        f'  Role: {member2.role}\n'
+        f'  Phone: {member2.phone}\n'
+    )
+    print(
+        f'  Title: {member3.title}\n'
+        f'  Email: {member3.email}\n'
+        f'  Password: 123456\n'
+        f'  Role: {member3.role}\n'
+        f'  Phone: {member3.phone}\n'
+    )
 

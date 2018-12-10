@@ -7,8 +7,8 @@ from .models import Application, Member
 
 def insert(): # pragma: no cover
     admin = Member(
-        title='admin',
-        email='admin@example.com',
+        title='GOD',
+        email='god@example.com',
         password='123456',
         role='admin'
     )
