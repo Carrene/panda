@@ -207,6 +207,7 @@ class TestOrganization(LocalApplicationTestCase):
             )
             assert status == 404
 
+            self.logout()
             self.login(self.member3.email, '123456')
             when(
                 'The user not member of organization',

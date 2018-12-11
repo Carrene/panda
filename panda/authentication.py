@@ -1,5 +1,5 @@
 from cas import CASPrincipal
-from nanohttp import HTTPStatus, HTTPForbidden
+from nanohttp import context, HTTPStatus, HTTPForbidden
 from restfulpy.authentication import StatefulAuthenticator
 from restfulpy.orm import DBSession
 from sqlalchemy_media import store_manager
@@ -22,7 +22,13 @@ class Authenticator(StatefulAuthenticator):
     @store_manager(DBSession)
     def create_principal(self, member_id=None, session_id=None):
         member = self.safe_member_lookup(Member.id == member_id)
-        return member.create_jwt_principal()
+        principal =  member.create_jwt_principal()
+
+        if context.identity:
+            payload = context.identity.payload
+            principal.payload = payload.update(principal.payload)
+
+        return principal
 
     def create_refresh_principal(self, member_id=None):
         member = self.safe_member_lookup(Member.id == member_id)
