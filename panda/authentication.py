@@ -26,7 +26,8 @@ class Authenticator(StatefulAuthenticator):
 
         if context.identity:
             payload = context.identity.payload
-            principal.payload = payload.update(principal.payload)
+            payload.update(principal.payload)
+            principal.payload = payload
 
         return principal
 
