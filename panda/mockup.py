@@ -6,7 +6,11 @@ from .models import Member, Organization, OrganizationMember
 
 
 def insert(): # pragma: no cover
+    # These mockup datas are shared between panda and dolphin.
+    # The GOD id is 1.
+
     member1 = Member(
+        id=2,
         title='User_1',
         email='user1@example.com',
         password='123456',
@@ -16,6 +20,7 @@ def insert(): # pragma: no cover
     DBSession.add(member1)
 
     member2 = Member(
+        id=3,
         title='User_2',
         email='user2@example.com',
         password='123456',
@@ -25,6 +30,7 @@ def insert(): # pragma: no cover
     DBSession.add(member2)
 
     member3 = Member(
+        id=4,
         title='User_3',
         email='user3@example.com',
         password='123456',
