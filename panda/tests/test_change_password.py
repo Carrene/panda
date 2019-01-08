@@ -55,7 +55,7 @@ class TestChangePassword(LocalApplicationTestCase):
 
             when(
                 'Trying to pass a simple password',
-                form=Update(newPassword='123')
+                form=Update(newPassword='123456')
             )
             assert status == '703 Password Not Complex Enough'
 
