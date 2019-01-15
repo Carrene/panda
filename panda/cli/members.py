@@ -9,7 +9,7 @@ class MemberListLauncher(Launcher):  # pragma: no cover
 
     @classmethod
     def create_parser(cls, subparsers):
-        parser = subparsers.add_parser('list', help='Sends an email.')
+        parser = subparsers.add_parser('list', help='List members.')
         return parser
 
     def launch(self):

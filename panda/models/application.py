@@ -153,3 +153,6 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
         else:
             self._icon = None
 
+    def __repr__(self):
+        return f'Application {self.id} {self.title}'
+

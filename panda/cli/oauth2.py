@@ -1,8 +1,10 @@
+import sys
+
 from restfulpy.orm import DBSession
 from restfulpy.cli import Launcher, RequireSubCommand
 
-from ..models import Member
-from ..oauth import AuthorizationCode
+from ..models import Member, Application, ApplicationMember
+from ..oauth import AuthorizationCode, AccessToken
 
 
 class OAuth2CreateTokenLauncher(Launcher):
@@ -18,17 +20,13 @@ class OAuth2CreateTokenLauncher(Launcher):
             help='Member id'
         )
         parser.add_argument(
+            'application_id',
+            help='Application Id'
+        )
+        parser.add_argument(
             '-s', '--scopes',
             nargs='+',
             help='List of oauth2 scopes'
-        )
-        parser.add_argument(
-            '-i', '--application-id',
-            help='Application Id'
-        )
-        parser.add_argument(
-            '-t', '--application-title',
-            help='Application Id'
         )
         return parser
 
@@ -38,19 +36,56 @@ class OAuth2CreateTokenLauncher(Launcher):
             .one_or_none()
 
         if member is None:
-            print("Invalid member id: {self.args.member_is}", file=sys.stderr)
+            print(f'Invalid member id: {self.args.member_id}', file=sys.stderr)
+            return 1
+
+        application = DBSession.query(Application)\
+            .filter(Application.id == self.args.application_id)\
+            .one_or_none()
+
+        if application is None:
+            print(f'Invalid application id: {self.args.application_id}', file=sys.stderr)
+            return 1
 
         authorization_code_payload = dict(
             scopes=self.args.scopes,
             memberId=member.id,
             memberTitle=member.title,
             email=member.email,
-            applicationId=self.args.application_id,
-            applicationTitle=self.args.application_title,
+            applicationId=application.id,
+            applicationTitle=application.title,
             location='/'
         )
         authorization_code = AuthorizationCode(authorization_code_payload)
-        print(authorization_code.dump().decode())
+
+        application = DBSession.query(Application) \
+            .filter(Application.id == application.id) \
+            .one_or_none()
+
+        if not application:
+            raise HTTPUnRecognizedApplication()
+
+        application_member = DBSession.query(ApplicationMember) \
+            .filter(
+                ApplicationMember.application_id == application.id,
+                ApplicationMember.member_id == authorization_code.member_id
+            ) \
+            .one_or_none()
+
+        if not application_member:
+            application_member = ApplicationMember(
+                application_id=application.id,
+                member_id=authorization_code.member_id
+            )
+            DBSession.add(application_member)
+
+        access_token_payload = dict(
+            applicationId=application.id,
+            memberId=authorization_code.member_id,
+            scopes=authorization_code.scopes,
+        )
+        access_token = AccessToken(access_token_payload)
+        print(access_token.dump().decode())
 
 
 class OAuth2Launcher(Launcher, RequireSubCommand):
