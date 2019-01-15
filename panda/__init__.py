@@ -7,7 +7,7 @@ from sqlalchemy_media import StoreManager, FileSystemStore
 
 from . import basedata, mockup
 from .authentication import Authenticator
-from .cli.email import EmailLauncher
+from .cli import EmailLauncher, OAuth2Launcher, MemberLauncher
 from .controllers.root import Root
 
 
@@ -107,6 +107,8 @@ class Panda(Application):
 
     def register_cli_launchers(self, subparsers):
         EmailLauncher.register(subparsers)
+        OAuth2Launcher.register(subparsers)
+        MemberLauncher.register(subparsers)
 
     @classmethod
     def initialize_orm(cls, engine=None):

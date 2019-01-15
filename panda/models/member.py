@@ -284,3 +284,6 @@ class Member(DeclarativeBase):
             code=cls.generate_activation_code(phone, str(id))
         )
 
+    def __repr__(self):
+        return f'Member: {self.id} {self.title} {self.email}'
+
