@@ -12,7 +12,7 @@ from .cli import EmailLauncher, MemberLauncher, ApplicationLauncher, \
 from .controllers.root import Root
 
 
-__version__ = '0.5.0'
+__version__ = '0.5.1a3'
 
 
 class Panda(Application):
