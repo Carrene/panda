@@ -1,17 +1,18 @@
 import sys
 
-from restfulpy.orm import DBSession
 from restfulpy.cli import Launcher, RequireSubCommand
+from restfulpy.orm import DBSession
 
 from ..models import Member, Application, ApplicationMember
-from ..oauth import AuthorizationCode, AccessToken
+from ..oauth import AccessToken
 
 
-class OAuth2CreateTokenLauncher(Launcher):
+class AccessTokenCreateLauncher(Launcher):
+
     @classmethod
     def create_parser(cls, subparsers):
         parser = subparsers.add_parser(
-            'create-token',
+            'create',
             help='Creates an jwt token.'
         )
         parser.add_argument(
@@ -44,61 +45,48 @@ class OAuth2CreateTokenLauncher(Launcher):
             .one_or_none()
 
         if application is None:
-            print(f'Invalid application id: {self.args.application_id}', file=sys.stderr)
+            print(
+                f'Invalid application id: {self.args.application_id}',
+                file=sys.stderr
+            )
             return 1
-
-        authorization_code_payload = dict(
-            scopes=self.args.scopes,
-            memberId=member.id,
-            memberTitle=member.title,
-            email=member.email,
-            applicationId=application.id,
-            applicationTitle=application.title,
-            location='/'
-        )
-        authorization_code = AuthorizationCode(authorization_code_payload)
-
-        application = DBSession.query(Application) \
-            .filter(Application.id == application.id) \
-            .one_or_none()
-
-        if not application:
-            raise HTTPUnRecognizedApplication()
 
         application_member = DBSession.query(ApplicationMember) \
             .filter(
                 ApplicationMember.application_id == application.id,
-                ApplicationMember.member_id == authorization_code.member_id
+                ApplicationMember.member_id == member.id
             ) \
             .one_or_none()
 
         if not application_member:
             application_member = ApplicationMember(
                 application_id=application.id,
-                member_id=authorization_code.member_id
+                member_id=member.id,
             )
             DBSession.add(application_member)
+            DBSession.commit()
 
         access_token_payload = dict(
             applicationId=application.id,
-            memberId=authorization_code.member_id,
-            scopes=authorization_code.scopes,
+            memberId=member.id,
+            scopes=self.args.scopes,
         )
         access_token = AccessToken(access_token_payload)
         print(access_token.dump().decode())
 
 
-class OAuth2Launcher(Launcher, RequireSubCommand):
+class AccessTokenLauncher(Launcher, RequireSubCommand):
 
     @classmethod
     def create_parser(cls, subparsers):
-        parser = subparsers.add_parser('oauth2', help="OAUTH2 related.")
-        oauth2_subparsers = parser.add_subparsers(
-            title="OAUTH2",
-            dest="oauth2_command"
+        parser = subparsers.add_parser(
+            'access-token',
+            help='Access token related.'
         )
-        OAuth2CreateTokenLauncher.register(oauth2_subparsers)
+        oauth2_subparsers = parser.add_subparsers(
+            title='Access token',
+            dest='access_token_command'
+        )
+        AccessTokenCreateLauncher.register(oauth2_subparsers)
         return parser
-
-
 
