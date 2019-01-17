@@ -124,6 +124,21 @@ class TestMember(LocalApplicationTestCase):
             assert status == '609 Token Expired'
 
             access_token_payload = dict(
+                applicationId=self.application1.id,
+                memberId=self.member.id,
+            )
+            access_token = AccessToken(access_token_payload).dump().decode()
+            when(
+                'Trying to pass with scopes in the access token',
+                headers={'authorization': f'oauth2-accesstoken {access_token}'}
+            )
+            assert response.json['id'] == self.member.id
+            assert response.json['name'] is None
+            assert response.json['email'] is None
+            assert response.json['avatar'] is None
+            assert response.json['phone'] is None
+
+            access_token_payload = dict(
                 applicationId=self.application2.id,
                 memberId=self.member.id,
                 scopes=['title']

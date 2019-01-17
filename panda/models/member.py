@@ -242,6 +242,9 @@ class Member(DeclarativeBase):
 
         member = dict.fromkeys(SCOPES.keys(), None)
         member['id'] = self.id
+        if context.identity.scopes is None:
+            return member
+
         for scope in context.identity.scopes:
             member[scope] = SCOPES[scope](self)
 
