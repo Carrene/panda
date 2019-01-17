@@ -129,7 +129,7 @@ class TestMember(LocalApplicationTestCase):
             )
             access_token = AccessToken(access_token_payload).dump().decode()
             when(
-                'Trying to pass with scopes in the access token',
+                'Trying to pass with empty scopes in the access token',
                 headers={'authorization': f'oauth2-accesstoken {access_token}'}
             )
             assert response.json['id'] == self.member.id
