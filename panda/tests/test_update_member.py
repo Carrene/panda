@@ -141,14 +141,16 @@ class TestMember(LocalApplicationTestCase):
                     'Format of the avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 620
+                assert status == '620 Invalid content type, Valid options '\
+                    'are: image/jpeg, image/png'
 
             with open(INVALID_MAXMIMUM_LENGTH_AVATAR_PATH, 'rb') as f:
                 when(
                     'The maxmimum length of avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 621
+                assert status == '621 Cannot store files larger than: '\
+                    '51200 bytes'
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
