@@ -11,10 +11,11 @@ def test_user_title_pattern():
     assert pattern.match('NICK123name')
     assert pattern.match('nick123NAME')
     assert pattern.match('nick123name')
+    assert pattern.match('nick name')
+    assert pattern.match('nickname ')
 
     assert not pattern.match('0nickname')
     assert not pattern.match('nickname@')
-    assert not pattern.match('nick name')
     assert not pattern.match('nick-name')
     assert not pattern.match('123456')
     assert not pattern.match('nick')

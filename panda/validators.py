@@ -5,7 +5,7 @@ from nanohttp import validate, HTTPStatus, context
 from .models.organization import roles
 
 
-USER_TITLE_PATTERN = re.compile(r'^[a-zA-Z][\w]{5,19}$')
+USER_TITLE_PATTERN = re.compile(r'^[a-zA-Z][\w\ ]{5,19}$')
 USER_PASSWORD_PATTERN = re.compile(r'(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+')
 PHONE_PATTERN = re.compile(r'^[+]{0,1}[\d+]{7,15}$')
 NAME_PATTERN = re.compile(r'^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$')
