@@ -22,25 +22,24 @@ from ..oauth.tokens import AccessToken
 from .messaging import OTPSMS
 
 
+AVATAR_CONTENT_TYPES = ['image/jpeg', 'image/png']
+AVATAR_MAXIMUM_LENGTH = 50
+
 class Avatar(Image):
     __pre_processors__ = [
         MagicAnalyzer(),
-        ContentTypeValidator([
-            'image/jpeg',
-            'image/png',
-        ]),
+        ContentTypeValidator([ 'image/jpeg', 'image/png', ]),
         ImageAnalyzer(),
         ImageValidator(
             minimum=(200, 200),
             maximum=(300, 300),
             min_aspect_ratio=1,
             max_aspect_ratio=1,
-            content_types=['image/jpeg', 'image/png']
+            content_types=AVATAR_CONTENT_TYPES
         ),
     ]
-
     __max_length__ = 50 * KB
-    __min_length__ = 1 * KB
+    __min_length__ = AVATAR_CONTENT_TYPES * KB
     __prefix__ = 'avatar'
 
 
@@ -48,6 +47,7 @@ class Member(DeclarativeBase):
     __tablename__ = 'member'
 
     id = Field(Integer, primary_key=True)
+
     email = Field(
         Unicode(100),
         unique=True,
@@ -169,13 +169,21 @@ class Member(DeclarativeBase):
                 raise HTTPStatus(f'618 {e}')
 
             except AspectRatioValidationError as e:
-                raise HTTPStatus(f'619 {e}')
+                raise HTTPStatus(
+                    '619 Invalid aspect ratio Only 1/1 is accepted.'
+                )
 
             except ContentTypeValidationError as e:
-                raise HTTPStatus(f'620 {e}')
+                raise HTTPStatus(
+                    f'620 Invalid content type, Valid options are: '\
+                    f'{", ".join(type for type in AVATAR_CONTENT_TYPES)}'
+                )
 
             except MaximumLengthIsReachedError as e:
-                raise HTTPStatus(f'621 {e}')
+                raise HTTPStatus(
+                    f'621 Cannot store files larger than: '\
+                    f'{AVATAR_MAXIMUM_LENGTH * 1024} bytes'
+                )
 
         else:
             self._avatar = None

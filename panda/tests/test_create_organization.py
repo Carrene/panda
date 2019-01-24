@@ -56,16 +56,16 @@ class TestApplication(LocalApplicationTestCase):
             assert status == '622 Organization Title Is Already Taken'
 
             when('The title format is invalid', form=dict(title='my organ'))
-            assert status == 705
+            assert status == '705 Invalid Title Format'
 
             when(
                 'The length of title is too long',
                 form=dict(title=(40 + 1) * 'a')
             )
-            assert status == 720
+            assert status == '720 At Most 40 Characters Are Valid For Title'
 
             when('The title not in form', form=given - 'title' + dict(a='a'))
-            assert status == 718
+            assert status == '718 Title Not In Form'
 
             when('Trying to pass with empty form', form={})
             assert status == '400 Empty Form'

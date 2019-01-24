@@ -12,6 +12,9 @@ from sqlalchemy_media.exceptions import DimensionValidationError, \
     ContentTypeValidationError
 
 
+ICON_CONTENT_TYPES = ['image/jpeg', 'image/png']
+ICON_MAXIMUM_LENGTH = 50
+
 class ApplicationMember(DeclarativeBase):
      __tablename__ = 'application_member'
 
@@ -36,11 +39,11 @@ class Icon(Image):
             maximum=(200, 200),
             min_aspect_ratio=1,
             max_aspect_ratio=1,
-            content_types=['image/jpeg', 'image/png']
+            content_types=ICON_CONTENT_TYPES,
         ),
     ]
 
-    __max_length__ = 50 * KB
+    __max_length__ = ICON_MAXIMUM_LENGTH * KB
     __min_length__ = 1 * KB
     __prefix__ = 'icon'
 
@@ -142,13 +145,21 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
                 raise HTTPStatus(f'618 {e}')
 
             except AspectRatioValidationError as e:
-                raise HTTPStatus(f'619 {e}')
+                raise HTTPStatus(
+                    '619 Invalid aspect ratio Only 1/1 is accepted.'
+                )
 
             except ContentTypeValidationError as e:
-                raise HTTPStatus(f'620 {e}')
+                raise HTTPStatus(
+                    f'620 Invalid content type, Valid options are: '\
+                    f'{", ".join(type for type in ICON_CONTENT_TYPES)}'
+                )
 
             except MaximumLengthIsReachedError as e:
-                raise HTTPStatus(f'621 {e}')
+                raise HTTPStatus(
+                    f'621 Cannot store files larger than: '\
+                    f'{ICON_MAXIMUM_LENGTH * 1024} bytes'
+                )
 
         else:
             self._icon = None

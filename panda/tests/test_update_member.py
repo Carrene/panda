@@ -117,35 +117,40 @@ class TestMember(LocalApplicationTestCase):
                     'The avatar size is exceeded the maximum size',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 618
+                assert status == '618 Maximum allowed width is:  300, '\
+                    'but the  550 is given.'
 
             with open(INVALID_MINIMUM_SIZE_AVATAR_PATH, 'rb') as f:
                 when(
                     'The avatar size is less than minimum size',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 618
+                assert status == '618 Minimum allowed width is:  200, '\
+                    'but the  50 is given.'
 
             with open(INVALID_RATIO_AVATAR_PATH, 'rb') as f:
                 when(
                     'Aspect ratio of the avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 619
+                assert status == '619 Invalid aspect ratio '\
+                    'Only 1/1 is accepted.'
 
             with open(INVALID_FORMAT_AVATAR_PATH, 'rb') as f:
                 when(
                     'Format of the avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 620
+                assert status == '620 Invalid content type, Valid options '\
+                    'are: image/jpeg, image/png'
 
             with open(INVALID_MAXMIMUM_LENGTH_AVATAR_PATH, 'rb') as f:
                 when(
                     'The maxmimum length of avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 621
+                assert status == '621 Cannot store files larger than: '\
+                    '51200 bytes'
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401
