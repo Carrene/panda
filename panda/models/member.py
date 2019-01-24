@@ -176,7 +176,7 @@ class Member(DeclarativeBase):
             except ContentTypeValidationError as e:
                 raise HTTPStatus(
                     f'620 Invalid content type, Valid options are: '\
-                    f'{", ".join(e for e in AVATAR_CONTENT_TYPES)}'
+                    f'{", ".join(type for type in AVATAR_CONTENT_TYPES)}'
                 )
 
             except MaximumLengthIsReachedError as e:

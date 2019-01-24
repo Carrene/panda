@@ -152,7 +152,7 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
             except ContentTypeValidationError as e:
                 raise HTTPStatus(
                     f'620 Invalid content type, Valid options are: '\
-                    f'{", ".join(e for e in ICON_CONTENT_TYPES)}'
+                    f'{", ".join(type for type in ICON_CONTENT_TYPES)}'
                 )
 
             except MaximumLengthIsReachedError as e:
