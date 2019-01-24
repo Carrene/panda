@@ -117,14 +117,16 @@ class TestMember(LocalApplicationTestCase):
                     'The avatar size is exceeded the maximum size',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 618
+                assert status == '618 Maximum allowed width is:  300, '\
+                    'but the  550 is given.'
 
             with open(INVALID_MINIMUM_SIZE_AVATAR_PATH, 'rb') as f:
                 when(
                     'The avatar size is less than minimum size',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 618
+                assert status == '618 Minimum allowed width is:  200, '\
+                    'but the  50 is given.'
 
             with open(INVALID_RATIO_AVATAR_PATH, 'rb') as f:
                 when(
