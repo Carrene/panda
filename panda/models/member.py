@@ -22,6 +22,9 @@ from ..oauth.tokens import AccessToken
 from .messaging import OTPSMS
 
 
+AVATAR_CONTENT_TYPES = ['image/jpeg', 'image/png']
+AVATAR_MAXIMUM_LENGTH = 50
+
 class Avatar(Image):
     __pre_processors__ = [
         MagicAnalyzer(),
@@ -35,12 +38,12 @@ class Avatar(Image):
             maximum=(300, 300),
             min_aspect_ratio=1,
             max_aspect_ratio=1,
-            content_types=['image/jpeg', 'image/png']
+            content_types=AVATAR_CONTENT_TYPES
         ),
     ]
 
     __max_length__ = 50 * KB
-    __min_length__ = 1 * KB
+    __min_length__ = AVATAR_CONTENT_TYPES * KB
     __prefix__ = 'avatar'
 
 
@@ -169,7 +172,9 @@ class Member(DeclarativeBase):
                 raise HTTPStatus(f'618 {e}')
 
             except AspectRatioValidationError as e:
-                raise HTTPStatus(f'619 {e}')
+                raise HTTPStatus(
+                    '619 Invalid aspect ratio Only 1/1 is accepted.'
+                )
 
             except ContentTypeValidationError as e:
                 raise HTTPStatus(f'620 {e}')

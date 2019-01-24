@@ -133,7 +133,8 @@ class TestMember(LocalApplicationTestCase):
                     'Aspect ratio of the avatar is invalid',
                     multipart=dict(avatar=io.BytesIO(f.read()))
                 )
-                assert status == 619
+                assert status == '619 Invalid aspect ratio '\
+                    'Only 1/1 is accepted.'
 
             with open(INVALID_FORMAT_AVATAR_PATH, 'rb') as f:
                 when(
