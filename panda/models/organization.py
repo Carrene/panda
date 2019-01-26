@@ -16,6 +16,7 @@ from sqlalchemy_media.exceptions import DimensionValidationError, \
 
 LOGO_CONTENT_TYPES = ['image/jpeg', 'image/png']
 LOGO_MAXIMUM_LENGTH = 50
+LOGO_MINIMUM_LENGTH = 1
 
 
 roles = [
@@ -61,7 +62,7 @@ class Logo(Image):
     ]
 
     __max_length__ = LOGO_MAXIMUM_LENGTH * KB
-    __min_length__ = 1 * KB
+    __min_length__ = LOGO_MINIMUM_LENGTH * KB
     __prefix__ = 'logo'
 
 
