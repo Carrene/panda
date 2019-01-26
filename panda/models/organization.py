@@ -14,6 +14,10 @@ from sqlalchemy_media.exceptions import DimensionValidationError, \
     ContentTypeValidationError
 
 
+LOGO_CONTENT_TYPES = ['image/jpeg', 'image/png']
+LOGO_MAXIMUM_LENGTH = 50
+
+
 roles = [
     'owner',
     'member',
@@ -52,11 +56,11 @@ class Logo(Image):
             maximum=(200, 200),
             min_aspect_ratio=1,
             max_aspect_ratio=1,
-            content_types=['image/jpeg', 'image/png']
+            content_types=LOGO_CONTENT_TYPES
         ),
     ]
 
-    __max_length__ = 50 * KB
+    __max_length__ = LOGO_MAXIMUM_LENGTH * KB
     __min_length__ = 1 * KB
     __prefix__ = 'logo'
 
@@ -168,13 +172,21 @@ class Organization(OrderingMixin, FilteringMixin, PaginationMixin, \
                 raise HTTPStatus(f'618 {e}')
 
             except AspectRatioValidationError as e:
-                raise HTTPStatus(f'619 {e}')
+                 raise HTTPStatus(
+                    '619 Invalid aspect ratio Only 1/1 is accepted.'
+                )
 
             except ContentTypeValidationError as e:
-                raise HTTPStatus(f'620 {e}')
+                raise HTTPStatus(
+                    f'620 Invalid content type, Valid options are: '\
+                    f'{", ".join(type for type in LOGO_CONTENT_TYPES)}'
+                )
 
             except MaximumLengthIsReachedError as e:
-                raise HTTPStatus(f'621 {e}')
+                 raise HTTPStatus(
+                    f'621 Cannot store files larger than: '\
+                    f'{LOGO_MAXIMUM_LENGTH * 1024} bytes'
+                )
 
         else:
             self._logo = None
