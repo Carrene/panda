@@ -1,4 +1,5 @@
 from cas import CASPrincipal
+from itsdangerous import JSONWebSignatureSerializer
 from nanohttp import context, HTTPStatus, HTTPForbidden
 from restfulpy.authentication import StatefulAuthenticator
 from restfulpy.orm import DBSession
@@ -19,15 +20,27 @@ class Authenticator(StatefulAuthenticator):
 
         return member
 
+    def get_previous_payload(self):
+        if hasattr(context, 'identity') and context.identity:
+            return context.identity.payload
+
+        if 'HTTP_AUTHORIZATION' in context.environ:
+            jsonWebSerializer = JSONWebSignatureSerializer('secret')
+            payload = jsonWebSerializer.loads_unsafe(
+                context.environ['HTTP_AUTHORIZATION']
+            )
+            return payload[1]
+
+        return {}
+
     @store_manager(DBSession)
     def create_principal(self, member_id=None, session_id=None):
         member = self.safe_member_lookup(Member.id == member_id)
         principal =  member.create_jwt_principal()
 
-        if context.identity:
-            payload = context.identity.payload
-            payload.update(principal.payload)
-            principal.payload = payload
+        payload = self.get_previous_payload()
+        payload.update(principal.payload)
+        principal.payload = payload
 
         return principal
 
@@ -59,4 +72,5 @@ class Authenticator(StatefulAuthenticator):
             raise HTTPForbidden()
 
         return access_token
+
 
