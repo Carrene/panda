@@ -116,13 +116,13 @@ class TestOrganization(LocalApplicationTestCase):
                 'The title format is invalid',
                 multipart=dict(title='my organ')
             )
-            assert status == 705
+            assert status == '705 Invalid Title Format'
 
             when(
                 'The length of title is too long',
                 multipart=dict(title=(40 + 1) * 'a')
             )
-            assert status == 720
+            assert status == '720 At Most 40 Characters Are Valid For Title'
 
             when(
                 'The URL format is invalid',
@@ -153,35 +153,40 @@ class TestOrganization(LocalApplicationTestCase):
                     'The logo size is exceeded the maximum size',
                     multipart=dict(logo=io.BytesIO(f.read()))
                 )
-                assert status == 618
+                assert status == '618 Maximum allowed width is:  200, '\
+                    'but the  550 is given.'
 
             with open(INVALID_MINIMUM_SIZE_LOGO_PATH, 'rb') as f:
                 when(
                     'The logo size is less than minimum size',
                     multipart=dict(logo=io.BytesIO(f.read()))
                 )
-                assert status == 618
+                assert status == '618 Minimum allowed width is:  100, '\
+                    'but the  50 is given.'
 
             with open(INVALID_RATIO_LOGO_PATH, 'rb') as f:
                 when(
                     'Aspect ratio of the logo is invalid',
                     multipart=dict(logo=io.BytesIO(f.read()))
                 )
-                assert status == 619
+                assert status == '619 Invalid aspect ratio '\
+                    'Only 1/1 is accepted.'
 
             with open(INVALID_FORMAT_LOGO_PATH, 'rb') as f:
                 when(
                     'Format of the logo is invalid',
                     multipart=dict(logo=io.BytesIO(f.read()))
                 )
-                assert status == 620
+                assert status == '620 Invalid content type, Valid options ' \
+                    'are: image/jpeg, image/png'
 
             with open(INVALID_MAXMIMUM_LENGTH_LOGO_PATH, 'rb') as f:
                 when(
                     'The maxmimum length of logo is invalid',
                     multipart=dict(logo=io.BytesIO(f.read()))
                 )
-                assert status == 621
+                assert status == '621 Cannot store files larger than: '\
+                    '51200 bytes'
 
             when('Trying with an unauthorized member', authorization=None)
             assert status == 401

@@ -14,6 +14,7 @@ from sqlalchemy_media.exceptions import DimensionValidationError, \
 
 ICON_CONTENT_TYPES = ['image/jpeg', 'image/png']
 ICON_MAXIMUM_LENGTH = 50
+ICON_MINIMUM_LENGTH = 1
 
 class ApplicationMember(DeclarativeBase):
      __tablename__ = 'application_member'
@@ -44,7 +45,7 @@ class Icon(Image):
     ]
 
     __max_length__ = ICON_MAXIMUM_LENGTH * KB
-    __min_length__ = 1 * KB
+    __min_length__ = ICON_MINIMUM_LENGTH * KB
     __prefix__ = 'icon'
 
 

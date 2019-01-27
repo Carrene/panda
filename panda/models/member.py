@@ -38,7 +38,7 @@ class Avatar(Image):
             content_types=AVATAR_CONTENT_TYPES
         ),
     ]
-    __max_length__ = 50 * KB
+    __max_length__ = AVATAR_MAXIMUM_LENGTH * KB
     __min_length__ = AVATAR_CONTENT_TYPES * KB
     __prefix__ = 'avatar'
 
