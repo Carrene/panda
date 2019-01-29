@@ -85,6 +85,16 @@ class Panda(Application):
       local_directory: %(root_path)s/data/assets
       base_url: http://localhost:8083/assets
 
+    attachments:
+      applications:
+        icons:
+          max_length: 50 # KB
+          min_length: 1  # KB
+      members:
+        avatars:
+          max_length: 50 # KB
+          min_length: 1  # KB
+
     organization_invitation:
       secret: !!binary dKcWy4fQTpgjjAhS6SbapQUvtxPhiO23GguaV9U1y7k=
       max_age: 2592000  # seconds

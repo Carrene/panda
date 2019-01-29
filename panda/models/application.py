@@ -1,6 +1,6 @@
 import base64
 
-from nanohttp import context, HTTPStatus
+from nanohttp import settings, context, HTTPStatus
 from restfulpy.orm import DeclarativeBase, OrderingMixin, PaginationMixin, \
     FilteringMixin, Field, relationship
 from sqlalchemy import Unicode, Integer, LargeBinary, ForeignKey, JSON
@@ -13,8 +13,7 @@ from sqlalchemy_media.exceptions import DimensionValidationError, \
 
 
 ICON_CONTENT_TYPES = ['image/jpeg', 'image/png']
-ICON_MAXIMUM_LENGTH = 50
-ICON_MINIMUM_LENGTH = 1
+
 
 class ApplicationMember(DeclarativeBase):
      __tablename__ = 'application_member'
@@ -28,6 +27,11 @@ class ApplicationMember(DeclarativeBase):
 
 
 class Icon(Image):
+
+    _internal_max_length = None
+
+    _internal_min_length = None
+
     __pre_processors__ = [
         MagicAnalyzer(),
         ContentTypeValidator([
@@ -44,9 +48,31 @@ class Icon(Image):
         ),
     ]
 
-    __max_length__ = ICON_MAXIMUM_LENGTH * KB
-    __min_length__ = ICON_MINIMUM_LENGTH * KB
     __prefix__ = 'icon'
+
+    @property
+    def __max_length__(self):
+        if self._internal_max_length is None:
+            self._internal_max_length = \
+                settings.attachments.applications.icons.max_length * KB
+
+        return self._internal_max_length
+
+    @__max_length__.setter
+    def __max_length__(self, v):
+        self._internal_max_length = v
+
+    @property
+    def __min_length__(self):
+        if self._internal_min_length is None:
+            self._internal_min_length = \
+                settings.attachments.applications.icons.min_length * KB
+
+        return self._internal_min_length
+
+    @__min_length__.setter
+    def __min_length__(self, v):
+        self._internal_min_length = v
 
 
 class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
@@ -157,9 +183,10 @@ class Application(DeclarativeBase, OrderingMixin, PaginationMixin,
                 )
 
             except MaximumLengthIsReachedError as e:
+                max_length = settings.attachments.applications.icons.max_length
                 raise HTTPStatus(
                     f'621 Cannot store files larger than: '\
-                    f'{ICON_MAXIMUM_LENGTH * 1024} bytes'
+                    f'{max_length * 1024} bytes'
                 )
 
         else:

@@ -23,9 +23,13 @@ from .messaging import OTPSMS
 
 
 AVATAR_CONTENT_TYPES = ['image/jpeg', 'image/png']
-AVATAR_MAXIMUM_LENGTH = 50
+
 
 class Avatar(Image):
+
+    _internal_max_length = None
+    _internal_min_length = None
+
     __pre_processors__ = [
         MagicAnalyzer(),
         ContentTypeValidator([ 'image/jpeg', 'image/png', ]),
@@ -38,9 +42,32 @@ class Avatar(Image):
             content_types=AVATAR_CONTENT_TYPES
         ),
     ]
-    __max_length__ = AVATAR_MAXIMUM_LENGTH * KB
-    __min_length__ = AVATAR_CONTENT_TYPES * KB
+
     __prefix__ = 'avatar'
+
+    @property
+    def __max_length__(self):
+        if self._internal_max_length is None:
+            self._internal_max_length = \
+                settings.attachments.members.avatars.max_length * KB
+
+        return self._internal_max_length
+
+    @__max_length__.setter
+    def __max_length__(self, v):
+        self._internal_max_length = v
+
+    @property
+    def __min_length__(self):
+        if self._internal_min_length is None:
+            self._internal_min_length = \
+                settings.attachments.members.avatars.min_length * KB
+
+        return self._internal_min_length
+
+    @__min_length__.setter
+    def __min_length__(self, v):
+        self._internal_min_length = v
 
 
 class Member(DeclarativeBase):
@@ -180,9 +207,10 @@ class Member(DeclarativeBase):
                 )
 
             except MaximumLengthIsReachedError as e:
+                max_length = settings.attachments.members.avatars.max_length
                 raise HTTPStatus(
                     f'621 Cannot store files larger than: '\
-                    f'{AVATAR_MAXIMUM_LENGTH * 1024} bytes'
+                    f'{max_length * 1024} bytes'
                 )
 
         else:
