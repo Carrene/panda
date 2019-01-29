@@ -104,7 +104,7 @@ class TestApplication(LocalApplicationTestCase):
 
             when(
                 'The application not exist with this id',
-                url_parameters=dict(id=10)
+                url_parameters=dict(id=0)
             )
             assert status == 404
 

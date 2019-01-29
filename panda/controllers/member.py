@@ -1,4 +1,4 @@
-from nanohttp import json, context, HTTPNotFound, validate
+from nanohttp import json, context, HTTPNotFound, validate, int_or_notfound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
@@ -55,10 +55,7 @@ class MemberController(ModelRestController):
     @Member.expose
     def get(self, id):
         id = context.identity.reference_id if id == 'me' else id
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         member = DBSession.query(Member).get(id)
         if not member:
@@ -83,10 +80,7 @@ class MemberController(ModelRestController):
     @Member.expose
     @commit
     def update(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         member = DBSession.query(Member).get(id)
         if member is None:

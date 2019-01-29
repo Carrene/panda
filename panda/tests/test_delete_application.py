@@ -71,7 +71,7 @@ class TestApplicationDelete(LocalApplicationTestCase):
             )
             assert status == 404
 
-            when('Trying to pass with wrong id', url_parameters=dict(id=50))
+            when('Trying to pass with wrong id', url_parameters=dict(id=0))
             assert status == 404
 
             when('Type of the id is invalid', url_parameters=dict(id='id'))

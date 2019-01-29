@@ -1,6 +1,6 @@
 import hashlib
 
-from nanohttp import json, context, HTTPNotFound
+from nanohttp import json, context, HTTPNotFound, int_or_notfound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import DBSession, commit
@@ -49,10 +49,7 @@ class ApplicationController(ModelRestController):
     @Application.expose
     @commit
     def get(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         application = DBSession.query(Application) \
             .filter(
@@ -76,10 +73,7 @@ class ApplicationController(ModelRestController):
     @Application.expose
     @commit
     def logout(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         application = DBSession.query(Application).get(id)
         if application is None:
@@ -112,10 +106,7 @@ class ApplicationController(ModelRestController):
     @Application.expose
     @commit
     def update(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         application = DBSession.query(Application).get(id)
         if application is None:
@@ -132,10 +123,7 @@ class ApplicationController(ModelRestController):
     @Application.expose
     @commit
     def revoke(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         application = DBSession.query(Application).get(id)
         if application is None \
@@ -150,10 +138,7 @@ class ApplicationController(ModelRestController):
     @Application.expose
     @commit
     def delete(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         application = DBSession.query(Application).get(id)
         if application is None or \
