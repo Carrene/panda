@@ -72,11 +72,3 @@ class TestMyApplication(LocalApplicationTestCase):
             when('Trying to pass with unathorized member', authorization=None)
             assert status == 401
 
-    def test_metadata(self):
-        with self.given(
-            'Test metadata verb',
-            '/apiv1/myapplications',
-            'METADATA'
-        ):
-            assert status == 200
-

@@ -44,7 +44,7 @@ class TestApplicationLogout(LocalApplicationTestCase):
             assert status == 200
             assert response.json['id'] == self.application.id
 
-            when('Trying to pass with wrong id', url_parameters=dict(id=50))
+            when('Trying to pass with wrong id', url_parameters=dict(id=0))
             assert status == 404
 
             when('The type of id is invalid', url_parameters=dict(id='id'))

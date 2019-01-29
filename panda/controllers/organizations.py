@@ -1,4 +1,5 @@
-from nanohttp import context, json, HTTPNotFound, HTTPForbidden, settings
+from nanohttp import context, json, HTTPNotFound, HTTPForbidden, settings, \
+    int_or_notfound
 from restfulpy.authorization import authorize
 from restfulpy.controllers import ModelRestController
 from restfulpy.orm import commit, DBSession
@@ -7,7 +8,8 @@ from sqlalchemy_media import store_manager
 
 from ..exceptions import HTTPOrganizationTitleAlreadyTaken, \
     HTTPAlreadyInThisOrganization
-from ..models import Member, Organization, OrganizationMember, OrganizationInvitationEmail
+from ..models import Member, Organization, OrganizationMember, \
+    OrganizationInvitationEmail
 from ..tokens import OrganizationInvitationToken
 from ..validators import token_validator, organization_create_validator, \
     organization_title_validator, organization_domain_validator, \
@@ -60,10 +62,7 @@ class OrganizationController(ModelRestController):
     @Organization.expose
     @commit
     def update(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         organization = DBSession.query(Organization).get(id)
         if organization is None:
@@ -100,10 +99,7 @@ class OrganizationController(ModelRestController):
     @Organization.expose
     @commit
     def invite(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         organization = DBSession.query(Organization).get(id)
         if organization is None:
@@ -185,10 +181,7 @@ class OrganizationController(ModelRestController):
     @store_manager(DBSession)
     @json(prevent_form='707 Form Not Allowed')
     def get(self, id):
-        try:
-            id = int(id)
-        except (ValueError, TypeError):
-            raise HTTPNotFound()
+        id = int_or_notfound(id)
 
         organization = DBSession.query(Organization) \
            .filter(Organization.id == id) \

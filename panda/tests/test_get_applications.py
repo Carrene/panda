@@ -40,7 +40,7 @@ class TestApplication(LocalApplicationTestCase):
             assert response.json['id'] == self.application.id
             assert response.json['secret'] is not None
 
-            when('Trying to pass with wrong id', url_parameters=dict(id=50))
+            when('Trying to pass with wrong id', url_parameters=dict(id=0))
             assert status == 404
 
             when('Type of id is invalid', url_parameters=dict(id='id'))
