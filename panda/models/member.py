@@ -86,10 +86,10 @@ class Member(DeclarativeBase):
         python_type=str,
         not_none=True,
         required=True,
-        watermark='user@example.com',
+        watermark=None,
         example='user@example.com',
         label='Email Address',
-        message='Enter your email address',
+        message=None,
     )
     title = Field(
         Unicode(100),
@@ -103,9 +103,9 @@ class Member(DeclarativeBase):
         min_length=6,
         max_length=20,
         example='John_Doe',
-        watermark='John_Doe',
+        watermark=None,
         label='Username',
-        message='Enter your username',
+        message=None,
     )
     name = Field(
         Unicode(20),
@@ -120,8 +120,8 @@ class Member(DeclarativeBase):
             'valid',
         example='John Doe',
         label='Full Name',
-        watermark='John Doe',
-        message='Enter your full name',
+        watermark=None,
+        message=None,
     )
     phone = Field(
         Unicode(16),
@@ -134,7 +134,7 @@ class Member(DeclarativeBase):
         required=False,
         min_length=8,
         max_length=16,
-        watermark='Enter your phone number',
+        watermark=None,
         label='Phone Number',
         example='+9891234567',
     )
@@ -159,9 +159,9 @@ class Member(DeclarativeBase):
         pattern_description='Password must include at least one uppercase, one'
             'lowercase and one number',
         example='ABCabc123',
-        watermark='******',
+        watermark=None,
         label='Password',
-        message='Allowed special characters: !@#$%^&*)(><"',
+        message=None,
         min_length=6,
         max_length=20,
         required=True,
