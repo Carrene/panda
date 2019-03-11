@@ -22,7 +22,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['email']['label'] is not None
             assert fields['email']['name'] is not None
             assert fields['email']['example'] is not None
-            assert fields['email']['watermark'] is not None
+            assert fields['email']['watermark'] is None
             assert fields['email']['minLength'] is not None
             assert fields['email']['maxLength'] is not None
 
@@ -33,7 +33,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['title']['label'] is not None
             assert fields['title']['name'] is not None
             assert fields['title']['example'] is not None
-            assert fields['title']['watermark'] is not None
+            assert fields['title']['watermark'] is None
             assert fields['title']['minLength'] is not None
             assert fields['title']['maxLength'] is not None
 
@@ -44,7 +44,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['password']['label'] is not None
             assert fields['password']['name'] is not None
             assert fields['password']['example'] is not None
-            assert fields['password']['watermark'] is not None
+            assert fields['password']['watermark'] is None
             assert fields['password']['minLength'] is not None
             assert fields['password']['maxLength'] is not None
 
@@ -54,7 +54,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['name']['label'] is not None
             assert fields['name']['name'] is not None
             assert fields['name']['example'] is not None
-            assert fields['name']['watermark'] is not None
+            assert fields['name']['watermark'] is None
             assert fields['name']['minLength'] is not None
             assert fields['name']['maxLength'] is not None
             assert fields['name']['notNone'] is not None
@@ -65,7 +65,7 @@ class TestMember(LocalApplicationTestCase):
             assert fields['phone']['label'] is not None
             assert fields['phone']['name'] is not None
             assert fields['phone']['example'] is not None
-            assert fields['phone']['watermark'] is not None
+            assert fields['phone']['watermark'] is None
             assert fields['phone']['minLength'] is not None
             assert fields['phone']['maxLength'] is not None
             assert fields['phone']['notNone'] is not None
