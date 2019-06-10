@@ -68,7 +68,7 @@ member_register_validator = validate(
     ),
     title=dict(
         required='718 Title Not In Form',
-        pattern=(USER_TITLE_PATTERN, '705 Invalid Title Format')
+        pattern=(USER_TITLE_PATTERN, '705 Invalid Title Format'),
     ),
     name=dict(
         required='731 Name Not In Form',
@@ -80,9 +80,10 @@ member_register_validator = validate(
         required='728 Password Not In Form',
         min_length=(6,'702 Invalid Password Length'),
         max_length=(20,'702 Invalid Password Length'),
-        pattern=(USER_PASSWORD_PATTERN, '703 Password Not Complex Enough')
+        pattern=(USER_PASSWORD_PATTERN, '703 Password Not Complex Enough'),
     ),
 )
+
 
 password_validator = validate(
     password=dict(
