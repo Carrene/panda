@@ -16,6 +16,7 @@ class TestAuthorizationCode(LocalApplicationTestCase):
         cls.member = Member(
             email='member@example.com',
             title='member_Title',
+            name='member_name',
             password='123abcABC',
             role='member'
         )

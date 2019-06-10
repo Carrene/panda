@@ -14,6 +14,7 @@ class TestMyApplication(LocalApplicationTestCase):
         member = Member(
             email='user@example.com',
             title='username',
+            name='user_name',
             password='123abcABC',
             role='member'
         )

@@ -109,12 +109,12 @@ class Member(DeclarativeBase):
     )
     name = Field(
         Unicode(20),
-        nullable=True,
-        not_none=False,
+        nullable=False,
+        not_none=True,
         python_type=str,
         min_length=3,
         max_length=20,
-        required=False,
+        required=True,
         pattern=r'^[a-zA-Z]{1}[a-z-A-Z ,.\'-]{2,19}$',
         pattern_description='Only alphabetical characters, ., \' and space are'
             'valid',

@@ -29,6 +29,7 @@ class TestMember(LocalApplicationTestCase):
         cls.member1 = Member(
             email='user1@example.com',
             title='member1_title',
+            name='user name',
             password='123456',
             role='member'
         )
@@ -37,6 +38,7 @@ class TestMember(LocalApplicationTestCase):
         cls.member2 = Member(
             email='user2@example.com',
             title='member2_title',
+            name='user name',
             password='123456',
             role='member'
         )
@@ -90,11 +92,14 @@ class TestMember(LocalApplicationTestCase):
             )
             assert status == '716 Invalid Name Format'
 
-            when(
-                'Invalid the max lenght of name',
-                multipart=Update(name='n' * (20 + 1))
-            )
+            when('The name have numbers', multipart=Update(name='name1'))
             assert status == '716 Invalid Name Format'
+
+            when(
+                'Invalid name max length',
+                multipart=Update(name='a' * (40 + 1))
+            )
+            assert status == '733 At Most 20 Characters Are Valid For Name'
 
             when(
                 'Trying to pass with redundant parameters in form',

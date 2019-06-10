@@ -8,21 +8,14 @@ from ..exceptions import HTTPEmailAddressAlreadyRegistered, \
     HTTPTitleAlreadyRegistered
 from ..models import Member
 from ..tokens import RegistrationToken
-from ..validators import title_validator, password_validator, member_validator
+from ..validators import member_register_validator, member_update_validator
 
 
 class MemberController(ModelRestController):
     __model__ = Member
 
     @json(prevent_empty_form=True)
-    @validate(
-        ownershipToken=dict(
-            required='727 Token Not In Form',
-        )
-    )
-    @title_validator
-    @password_validator
-    @Member.expose
+    @member_register_validator
     @commit
     def register(self):
         title = context.form.get('title')
@@ -41,6 +34,7 @@ class MemberController(ModelRestController):
             email=email,
             title=title,
             password=password,
+            name=context.form.get('name'),
             role='member'
         )
         DBSession.add(member)
@@ -68,7 +62,6 @@ class MemberController(ModelRestController):
 
     @store_manager(DBSession)
     @authorize
-    @member_validator
     @json(
         form_whitelist=(
             ['name', 'avatar'],
@@ -77,6 +70,7 @@ class MemberController(ModelRestController):
         ),
         prevent_empty_form=True
     )
+    @member_update_validator
     @Member.expose
     @commit
     def update(self, id):

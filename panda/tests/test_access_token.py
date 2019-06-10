@@ -16,6 +16,7 @@ class TestAccessToken(LocalApplicationTestCase):
         cls.member = Member(
             email='member@example.com',
             title='member_title',
+            name='member_name',
             password='123abcABC',
             role='member'
         )
