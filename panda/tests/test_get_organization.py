@@ -12,6 +12,7 @@ class TestApplication(LocalApplicationTestCase):
         owner1 = Member(
             email='owner1@example.com',
             title='owner1',
+            name='owner1_name',
             password='123456',
             role='member'
         )
@@ -20,6 +21,7 @@ class TestApplication(LocalApplicationTestCase):
         member1 = Member(
             email='member1@example.com',
             title='member1',
+            name='member1_name',
             password='123456',
             role='member'
         )

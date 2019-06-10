@@ -14,12 +14,14 @@ class TestApplicationLogout(LocalApplicationTestCase):
         member = Member(
             email='already.added@example.com',
             title='username',
+            name='user_name',
             password='123abcABC',
             role='member'
         )
         cls.member1 = Member(
             email='member1@example.com',
             title='username1',
+            name='user1_name',
             password='123abcABC',
             role='member'
         )

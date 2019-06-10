@@ -29,6 +29,7 @@ class TestOrganization(LocalApplicationTestCase):
         member1 = Member(
             email='user1@example.com',
             title='user1',
+            name='user1_name',
             password='123456',
             role='member'
         )
@@ -37,6 +38,7 @@ class TestOrganization(LocalApplicationTestCase):
         cls.member2 = Member(
             email='user2@example.com',
             title='user2',
+            name='user2_name',
             password='123456',
             role='member'
         )
@@ -45,6 +47,7 @@ class TestOrganization(LocalApplicationTestCase):
         cls.member3 = Member(
             email='user3@example.com',
             title='user3',
+            name='user3_name',
             password='123456',
             role='member'
         )

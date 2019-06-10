@@ -62,6 +62,29 @@ title_validator = validate(
 )
 
 
+member_register_validator = validate(
+    ownershipToken=dict(
+        required='727 Token Not In Form',
+    ),
+    title=dict(
+        required='718 Title Not In Form',
+        pattern=(USER_TITLE_PATTERN, '705 Invalid Title Format'),
+    ),
+    name=dict(
+        required='731 Name Not In Form',
+        not_none='732 Name Is Null',
+        max_length=(20, '733 At Most 20 Characters Are Valid For Name'),
+        pattern=(NAME_PATTERN, '716 Invalid Name Format'),
+    ),
+    password=dict(
+        required='728 Password Not In Form',
+        min_length=(6,'702 Invalid Password Length'),
+        max_length=(20,'702 Invalid Password Length'),
+        pattern=(USER_PASSWORD_PATTERN, '703 Password Not Complex Enough'),
+    ),
+)
+
+
 password_validator = validate(
     password=dict(
         required='728 Password Not In Form',
@@ -100,9 +123,11 @@ phone_number_validator = validate(
 )
 
 
-member_validator = validate(
+member_update_validator = validate(
     name=dict(
-        pattern=(NAME_PATTERN, '716 Invalid Name Format')
+        pattern=(NAME_PATTERN, '716 Invalid Name Format'),
+        not_none='732 Name Is Null',
+        max_length=(20, '733 At Most 20 Characters Are Valid For Name'),
     ),
 )
 

@@ -28,6 +28,7 @@ class TestMember(LocalApplicationTestCase):
             admin = Member(
                 email='admin@example.com',
                 title='admin_title',
+                name='admin_name',
                 password='123abcABC',
                 role='admin'
             )
@@ -36,6 +37,7 @@ class TestMember(LocalApplicationTestCase):
             owner = Member(
                 email='owner@example.com',
                 title='owner_title',
+                name='owner_name',
                 password='123abcABC',
                 role='member'
             )

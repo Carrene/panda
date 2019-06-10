@@ -13,31 +13,36 @@ class TestApplicationRevoke(LocalApplicationTestCase):
         cls.session = cls.create_session(expire_on_commit=True)
         owner1 = Member(
             email='owner1@example.com',
-            title='owner1',
             password='123abcABC',
+            title='owner1',
+            name='owner1_name',
             role='member'
         )
         owner2 = Member(
             email='owner2@example.com',
             title='owner2',
+            name='owner2_name',
             password='123abcABC',
             role='member'
         )
         member1 = Member(
             email='member1@example.com',
             title='username1',
+            name='user1_name',
             password='123abcABC',
             role='member'
         )
         member2 = Member(
             email='member2@example.com',
             title='username2',
+            name='user2_name',
             password='123abcABC',
             role='member'
         )
         member3 = Member(
             email='member3@example.com',
             title='username3',
+            name='user3_name',
             password='123abcABC',
             role='member'
         )
