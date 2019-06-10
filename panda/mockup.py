@@ -12,6 +12,7 @@ def insert(): # pragma: no cover
     member1 = Member(
         id=2,
         title='User_1',
+        name='User1_name',
         email='user1@example.com',
         password='123456',
         role='member',
@@ -22,6 +23,7 @@ def insert(): # pragma: no cover
     member2 = Member(
         id=3,
         title='User_2',
+        name='User2_name',
         email='user2@example.com',
         password='123456',
         role='member',
@@ -32,6 +34,7 @@ def insert(): # pragma: no cover
     member3 = Member(
         id=4,
         title='User_3',
+        name='User3_name',
         email='user3@example.com',
         password='123456',
         role='member',
@@ -43,6 +46,7 @@ def insert(): # pragma: no cover
     print('Members have been created.')
     print(
         f'  Title: {member1.title}\n'
+        f'  Name: {member1.name}\n'
         f'  Email: {member1.email}\n'
         f'  Password: 123456\n'
         f'  Role: {member1.role}\n'
@@ -50,6 +54,7 @@ def insert(): # pragma: no cover
     )
     print(
         f'  Title: {member2.title}\n'
+        f'  Name: {member1.name}\n'
         f'  Email: {member2.email}\n'
         f'  Password: 123456\n'
         f'  Role: {member2.role}\n'
@@ -57,6 +62,7 @@ def insert(): # pragma: no cover
     )
     print(
         f'  Title: {member3.title}\n'
+        f'  Name: {member1.name}\n'
         f'  Email: {member3.email}\n'
         f'  Password: 123456\n'
         f'  Role: {member3.role}\n'
