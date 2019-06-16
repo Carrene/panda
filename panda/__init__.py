@@ -23,6 +23,10 @@ class Panda(Application):
       test_url: postgresql://postgres:postgres@localhost/panda_test
       administrative_url: postgresql://postgres:postgres@localhost/postgres
 
+    migration:
+      directory: %(root_path)s/panda/migration
+      ini: %(root_path)s/panda/alembic.ini
+
     reset_password:
       secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
       max_age: 3600  # seconds
