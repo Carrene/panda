@@ -1,0 +1,3 @@
+include panda/alembic.ini
+include panda/migration/*.py
+include panda/migration/versions/*.py

@@ -26,6 +26,7 @@ setup(
     install_requires=dependencies,
     packages=find_packages(),
     test_suite='panda.tests',
+    include_package_data=True,
     entry_points={
         'console_scripts': [
             'panda = panda:panda.cli_main'
