@@ -24,8 +24,8 @@ class Panda(Application):
       administrative_url: postgresql://postgres:postgres@localhost/postgres
 
     migration:
-      directory: %(root_path)s/panda/migration
-      ini: %(root_path)s/panda/alembic.ini
+      directory: %(root_path)s/migration
+      ini: %(root_path)s/alembic.ini
 
     reset_password:
       secret: !!binary xxSN/uarj5SpcEphAHhmsab8Ql2Og/2IcieNfQ3PysI=
@@ -42,7 +42,7 @@ class Panda(Application):
     messaging:
       default_messenger: restfulpy.messaging.ConsoleMessenger
       template_dirs:
-        - %(root_path)s/panda/email_templates
+        - %(root_path)s/email_templates
 
     authorization_code:
       secret: !!binary T8xNMJCFl4xgBSW3NaDv6/D+48ssBWZTQbqqDlnl0gU=
@@ -86,7 +86,7 @@ class Panda(Application):
         max_age: 86400
 
     storage:
-      local_directory: %(root_path)s/data/assets
+      local_directory: %(root_path)s/../data/assets
       base_url: http://localhost:8083/assets
 
     attachments:
@@ -110,7 +110,7 @@ class Panda(Application):
         super().__init__(
             application_name,
             root=root,
-            root_path=join(dirname(__file__), '..'),
+            root_path=join(dirname(__file__)),
             version=__version__,
         )
 
