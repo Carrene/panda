@@ -9,8 +9,9 @@ with open(join(dirname(__file__), 'panda', '__init__.py')) as v_file:
         .match(v_file.read()).group(1)
 
 
+# TODO: Must be change dependency when the restfulpy release.
 dependencies = [
-    'restfulpy >= 2.6.11',
+#    'restfulpy >= 2.6.11',
     'kavenegar',
     'requests',
     'oathcy',

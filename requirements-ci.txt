@@ -1,3 +1,4 @@
+git+git://github.com/Carrene/restfulpy.git@master
 cython
 -r requirements-private.txt
 coverage
