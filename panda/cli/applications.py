@@ -4,7 +4,7 @@ from restfulpy.orm import DBSession
 from ..models import Application
 
 
-class ApplicationListSubSubCommand(SubCommand):
+class ApplicationListSubSubCommand(SubCommand): # pragma: no cover
     __help__ = 'List applications.'
     __command__ = 'list'
 
@@ -13,7 +13,7 @@ class ApplicationListSubSubCommand(SubCommand):
             print(m)
 
 
-class ApplicationSubCommand(SubCommand):
+class ApplicationSubCommand(SubCommand): # pragma: no cover
     __help__ = 'Manage applications'
     __command__ = 'application'
     __arguments__ = [

@@ -7,7 +7,7 @@ from ..models import Member, Application, ApplicationMember
 from ..oauth import AccessToken
 
 
-class AccessTokenCreateSumSubCommand(SubCommand):
+class AccessTokenCreateSumSubCommand(SubCommand): # pragma: no cover
     __help__ = 'Creates an jwt token.'
     __command__ = 'create'
     __arguments__ = [
@@ -72,7 +72,7 @@ class AccessTokenCreateSumSubCommand(SubCommand):
         print(access_token.dump().decode())
 
 
-class AccessTokenSubCommand(SubCommand):
+class AccessTokenSubCommand(SubCommand): # pragma: no cover
     __help__ = 'Access token related.'
     __command__ = 'access-token'
     __arguments__ = [
