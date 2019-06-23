@@ -1,47 +1,33 @@
+from easycli import SubCommand, Argument
 from nanohttp import settings
-from restfulpy.cli import Launcher, RequireSubCommand
 
 from ..models import RegisterEmail
 from ..tokens import RegistrationToken
 
 
-class SendEmailLauncher(Launcher):  # pragma: no cover
-
-    @classmethod
-    def create_parser(cls, subparsers):
-        parser = subparsers.add_parser('send', help='Sends an email.')
-        parser.add_argument(
+class SendEmailSubCommand(SubCommand):  # pragma: no cover
+    __help__ = 'Sends an email.'
+    __command__ = 'send'
+    __arguments__ = [
+        Argument(
             '-e',
             '--email',
             required=True,
-            help='Email to be claim'
-        )
-        return parser
+            help='Email to be claim',
+        ),
+    ]
 
-    def launch(self):
-        token = RegistrationToken(dict(email=self.args.email))
+    def __call__(self, args):
+        token = RegistrationToken(dict(email=args.email))
         email = RegisterEmail(
-                to=self.args.email,
+                to=args.email,
                 subject='Register your CAS account',
                 body={
                     'registration_token': token.dump(),
                     'registration_callback_url':
-                        settings.registeration.callback_url
+                        settings.registration.callback_url
                 }
         )
-        email.to = self.args.email
+        email.to = args.email
         email.do_({})
-
-
-class EmailLauncher(Launcher, RequireSubCommand):  # pragma: no cover
-
-    @classmethod
-    def create_parser(cls, subparsers):
-        parser = subparsers.add_parser('email', help="Manage emails")
-        user_subparsers = parser.add_subparsers(
-            title="Email managements",
-            dest="email_command"
-        )
-        SendEmailLauncher.register(user_subparsers)
-        return parser
 

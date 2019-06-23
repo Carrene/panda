@@ -1,52 +1,49 @@
 import sys
 
-from restfulpy.cli import Launcher, RequireSubCommand
+from easycli import SubCommand, Argument
 from restfulpy.orm import DBSession
 
 from ..models import Member, Application, ApplicationMember
 from ..oauth import AccessToken
 
 
-class AccessTokenCreateLauncher(Launcher):
-
-    @classmethod
-    def create_parser(cls, subparsers):
-        parser = subparsers.add_parser(
-            'create',
-            help='Creates an jwt token.'
-        )
-        parser.add_argument(
+class AccessTokenCreateSumSubCommand(SubCommand):
+    __help__ = 'Creates an jwt token.'
+    __command__ = 'create'
+    __arguments__ = [
+        Argument(
             'member_id',
             type=int,
-            help='Member id'
-        )
-        parser.add_argument(
+            help='Member id',
+        ),
+        Argument(
             'application_id',
-            help='Application Id'
-        )
-        parser.add_argument(
-            '-s', '--scopes',
+            help='Application Id',
+        ),
+        Argument(
+            '-s',
+            '--scopes',
             nargs='+',
-            help='List of oauth2 scopes'
-        )
-        return parser
+            help='List of oauth2 scopes',
+        ),
+    ]
 
-    def launch(self):
+    def __call__(self, args):
         member = DBSession.query(Member)\
-            .filter(Member.id == self.args.member_id)\
+            .filter(Member.id == args.member_id)\
             .one_or_none()
 
         if member is None:
-            print(f'Invalid member id: {self.args.member_id}', file=sys.stderr)
+            print(f'Invalid member id: {args.member_id}', file=sys.stderr)
             return 1
 
         application = DBSession.query(Application)\
-            .filter(Application.id == self.args.application_id)\
+            .filter(Application.id == args.application_id)\
             .one_or_none()
 
         if application is None:
             print(
-                f'Invalid application id: {self.args.application_id}',
+                f'Invalid application id: {args.application_id}',
                 file=sys.stderr
             )
             return 1
@@ -69,24 +66,16 @@ class AccessTokenCreateLauncher(Launcher):
         access_token_payload = dict(
             applicationId=application.id,
             memberId=member.id,
-            scopes=self.args.scopes,
+            scopes=args.scopes,
         )
         access_token = AccessToken(access_token_payload)
         print(access_token.dump().decode())
 
 
-class AccessTokenLauncher(Launcher, RequireSubCommand):
-
-    @classmethod
-    def create_parser(cls, subparsers):
-        parser = subparsers.add_parser(
-            'access-token',
-            help='Access token related.'
-        )
-        oauth2_subparsers = parser.add_subparsers(
-            title='Access token',
-            dest='access_token_command'
-        )
-        AccessTokenCreateLauncher.register(oauth2_subparsers)
-        return parser
+class AccessTokenSubCommand(SubCommand):
+    __help__ = 'Access token related.'
+    __command__ = 'access-token'
+    __arguments__ = [
+        AccessTokenCreateSumSubCommand,
+    ]
 

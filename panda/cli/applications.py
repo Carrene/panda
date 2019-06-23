@@ -1,34 +1,22 @@
-from nanohttp import settings
-from restfulpy.cli import Launcher, RequireSubCommand
+from easycli import SubCommand
 from restfulpy.orm import DBSession
 
-from ..models import RegisterEmail, Application
+from ..models import Application
 
 
-class ApplicationListLauncher(Launcher):
+class ApplicationListSubSubCommand(SubCommand):
+    __help__ = 'List applications.'
+    __command__ = 'list'
 
-    @classmethod
-    def create_parser(cls, subparsers):
-        parser = subparsers.add_parser('list', help='List applications.')
-        return parser
-
-    def launch(self):
+    def __call__(self, args):
         for m in DBSession.query(Application):
             print(m)
 
 
-class ApplicationLauncher(Launcher, RequireSubCommand):
-
-    @classmethod
-    def create_parser(cls, subparsers):
-        parser = subparsers.add_parser(
-            'application',
-            help="Manage applications"
-        )
-        _subparsers = parser.add_subparsers(
-            title="Applications managements",
-            dest="application_command"
-        )
-        ApplicationListLauncher.register(_subparsers)
-        return parser
+class ApplicationSubCommand(SubCommand):
+    __help__ = 'Manage applications'
+    __command__ = 'application'
+    __arguments__ = [
+        ApplicationListSubSubCommand,
+    ]
 
