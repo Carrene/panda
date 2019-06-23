@@ -1,5 +1,5 @@
-from .email import EmailLauncher
-from .access_token import AccessTokenLauncher
-from .members import MemberLauncher
-from .applications import ApplicationLauncher
+from .email import SendEmailSubCommand
+from .access_token import AccessTokenSubCommand
+from .members import MemberSubCommand
+from .applications import ApplicationSubCommand
 

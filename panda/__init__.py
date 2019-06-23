@@ -7,8 +7,8 @@ from sqlalchemy_media import StoreManager, FileSystemStore
 
 from . import basedata, mockup
 from .authentication import Authenticator
-from .cli import EmailLauncher, MemberLauncher, ApplicationLauncher, \
-    AccessTokenLauncher
+from .cli import SendEmailSubCommand, AccessTokenSubCommand, MemberSubCommand, \
+    ApplicationSubCommand
 from .controllers.root import Root
 
 
@@ -120,11 +120,13 @@ class Panda(Application):
     def insert_mockup(self, *args):
         mockup.insert()
 
-    def register_cli_launchers(self, subparsers):
-        EmailLauncher.register(subparsers)
-        MemberLauncher.register(subparsers)
-        ApplicationLauncher.register(subparsers)
-        AccessTokenLauncher.register(subparsers)
+    def get_cli_arguments(self):
+        return [
+            SendEmailSubCommand,
+            MemberSubCommand,
+            ApplicationSubCommand,
+            AccessTokenSubCommand,
+        ]
 
     @classmethod
     def initialize_orm(cls, engine=None):
