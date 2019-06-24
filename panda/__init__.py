@@ -12,7 +12,7 @@ from .cli import SendEmailSubCommand, AccessTokenSubCommand, MemberSubCommand, \
 from .controllers.root import Root
 
 
-__version__ = '0.7.0a4'
+__version__ = '0.8.0a5'
 
 
 class Panda(Application):
