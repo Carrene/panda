@@ -5,7 +5,7 @@ from hashlib import sha256
 from cas import CASPrincipal
 from nanohttp import context, settings, HTTPStatus
 from restfulpy.orm import DeclarativeBase, Field, DBSession, relationship
-from restfulpy.principal import JwtRefreshToken
+from restfulpy.principal import JWTRefreshToken
 from sqlalchemy import Unicode, Integer, JSON
 from sqlalchemy.orm import synonym
 from sqlalchemy_media import Image, ImageAnalyzer, ImageValidator, \
@@ -256,7 +256,7 @@ class Member(DeclarativeBase):
         })
 
     def create_refresh_principal(self):
-        return JwtRefreshToken(dict(id=self.id))
+        return JWTRefreshToken(dict(id=self.id))
 
     def validate_password(self, password):
         hashed_pass = sha256()

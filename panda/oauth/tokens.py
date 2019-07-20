@@ -1,12 +1,12 @@
 import itsdangerous
 from nanohttp import settings, HTTPStatus
-from restfulpy.principal import BaseJwtPrincipal
+from restfulpy.principal import BaseJWTPrincipal
 
 from ..exceptions import HTTPTokenExpired, HTTPMalformedAccessToken, \
     HTTPMalformedAuthorizationCode
 
 
-class AuthorizationCode(BaseJwtPrincipal):
+class AuthorizationCode(BaseJWTPrincipal):
 
     @classmethod
     def load(cls, token):
@@ -44,7 +44,7 @@ class AuthorizationCode(BaseJwtPrincipal):
         return self.payload.get('email')
 
 
-class AccessToken(BaseJwtPrincipal):
+class AccessToken(BaseJWTPrincipal):
 
     @classmethod
     def load(cls, token):
