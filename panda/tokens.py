@@ -1,11 +1,11 @@
 import itsdangerous
 from nanohttp import settings
-from restfulpy.principal import BaseJwtPrincipal
+from restfulpy.principal import BaseJWTPrincipal
 
 from .exceptions import HTTPTokenExpired, HTTPMalformedToken
 
 
-class RegistrationToken(BaseJwtPrincipal):
+class RegistrationToken(BaseJWTPrincipal):
 
     @classmethod
     def load(cls, token):
@@ -27,7 +27,7 @@ class RegistrationToken(BaseJwtPrincipal):
         return self.payload.get('email')
 
 
-class ResetPasswordToken(BaseJwtPrincipal):
+class ResetPasswordToken(BaseJWTPrincipal):
 
     @classmethod
     def load(cls, token):
@@ -49,7 +49,7 @@ class ResetPasswordToken(BaseJwtPrincipal):
         return self.payload.get('email')
 
 
-class PhoneNumberActivationToken(BaseJwtPrincipal):
+class PhoneNumberActivationToken(BaseJWTPrincipal):
 
     @classmethod
     def load(cls, token):
@@ -75,7 +75,7 @@ class PhoneNumberActivationToken(BaseJwtPrincipal):
         return self.payload.get('memberId')
 
 
-class OrganizationInvitationToken(BaseJwtPrincipal):
+class OrganizationInvitationToken(BaseJWTPrincipal):
 
     @classmethod
     def load(cls, token):
