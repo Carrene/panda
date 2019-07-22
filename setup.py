@@ -10,7 +10,7 @@ with open(join(dirname(__file__), 'panda', '__init__.py')) as v_file:
 
 
 dependencies = [
-    'restfulpy >= 3.3.1a5',
+    'restfulpy >= 3.4.0',
     'kavenegar',
     'requests',
     'oathcy',
