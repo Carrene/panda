@@ -45,7 +45,7 @@ class AuthorizationCodeController(RestController):
         authorization_code_payload = dict(
             scopes=scopes,
             memberId=context.identity.id,
-            memberTitle=context.identity.payload['name'],
+            memberTitle=context.identity.payload['title'],
             email=context.identity.email,
             applicationId=application.id,
             applicationTitle=application.title,

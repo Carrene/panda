@@ -7,8 +7,12 @@ def get_email(member):
     return member.email
 
 
-def get_name(member):
-    return member.name
+def get_first_name(member):
+    return member.first_name
+
+
+def get_last_name(member):
+    return member.last_name
 
 
 def get_avatar(member):
@@ -22,7 +26,8 @@ def get_phone(member):
 SCOPES = {
     'title': get_title,
     'email': get_email,
-    'name': get_name,
+    'firstName': get_first_name,
+    'lastName': get_last_name,
     'avatar': get_avatar,
     'phone': get_phone,
 }
