@@ -34,7 +34,8 @@ class MemberController(ModelRestController):
             email=email,
             title=title,
             password=password,
-            name=context.form.get('name'),
+            first_name=context.form.get('firstName'),
+            last_name=context.form.get('lastName'),
             role='member'
         )
         DBSession.add(member)
@@ -64,9 +65,9 @@ class MemberController(ModelRestController):
     @authorize
     @json(
         form_whitelist=(
-            ['name', 'avatar'],
-            '717 Invalid field, only the name and avatar parameters are ' \
-            'accepted'
+            ['firstName', 'lastName', 'avatar'],
+            '717 Invalid field, only the firstName, lastName and avatar ' \
+            'parameters are accepted'
         ),
         prevent_empty_form=True
     )

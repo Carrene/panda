@@ -70,10 +70,16 @@ member_register_validator = validate(
         required='718 Title Not In Form',
         pattern=(USER_TITLE_PATTERN, '705 Invalid Title Format'),
     ),
-    name=dict(
-        required='731 Name Not In Form',
-        not_none='732 Name Is Null',
-        max_length=(20, '733 At Most 20 Characters Are Valid For Name'),
+    firstName=dict(
+        required='731 First Name Not In Form',
+        not_none='732 First Name Is Null',
+        max_length=(20, '733 At Most 20 Characters Are Valid For First Name'),
+        pattern=(NAME_PATTERN, '716 Invalid Name Format'),
+    ),
+    lastName=dict(
+        required='734 Last Name Not In Form',
+        not_none='735 Last Name Is Null',
+        max_length=(20, '736 At Most 20 Characters Are Valid For Last Name'),
         pattern=(NAME_PATTERN, '716 Invalid Name Format'),
     ),
     password=dict(
@@ -124,10 +130,15 @@ phone_number_validator = validate(
 
 
 member_update_validator = validate(
-    name=dict(
+    firstName=dict(
         pattern=(NAME_PATTERN, '716 Invalid Name Format'),
-        not_none='732 Name Is Null',
-        max_length=(20, '733 At Most 20 Characters Are Valid For Name'),
+        not_none='732 First Name Is Null',
+        max_length=(20, '733 At Most 20 Characters Are Valid For First Name'),
+    ),
+    lastName=dict(
+        pattern=(NAME_PATTERN, '716 Invalid Last Name Format'),
+        not_none='735 Last Name Is Null',
+        max_length=(20, '736 At Most 20 Characters Are Valid For Name'),
     ),
 )
 
