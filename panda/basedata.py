@@ -9,7 +9,8 @@ def insert(): # pragma: no cover
     admin = Member(
         id=1,
         title='GOD',
-        name='GOD',
+        first_name='First name',
+        last_name='Last name',
         email='god@example.com',
         password='123456',
         role='admin'
@@ -29,7 +30,8 @@ def insert(): # pragma: no cover
     print('Admin has been created.')
     print(
         f'  Title: {admin.title}\n'
-        f'  Name: {admin.name}\n'
+        f'  First Name: {admin.first_name}\n'
+        f'  Last Name: {admin.last_name}\n'
         f'  Email: {admin.email}\n'
         f'  Password: 123456\n'
         f'  Role: {admin.role}\n'
